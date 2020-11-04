@@ -1,7 +1,6 @@
-import 'package:driver/widget/LoginPage.dart';
+import 'package:driver/router/routes.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:driver/router/router.gr.dart';
 
 void main() => runApp(MyApp());
 
