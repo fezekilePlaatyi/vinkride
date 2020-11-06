@@ -1,6 +1,5 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:passenger/widget/Login.dart';
+import 'package:passenger/routes/routes.gr.dart';
 
 void main() => runApp(MyApp());
 
@@ -9,19 +8,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Vink Intercity',
       theme: ThemeData(
         primarySwatch: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: FutureBuilder(
-        future: Firebase.initializeApp(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return LoginPage(title: 'Vink Intercity');
-          }
-        },
-      ),
+      initialRoute: Routes.loginPage,
+      onGenerateRoute: Routes.onGenerateRoute,
+      navigatorKey: Routes.navigatorKey,
     );
   }
 }

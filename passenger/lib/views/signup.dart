@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:passenger/main.dart';
-import 'package:passenger/models/Helper.dart';
+import 'package:passenger/model/Helper.dart';
 import 'package:passenger/views/passengerForm.dart';
 
 class SignUP extends StatefulWidget {

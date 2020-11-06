@@ -1,11 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:passenger/models/Helper.dart';
+import 'package:passenger/model/Helper.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -166,8 +163,31 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Widget _splash() {
+    return Scaffold(
+      body: Container(
+        child: Center(
+          child: Image.asset(
+            'assets/images/vink_icon.png',
+            height: 50.0,
+            width: 50.0,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder();
+    final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+    return FutureBuilder(
+      future: _initialization,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return _loginForm();
+        }
+        return _splash();
+      },
+    );
   }
 }

@@ -11,11 +11,6 @@ final defaultPic =
     'https://aed.cals.arizona.edu/sites/aed.cals.arizona.edu/files/images/people/default-profile_1.png';
 final vinkLightGrey = Color(0xfff2f2f2);
 final vinkRed = Color(0xffcc1719);
-final userRef = FirebaseFirestore.instance.collection("users");
-final chatRef = FirebaseFirestore.instance.collection("chats");
-final requestRef = FirebaseFirestore.instance.collection("requests");
-final vinkCategoryRef =
-    FirebaseFirestore.instance.collection("vink_categories");
 
 String dateTime(Timestamp timestamp) {
   var dateTime =

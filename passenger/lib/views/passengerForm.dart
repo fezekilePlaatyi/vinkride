@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:passenger/models/Helper.dart';
+import 'package:passenger/model/Helper.dart';
 
 class PassengerForm extends StatefulWidget {
   @override
