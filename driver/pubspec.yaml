@@ -56,7 +56,7 @@ dependencies:
   flutter_cache_manager: ^2.0.0
   flushbar: ^1.5.0
   social_share: ^2.0.5
-  share: any
+  # share: any
 
   # Location and Gmaps
   # Gmaps libs

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:passenger/main.dart';
 import 'package:passenger/model/Helper.dart';
+import 'package:passenger/model/User.dart';
+import 'package:passenger/routes/routes.gr.dart';
 import 'package:passenger/views/passengerForm.dart';
 
 class SignUP extends StatefulWidget {
@@ -9,6 +11,40 @@ class SignUP extends StatefulWidget {
 }
 
 class _SignUPState extends State<SignUP> {
+  String _name, _email, _password, _confirm_passwod;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool isLoading = false;
+  User _user = new User();
+  _signup() {
+    final form = _formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      if (_password == _confirm_passwod) {
+        setState(() {
+          isLoading = true;
+        });
+
+        _user.signUp(_name, _email, _password).then((value) {
+          setState(() {
+            isLoading = false;
+          });
+          print('TEST VALUE  $value');
+          if (value as bool) {
+            Routes.navigator.pushReplacementNamed(Routes.passengerForm);
+          }
+        }).catchError((err) {
+          print('TEST VALUE  $err');
+          setState(() {
+            isLoading = false;
+          });
+        });
+      } else {
+        errorFloatingFlushbar('Password does not match');
+        return;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,34 +69,67 @@ class _SignUPState extends State<SignUP> {
                     height: 20,
                   ),
                   Form(
+                    key: _formKey,
                     child: Column(
                       children: [
                         TextFormField(
-                            textCapitalization: TextCapitalization.words,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black,
-                            ),
-                            decoration: formDecor("Full Name")),
+                          textCapitalization: TextCapitalization.words,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                          decoration: formDecor("Full Name"),
+                          onSaved: (input) => _name = input,
+                          validator: (input) {
+                            if (input.isEmpty) {
+                              return 'Full name is required';
+                            } else if (input.length < 4) {
+                              return 'Full name is invalid';
+                            } else if (input.split(' ').length < 2) {
+                              return 'Provide a full name';
+                            }
+                            return null;
+                          },
+                        ),
                         SizedBox(
                           height: 10,
                         ),
                         TextFormField(
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black,
-                            ),
-                            decoration: formDecor("Email")),
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                          decoration: formDecor("Email"),
+                          onSaved: (input) => _email = input,
+                          validator: (input) {
+                            if (input.isEmpty) {
+                              return 'Email is required';
+                            } else if (!isValidEmail(input)) {
+                              return 'Email is invalid';
+                            }
+                            return null;
+                          },
+                        ),
                         SizedBox(
                           height: 10,
                         ),
                         TextFormField(
-                            obscureText: true,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black,
-                            ),
-                            decoration: formDecor("Password")),
+                          obscureText: true,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                          decoration: formDecor("Password"),
+                          onSaved: (input) => _password = input,
+                          validator: (input) {
+                            if (input.isEmpty) {
+                              return 'Password is required';
+                            } else if (input.length < 6) {
+                              return 'Password should be at least 6 characters';
+                            }
+                            return null;
+                          },
+                        ),
                         SizedBox(
                           height: 10,
                         ),
@@ -71,6 +140,15 @@ class _SignUPState extends State<SignUP> {
                             color: Colors.black,
                           ),
                           decoration: formDecor("Confirm Password"),
+                          onSaved: (input) => _confirm_passwod = input,
+                          validator: (input) {
+                            if (input.isEmpty) {
+                              return 'Password is required';
+                            } else if (input.length < 6) {
+                              return 'Password should be at least 6 characters';
+                            }
+                            return null;
+                          },
                         ),
                         SizedBox(
                           height: 20,
@@ -95,13 +173,8 @@ class _SignUPState extends State<SignUP> {
                       borderRadius: BorderRadius.circular(50),
                     ),
                     padding: const EdgeInsets.all(15),
-                    onPressed: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => PassengerForm(),
-                        ),
-                      ),
+                    onPressed: () {
+                      _signup();
                     },
                   ),
                   SizedBox(
@@ -122,9 +195,8 @@ class _SignUPState extends State<SignUP> {
                           style: TextStyle(color: vinkRed, fontSize: 16),
                         ),
                         padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                        onPressed: () => {
-                          Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder: (_) => MyApp()))
+                        onPressed: () {
+                          Routes.navigator.pop();
                         },
                       )
                     ],

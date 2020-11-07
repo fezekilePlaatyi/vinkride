@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:passenger/model/Helper.dart';
+import 'package:passenger/model/User.dart';
+import 'package:passenger/routes/routes.gr.dart';
+import 'package:passenger/utils/Utils.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -12,6 +16,30 @@ class _LoginPageState extends State<LoginPage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isLoading = false;
+  User _user = new User();
+  Future<void> _login() async {
+    final form = _formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      setState(() {
+        isLoading = true;
+      });
+      _user.signIn(_email, _password).then((value) {
+        setState(() {
+          isLoading = false;
+        });
+        if (value as bool) {
+          Routes.navigator.pushReplacementNamed(Routes.home);
+        }
+      }).catchError((err) {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    } else {
+      print('Validation Failed!');
+    }
+  }
 
   Widget _loginForm() {
     return Scaffold(
@@ -118,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(50),
                             ),
                             padding: const EdgeInsets.all(15),
-                            onPressed: () => {},
+                            onPressed: () => {_login()},
                           ),
                           SizedBox(
                             height: 20,
@@ -143,12 +171,7 @@ class _LoginPageState extends State<LoginPage> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 0.0),
                                 onPressed: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (_) => SignUP(),
-                                  //   ),
-                                  // );
+                                  Routes.navigator.pushNamed(Routes.signUp);
                                 },
                               )
                             ],
@@ -163,20 +186,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _splash() {
-    return Scaffold(
-      body: Container(
-        child: Center(
-          child: Image.asset(
-            'assets/images/vink_icon.png',
-            height: 50.0,
-            width: 50.0,
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final Future<FirebaseApp> _initialization = Firebase.initializeApp();
@@ -184,9 +193,48 @@ class _LoginPageState extends State<LoginPage> {
       future: _initialization,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return _loginForm();
+          return FutureBuilder(
+            future: _user.isLoggedIn(),
+            builder: (context, AsyncSnapshot<DocumentSnapshot> snap) {
+              if (snap.connectionState == ConnectionState.done) {
+                if (snap.data.exists) {
+                  final doc = snap.data.data();
+                  switch (doc['registration_progress'] as int) {
+                    case 40:
+                      Routes.navigator.pushNamed(Routes.passengerForm);
+                      break;
+                    case 80:
+                      Routes.navigator.pushNamed(Routes.profilePicture);
+                      break;
+                    case 100:
+                      if (Utils.AUTH_USER.emailVerified) {
+                        if (doc['is_user_approved'] as bool) {
+                          Routes.navigator.pushNamed(Routes.home);
+                        } else {
+                          errorFloatingFlushbar(
+                              'Your account is still being reviewed.');
+                          return _loginForm();
+                        }
+                      } else {
+                        errorFloatingFlushbar(
+                            'Please verify your email address');
+                        return _loginForm();
+                      }
+                      break;
+                    default:
+                      return _loginForm();
+                      break;
+                  }
+                  return splashScreen();
+                } else {
+                  return _loginForm();
+                }
+              }
+              return splashScreen();
+            },
+          );
         }
-        return _splash();
+        return splashScreen();
       },
     );
   }

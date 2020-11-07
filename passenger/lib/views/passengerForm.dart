@@ -1,6 +1,13 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:passenger/model/Helper.dart';
+import 'package:passenger/model/User.dart';
+import 'package:passenger/routes/routes.gr.dart';
+import 'package:passenger/utils/Utils.dart';
 
 class PassengerForm extends StatefulWidget {
   @override
@@ -8,6 +15,65 @@ class PassengerForm extends StatefulWidget {
 }
 
 class _PassengerFormState extends State<PassengerForm> {
+  String _address, _id_copy, _phone_number;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  File _image;
+  var uploadProgress = 0.00;
+  bool isUploading = false;
+  Image _imageWidget = new Image.network(defaultPic);
+  User _user = new User();
+
+  Future<dynamic> selectImage() async {
+    var selectedImage =
+        await ImagePicker.pickImage(source: ImageSource.gallery);
+    _image = File(selectedImage.path);
+    _imageWidget = Image.memory(_image.readAsBytesSync());
+    if (_image != null) {
+      _uploadImage();
+    }
+  }
+
+  _uploadImage() async {
+    StorageUploadTask storageUploadTask = Utils.ID_STORAGE.putFile(_image);
+
+    setState(() => isUploading = true);
+    storageUploadTask.events.listen((event) {
+      setState(() => uploadProgress =
+          (event.snapshot.bytesTransferred / event.snapshot.totalByteCount) *
+              100);
+    });
+
+    await storageUploadTask.onComplete;
+    Utils.ID_STORAGE.getDownloadURL().then((value) {
+      setState(() {
+        isUploading = false;
+        _id_copy = value;
+      });
+
+      print('$isUploading  Check  $_id_copy');
+    }).catchError((err) => print(err));
+  }
+
+  Future<void> uploadUserData() async {
+    final form = _formKey.currentState;
+
+    if (form.validate()) {
+      form.save();
+      if (_image != null) {
+        _user.setAbout(_phone_number, _address, _id_copy).then((value) {
+          print(value);
+          if (value as bool) {
+            Routes.navigator.pushReplacementNamed(Routes.profilePicture);
+          }
+        }).catchError((err) {
+          errorFloatingFlushbar(err);
+        });
+      } else {
+        errorFloatingFlushbar('Upload your ID Copy');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,30 +108,114 @@ class _PassengerFormState extends State<PassengerForm> {
                 height: 30,
               ),
               Form(
+                  key: _formKey,
                   child: Column(
-                children: [
-                  TextFormField(
-                    style: formTextStyle(),
-                    autocorrect: true,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      LengthLimitingTextInputFormatter(10),
-                      FilteringTextInputFormatter.digitsOnly
+                    children: [
+                      TextFormField(
+                        style: formTextStyle(),
+                        autocorrect: true,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(10),
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        decoration: formDecor('Contact Number'),
+                        onSaved: (input) => _phone_number = input,
+                        validator: (input) {
+                          if (input.isEmpty) {
+                            return 'You will be called at some point';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        style: formTextStyle(),
+                        decoration: formDecor("Address"),
+                        onSaved: (input) => _address = input,
+                        validator: (input) {
+                          if (input.isEmpty) {
+                            return 'Your address is important to us';
+                          } else if (!isValidAddress(input)) {
+                            return 'Invalid address';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Card(
+                        color: Color(0xFFCC1719),
+                        child: Container(
+                          height: 80,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20.0, vertical: 2.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        _image == null
+                                            ? 'Upload your ID copy.'
+                                            : (isUploading
+                                                ? 'Upload in progress...'
+                                                : 'Done Uploading'),
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 15),
+                                      ),
+                                      isUploading
+                                          ? SizedBox(height: 7.0)
+                                          : SizedBox.shrink(),
+                                      isUploading
+                                          ? Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  .45,
+                                              child: LinearProgressIndicator(
+                                                backgroundColor: Colors.white70,
+                                                value: uploadProgress,
+                                                valueColor:
+                                                    new AlwaysStoppedAnimation<
+                                                        Color>(Colors.black12),
+                                              ),
+                                            )
+                                          : SizedBox.shrink()
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              RaisedButton(
+                                color: Color(0xFF1B1B1B),
+                                child: Text(
+                                  'Upload ID',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                shape: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black12),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                onPressed: () => selectImage(),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
                     ],
-                    decoration: formDecor('Contact Number'),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    style: formTextStyle(),
-                    decoration: formDecor("Address"),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                ],
-              )),
+                  )),
               RaisedButton(
                 color: Colors.black87,
                 child: GestureDetector(
@@ -83,7 +233,8 @@ class _PassengerFormState extends State<PassengerForm> {
                   borderRadius: BorderRadius.circular(50),
                 ),
                 padding: const EdgeInsets.all(15),
-                onPressed: () => {},
+                onPressed: () =>
+                    {!isUploading && _image != null ? uploadUserData() : null},
               ),
             ],
           ),

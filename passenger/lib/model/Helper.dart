@@ -5,6 +5,7 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:passenger/routes/routes.gr.dart';
 import 'package:simple_moment/simple_moment.dart';
 
 final defaultPic =
@@ -92,6 +93,82 @@ errorPage(BuildContext context) {
       builder: (context) => AlertDialog(
             title: Text("Error occured.."),
           ));
+}
+
+void errorFloatingFlushbar(String message) {
+  Flushbar(
+    duration: Duration(seconds: 2),
+    padding: EdgeInsets.all(10),
+    borderRadius: 8,
+    backgroundGradient: LinearGradient(
+      colors: [
+        vinkRed,
+        Colors.redAccent.shade200,
+      ],
+      stops: [0.7, 1],
+    ),
+    boxShadows: [
+      BoxShadow(
+        color: Colors.black45,
+        offset: Offset(3, 3),
+        blurRadius: 3,
+      ),
+    ],
+    // All of the previous Flushbars could be dismissed by swiping down
+    // now we want to swipe to the sides
+    dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+    // The default curve is Curves.easeOut
+    forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+    title: 'error occured',
+    message: message,
+    isDismissible: true,
+    margin: EdgeInsets.symmetric(
+      horizontal: 5.0,
+      vertical: 15.0,
+    ),
+    icon: Icon(
+      Icons.close,
+      color: Colors.white,
+    ),
+  ).show(Routes.navigatorKey.currentContext);
+}
+
+void successFloatingFlushbar(String message) {
+  Flushbar(
+    duration: Duration(seconds: 2),
+    padding: EdgeInsets.all(10),
+    borderRadius: 8,
+    backgroundGradient: LinearGradient(
+      colors: [
+        Colors.green[900],
+        Colors.greenAccent[700],
+      ],
+      stops: [0.6, 1],
+    ),
+    boxShadows: [
+      BoxShadow(
+        color: Colors.black45,
+        offset: Offset(3, 3),
+        blurRadius: 3,
+      ),
+    ],
+    // All of the previous Flushbars could be dismissed by swiping down
+    // now we want to swipe to the sides
+    dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+    // The default curve is Curves.easeOut
+    forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
+    title: 'Success',
+    message: message,
+    isDismissible: true,
+    margin: EdgeInsets.symmetric(
+      horizontal: 5.0,
+      vertical: 15.0,
+    ),
+    icon: Icon(
+      Icons.check,
+      color: Colors.white,
+    ),
+  ).show(Routes.navigatorKey.currentContext);
 }
 
 InputDecoration formDecor(String hint) {
@@ -239,7 +316,7 @@ bool isValidAddress(String address) {
   return addressSegments.length < 2 ? false : true;
 }
 
-bool isValidateEmail(String value) {
+bool isValidEmail(String value) {
   Pattern pattern =
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
   RegExp regex = new RegExp(pattern);
