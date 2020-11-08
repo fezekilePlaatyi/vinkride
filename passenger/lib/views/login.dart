@@ -29,7 +29,46 @@ class _LoginPageState extends State<LoginPage> {
           isLoading = false;
         });
         if (value as bool) {
-          Routes.navigator.pushReplacementNamed(Routes.home);
+          StreamBuilder(
+            stream: _user.loadCurrentUser(),
+            builder:
+                (BuildContext context, AsyncSnapshot<DocumentSnapshot> snap) {
+              if (snap.hasData) {
+                final doc = snap.data.data();
+                if (doc['registration_progress'] as int == 40) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Routes.navigator.pushNamed(Routes.passengerForm);
+                  });
+                } else if (doc['registration_progress'] as int == 80) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Routes.navigator.pushNamed(Routes.profilePicture);
+                  });
+                } else if (doc['registration_progress'] as int == 100) {
+                  if (Utils.AUTH_USER.emailVerified) {
+                    if (doc['is_user_approved'] as bool) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        Routes.navigator.pushNamed(Routes.home);
+                      });
+                    } else {
+                      errorFloatingFlushbar(
+                          'Your account is still being reviewed.');
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        Routes.navigator.pushNamed(Routes.loginPage);
+                      });
+                    }
+                  } else {
+                    errorFloatingFlushbar('Please verify your email address');
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Routes.navigator.pushNamed(Routes.loginPage);
+                    });
+                  }
+                } else {
+                  return _loginForm();
+                }
+              }
+              return splashScreen();
+            },
+          );
         }
       }).catchError((err) {
         setState(() {
@@ -191,55 +230,47 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-    return FutureBuilder(
-      future: _initialization,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return FutureBuilder(
-            future: _user.isLoggedIn(),
-            builder: (context, AsyncSnapshot<DocumentSnapshot> snap) {
-              if (snap.connectionState == ConnectionState.done) {
-                bool userExists = snap.data != null ? snap.data.exists : false;
-                if (userExists) {
-                  final doc = snap.data.data();
-                  switch (doc['registration_progress'] as int) {
-                    case 40:
-                      Routes.navigator.pushNamed(Routes.passengerForm);
-                      break;
-                    case 80:
-                      Routes.navigator.pushNamed(Routes.profilePicture);
-                      break;
-                    case 100:
-                      if (Utils.AUTH_USER.emailVerified) {
-                        if (doc['is_user_approved'] as bool) {
-                          Routes.navigator.pushNamed(Routes.home);
-                        } else {
-                          errorFloatingFlushbar(
-                              'Your account is still being reviewed.');
-                          return _loginForm();
-                        }
-                      } else {
-                        errorFloatingFlushbar(
-                            'Please verify your email address');
-                        return _loginForm();
-                      }
-                      break;
-                    default:
-                      return _loginForm();
-                      break;
+    return Utils.AUTH_USER != null
+        ? StreamBuilder(
+            stream: _user.loadCurrentUser(),
+            builder:
+                (BuildContext context, AsyncSnapshot<DocumentSnapshot> snap) {
+              if (snap.hasData) {
+                final doc = snap.data.data();
+                if (doc['registration_progress'] as int == 40) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Routes.navigator.pushNamed(Routes.passengerForm);
+                  });
+                } else if (doc['registration_progress'] as int == 80) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Routes.navigator.pushNamed(Routes.profilePicture);
+                  });
+                } else if (doc['registration_progress'] as int == 100) {
+                  if (Utils.AUTH_USER.emailVerified) {
+                    if (doc['is_user_approved'] as bool) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        Routes.navigator.pushNamed(Routes.home);
+                      });
+                    } else {
+                      errorFloatingFlushbar(
+                          'Your account is still being reviewed.');
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        Routes.navigator.pushNamed(Routes.loginPage);
+                      });
+                    }
+                  } else {
+                    errorFloatingFlushbar('Please verify your email address');
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Routes.navigator.pushNamed(Routes.loginPage);
+                    });
                   }
-                  return splashScreen();
                 } else {
                   return _loginForm();
                 }
               }
               return splashScreen();
             },
-          );
-        }
-        return splashScreen();
-      },
-    );
+          )
+        : _loginForm();
   }
 }

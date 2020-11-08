@@ -1,23 +1,15 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:passenger/helper/onboardingModel.dart';
 import 'package:passenger/model/Helper.dart';
+import 'package:passenger/model/User.dart';
 import 'package:passenger/routes/routes.gr.dart';
-import 'package:passenger/views/login.dart';
+import 'package:passenger/utils/Utils.dart';
 import 'package:passenger/widget/sliderTile.dart';
-
-class Onboariding extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Vink App',
-      home: OnboardingSlider(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
 
 class OnboardingSlider extends StatefulWidget {
   @override
@@ -28,6 +20,8 @@ class _OnboardingSliderState extends State<OnboardingSlider> {
   List<OnboardingModel> slides = new List<OnboardingModel>();
   int currentIndex = 0;
   PageController pageController = new PageController(initialPage: 0);
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+  User _user = new User();
 
   @override
   void initState() {
@@ -50,6 +44,105 @@ class _OnboardingSliderState extends State<OnboardingSlider> {
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: _initialization,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (Utils.AUTH_USER != null) {
+            return StreamBuilder(
+              stream: _user.loadCurrentUser(),
+              builder:
+                  (BuildContext context, AsyncSnapshot<DocumentSnapshot> snap) {
+                if (snap.hasData) {
+                  final doc = snap.data.data();
+                  if (doc['registration_progress'] as int == 40) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Routes.navigator.pushNamed(Routes.passengerForm);
+                    });
+                  } else if (doc['registration_progress'] as int == 80) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Routes.navigator.pushNamed(Routes.profilePicture);
+                    });
+                  } else if (doc['registration_progress'] as int == 100) {
+                    if (Utils.AUTH_USER.emailVerified) {
+                      if (doc['is_user_approved'] as bool) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          Routes.navigator.pushNamed(Routes.home);
+                        });
+                      } else {
+                        errorFloatingFlushbar(
+                            'Your account is still being reviewed.');
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          Routes.navigator.pushNamed(Routes.loginPage);
+                        });
+                      }
+                    } else {
+                      errorFloatingFlushbar('Please verify your email address');
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        Routes.navigator.pushNamed(Routes.loginPage);
+                      });
+                    }
+                  } else {
+                    return _slider();
+                  }
+                }
+                return splashScreen();
+              },
+            );
+          } else {
+            return _slider();
+          }
+        } else {
+          return splashScreen();
+        }
+      },
+    );
+  }
+
+  Widget _checkUser() {
+    return FutureBuilder(
+      future: _user.isLoggedIn(),
+      builder: (context, AsyncSnapshot<DocumentSnapshot> snap) {
+        if (snap.connectionState == ConnectionState.done) {
+          bool userExists = snap.data != null ? snap.data.exists : false;
+          if (userExists) {
+            final doc = snap.data.data();
+            switch (doc['registration_progress'] as int) {
+              case 40:
+                Routes.navigator.pushNamed(Routes.passengerForm);
+                break;
+              case 80:
+                Routes.navigator.pushNamed(Routes.profilePicture);
+                break;
+              case 100:
+                if (Utils.AUTH_USER.emailVerified) {
+                  if (doc['is_user_approved'] as bool) {
+                    Routes.navigator.pushNamed(Routes.home);
+                  } else {
+                    errorFloatingFlushbar(
+                        'Your account is still being reviewed.');
+                    Routes.navigator.pushNamed(Routes.loginPage);
+                  }
+                } else {
+                  errorFloatingFlushbar('Please verify your email address');
+                  Routes.navigator.pushNamed(Routes.loginPage);
+                }
+                break;
+              default:
+                Routes.navigator.pushNamed(Routes.loginPage);
+                break;
+            }
+            return splashScreen();
+          } else {
+            Routes.navigator.pushNamed(Routes.loginPage);
+          }
+        }
+        return splashScreen();
+      },
+    );
+  }
+
+  Widget _slider() {
     return Scaffold(
       backgroundColor: Colors.white,
       body: PageView.builder(

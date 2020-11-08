@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: Routes.loginPage,
+      initialRoute: Routes.onboardingSlider,
       onGenerateRoute: Routes.onGenerateRoute,
       navigatorKey: Routes.navigatorKey,
     );

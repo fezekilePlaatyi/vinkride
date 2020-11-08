@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:passenger/model/User.dart';
 
 class ProfilePicture extends StatefulWidget {
   @override
@@ -6,6 +7,7 @@ class ProfilePicture extends StatefulWidget {
 }
 
 class _ProfilePictureState extends State<ProfilePicture> {
+  User _user = new User();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

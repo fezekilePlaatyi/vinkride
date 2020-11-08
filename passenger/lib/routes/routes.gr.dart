@@ -7,6 +7,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:auto_route/router_utils.dart';
+import 'package:passenger/views/onboarding.dart';
 import 'package:passenger/views/login.dart';
 import 'package:passenger/views/passengerForm.dart';
 import 'package:passenger/views/Home.dart';
@@ -14,7 +15,8 @@ import 'package:passenger/views/signup.dart';
 import 'package:passenger/views/profilePicture.dart';
 
 class Routes {
-  static const loginPage = '/';
+  static const onboardingSlider = '/';
+  static const loginPage = '/login-page';
   static const passengerForm = '/passenger-form';
   static const home = '/home';
   static const signUp = '/sign-up';
@@ -26,6 +28,11 @@ class Routes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     final args = settings.arguments;
     switch (settings.name) {
+      case Routes.onboardingSlider:
+        return MaterialPageRoute(
+          builder: (_) => OnboardingSlider(),
+          settings: settings,
+        );
       case Routes.loginPage:
         return MaterialPageRoute(
           builder: (_) => LoginPage(),
