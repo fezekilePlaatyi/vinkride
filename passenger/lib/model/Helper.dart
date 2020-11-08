@@ -13,6 +13,7 @@ final defaultPic =
 final vinkLightGrey = Color(0xfff2f2f2);
 final vinkRed = Color(0xffcc1718);
 final vinkBlack = Color(0xFF1B1B1B);
+final vinkDarkGrey = Color(0xFF9E9E9E);
 
 String dateTime(Timestamp timestamp) {
   var dateTime =
