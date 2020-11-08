@@ -8,6 +8,12 @@ class ProfilePicture extends StatefulWidget {
 class _ProfilePictureState extends State<ProfilePicture> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Container());
+    return Scaffold(
+      body: Container(
+        child: Center(
+          child: Text('Profile Pic'),
+        ),
+      ),
+    );
   }
 }
