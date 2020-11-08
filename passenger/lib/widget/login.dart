@@ -197,7 +197,8 @@ class _LoginPageState extends State<LoginPage> {
             future: _user.isLoggedIn(),
             builder: (context, AsyncSnapshot<DocumentSnapshot> snap) {
               if (snap.connectionState == ConnectionState.done) {
-                if (snap.data.exists) {
+                bool userExists = snap.data != null ? snap.data.exists : false;
+                if (userExists) {
                   final doc = snap.data.data();
                   switch (doc['registration_progress'] as int) {
                     case 40:
