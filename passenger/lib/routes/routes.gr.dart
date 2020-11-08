@@ -7,7 +7,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:auto_route/router_utils.dart';
-import 'package:passenger/widget/login.dart';
+import 'package:passenger/views/login.dart';
 import 'package:passenger/views/passengerForm.dart';
 import 'package:passenger/views/Home.dart';
 import 'package:passenger/views/signup.dart';

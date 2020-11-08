@@ -49,162 +49,168 @@ class _SignUPState extends State<SignUP> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: ListView(shrinkWrap: true, children: [
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.all(15),
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Image.asset(
-                    'assets/images/logo.png',
-                    height: 90,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Form(
-                    key: _formKey,
-                    child: Column(
+      body: Center(
+        child: SingleChildScrollView(
+          child: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: ListView(shrinkWrap: true, children: [
+              Container(
+                color: Colors.white,
+                padding: const EdgeInsets.all(15),
+                width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/images/logo.png',
+                      height: 90,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            textCapitalization: TextCapitalization.words,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                            decoration: formDecor("Full Name"),
+                            onSaved: (input) => _name = input,
+                            validator: (input) {
+                              if (input.isEmpty) {
+                                return 'Full name is required';
+                              } else if (input.length < 4) {
+                                return 'Full name is invalid';
+                              } else if (input.split(' ').length < 2) {
+                                return 'Provide a full name';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                            decoration: formDecor("Email"),
+                            onSaved: (input) => _email = input,
+                            validator: (input) {
+                              if (input.isEmpty) {
+                                return 'Email is required';
+                              } else if (!isValidEmail(input)) {
+                                return 'Email is invalid';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            obscureText: true,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                            decoration: formDecor("Password"),
+                            onSaved: (input) => _password = input,
+                            validator: (input) {
+                              if (input.isEmpty) {
+                                return 'Password is required';
+                              } else if (input.length < 6) {
+                                return 'Password should be at least 6 characters';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            obscureText: true,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                            decoration: formDecor("Confirm Password"),
+                            onSaved: (input) => _confirm_passwod = input,
+                            validator: (input) {
+                              if (input.isEmpty) {
+                                return 'Password is required';
+                              } else if (input.length < 6) {
+                                return 'Password should be at least 6 characters';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      ),
+                    ),
+                    RaisedButton(
+                      color: Colors.black87,
+                      child: GestureDetector(
+                        child: Text(
+                          'Register',
+                          style: TextStyle(
+                            fontSize: 18,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                      ),
+                      textColor: Colors.white,
+                      shape: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black12),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      padding: const EdgeInsets.all(15),
+                      onPressed: () {
+                        _signup();
+                      },
+                    ),
+                    SizedBox(height: 30),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        TextFormField(
-                          textCapitalization: TextCapitalization.words,
+                        Text(
+                          "Don't have an account?",
                           style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
+                            color: Color(0xFF1B1B1B),
+                            fontFamily: 'roboto',
+                            fontSize: 16.0,
                           ),
-                          decoration: formDecor("Full Name"),
-                          onSaved: (input) => _name = input,
-                          validator: (input) {
-                            if (input.isEmpty) {
-                              return 'Full name is required';
-                            } else if (input.length < 4) {
-                              return 'Full name is invalid';
-                            } else if (input.split(' ').length < 2) {
-                              return 'Provide a full name';
-                            }
-                            return null;
+                        ),
+                        SizedBox(width: 5.0),
+                        GestureDetector(
+                          onTap: () {
+                            Routes.navigator.pop();
                           },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
+                          child: Text(
+                            "Login",
+                            style: TextStyle(
+                              color: Color(0xFFCC1718),
+                              fontFamily: 'roboto',
+                              fontSize: 16.0,
+                            ),
                           ),
-                          decoration: formDecor("Email"),
-                          onSaved: (input) => _email = input,
-                          validator: (input) {
-                            if (input.isEmpty) {
-                              return 'Email is required';
-                            } else if (!isValidEmail(input)) {
-                              return 'Email is invalid';
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
-                          obscureText: true,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                          decoration: formDecor("Password"),
-                          onSaved: (input) => _password = input,
-                          validator: (input) {
-                            if (input.isEmpty) {
-                              return 'Password is required';
-                            } else if (input.length < 6) {
-                              return 'Password should be at least 6 characters';
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
-                          obscureText: true,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
-                          decoration: formDecor("Confirm Password"),
-                          onSaved: (input) => _confirm_passwod = input,
-                          validator: (input) {
-                            if (input.isEmpty) {
-                              return 'Password is required';
-                            } else if (input.length < 6) {
-                              return 'Password should be at least 6 characters';
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 20,
                         ),
                       ],
                     ),
-                  ),
-                  RaisedButton(
-                    color: Colors.black87,
-                    child: GestureDetector(
-                      child: Text(
-                        'Register',
-                        style: TextStyle(
-                          fontSize: 18,
-                          letterSpacing: 1,
-                        ),
-                      ),
-                    ),
-                    textColor: Colors.white,
-                    shape: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black12),
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    padding: const EdgeInsets.all(15),
-                    onPressed: () {
-                      _signup();
-                    },
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        "Have an account?",
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                      FlatButton(
-                        child: Text(
-                          'Login',
-                          style: TextStyle(color: vinkRed, fontSize: 16),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                        onPressed: () {
-                          Routes.navigator.pop();
-                        },
-                      )
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ]),
+            ]),
+          ),
         ),
       ),
     );

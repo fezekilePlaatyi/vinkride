@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                         children: <Widget>[
                           Image.asset(
                             'assets/images/logo.png',
-                            height: 100,
+                            height: 90,
                           ),
                           SizedBox(
                             height: 20,
@@ -118,7 +118,8 @@ class _LoginPageState extends State<LoginPage> {
                                   child: Text(
                                     'Forgot Password?',
                                     style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: 16.0,
+                                      fontFamily: 'roboto',
                                     ),
                                     textAlign: TextAlign.right,
                                   ),
@@ -149,33 +150,35 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed: () => {_login()},
                           ),
                           SizedBox(
-                            height: 20,
+                            height: 30,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
+                            children: [
                               Text(
                                 "Don't have an account?",
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  color: vinkBlack,
+                                  fontFamily: 'roboto',
+                                  fontSize: 16.0,
                                 ),
                               ),
-                              FlatButton(
-                                child: GestureDetector(
-                                  child: Text(
-                                    'Sign Up',
-                                    style:
-                                        TextStyle(color: vinkRed, fontSize: 16),
-                                  ),
-                                ),
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 0.0),
-                                onPressed: () {
+                              SizedBox(width: 5.0),
+                              GestureDetector(
+                                onTap: () {
                                   Routes.navigator.pushNamed(Routes.signUp);
                                 },
-                              )
+                                child: Text(
+                                  "Sign Up",
+                                  style: TextStyle(
+                                    color: vinkRed,
+                                    fontFamily: 'roboto',
+                                    fontSize: 16.0,
+                                  ),
+                                ),
+                              ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                     ),

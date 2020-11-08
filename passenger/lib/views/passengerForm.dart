@@ -77,42 +77,27 @@ class _PassengerFormState extends State<PassengerForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          color: Colors.white,
+      backgroundColor: Colors.white,
+      body: Center(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(15),
-          width: double.infinity,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Image.asset(
                 'assets/images/logo.png',
-                height: 70,
+                height: 90,
               ),
               SizedBox(
                 height: 40,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Text(
-                  "Add Your Contact Details",
-                  style: TextStyle(
-                    color: Color(0xFF1B1B1B),
-                    fontFamily: 'Roboto',
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 30,
               ),
               Form(
                   key: _formKey,
                   child: Column(
                     children: [
                       TextFormField(
-                        style: formTextStyle(),
+                        style: textStyle(16, vinkBlack),
                         autocorrect: true,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
@@ -132,7 +117,7 @@ class _PassengerFormState extends State<PassengerForm> {
                         height: 10,
                       ),
                       TextFormField(
-                        style: formTextStyle(),
+                        style: textStyle(16, vinkBlack),
                         decoration: formDecor("Address"),
                         onSaved: (input) => _address = input,
                         validator: (input) {
@@ -148,7 +133,8 @@ class _PassengerFormState extends State<PassengerForm> {
                         height: 10,
                       ),
                       Card(
-                        color: Color(0xFFCC1719),
+                        color: Colors.white,
+                        elevation: 0.0,
                         child: Container(
                           height: 80,
                           padding: EdgeInsets.symmetric(
@@ -167,12 +153,9 @@ class _PassengerFormState extends State<PassengerForm> {
                                             : (isUploading
                                                 ? 'Upload in progress...'
                                                 : 'Done Uploading'),
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 15),
+                                        style: textStyle(15.0, vinkBlack),
                                       ),
-                                      isUploading
-                                          ? SizedBox(height: 7.0)
-                                          : SizedBox.shrink(),
+                                      SizedBox(height: 10),
                                       isUploading
                                           ? Container(
                                               width: MediaQuery.of(context)
@@ -180,11 +163,12 @@ class _PassengerFormState extends State<PassengerForm> {
                                                       .width *
                                                   .45,
                                               child: LinearProgressIndicator(
-                                                backgroundColor: Colors.white70,
+                                                backgroundColor:
+                                                    Color(0xFFB3B3B3),
                                                 value: uploadProgress,
                                                 valueColor:
                                                     new AlwaysStoppedAnimation<
-                                                        Color>(Colors.black12),
+                                                        Color>(vinkBlack),
                                               ),
                                             )
                                           : SizedBox.shrink()
@@ -196,10 +180,7 @@ class _PassengerFormState extends State<PassengerForm> {
                                 color: Color(0xFF1B1B1B),
                                 child: Text(
                                   'Upload ID',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
+                                  style: textStyle(16, Colors.white),
                                 ),
                                 shape: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.black12),
@@ -217,21 +198,15 @@ class _PassengerFormState extends State<PassengerForm> {
                     ],
                   )),
               RaisedButton(
-                color: Colors.black87,
+                color: vinkBlack,
                 child: GestureDetector(
                   child: Text(
                     'Save and continue',
-                    style: TextStyle(
-                      fontSize: 18,
-                      letterSpacing: 1,
-                    ),
+                    style: textStyle(16, Colors.white),
                   ),
                 ),
                 textColor: Colors.white,
-                shape: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black12),
-                  borderRadius: BorderRadius.circular(50),
-                ),
+                shape: darkButton(),
                 padding: const EdgeInsets.all(15),
                 onPressed: () =>
                     {!isUploading && _image != null ? uploadUserData() : null},

@@ -11,7 +11,8 @@ import 'package:simple_moment/simple_moment.dart';
 final defaultPic =
     'https://aed.cals.arizona.edu/sites/aed.cals.arizona.edu/files/images/people/default-profile_1.png';
 final vinkLightGrey = Color(0xfff2f2f2);
-final vinkRed = Color(0xffcc1719);
+final vinkRed = Color(0xffcc1718);
+final vinkBlack = Color(0xFF1B1B1B);
 
 String dateTime(Timestamp timestamp) {
   var dateTime =
@@ -174,16 +175,16 @@ void successFloatingFlushbar(String message) {
 InputDecoration formDecor(String hint) {
   return InputDecoration(
     filled: true,
-    fillColor: Colors.white,
+    fillColor: Color(0xFFFCF9F9),
     hintText: hint,
     contentPadding: const EdgeInsets.all(15),
-    focusedBorder: UnderlineInputBorder(
-      borderSide: BorderSide(color: Colors.black12),
-      borderRadius: BorderRadius.circular(0),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Color(0xFFF2F2F2)),
+      borderRadius: BorderRadius.circular(50),
     ),
     enabledBorder: UnderlineInputBorder(
-      borderSide: BorderSide(color: Colors.black12),
-      borderRadius: BorderRadius.circular(0),
+      borderSide: BorderSide(color: Color(0xFFF2F2F2)),
+      borderRadius: BorderRadius.circular(50),
     ),
   );
 }
@@ -212,9 +213,20 @@ TextStyle formTextStyle() {
   );
 }
 
-TextStyle hairstyleTextStyle() {
+TextStyle textStyle(double fSize, final textColor) {
   return TextStyle(
-      fontSize: 15, color: Colors.black, fontWeight: FontWeight.w600);
+    fontSize: fSize,
+    color: textColor,
+    fontFamily: 'roboto',
+    letterSpacing: 1,
+  );
+}
+
+OutlineInputBorder darkButton() {
+  return OutlineInputBorder(
+    borderSide: BorderSide(color: vinkBlack),
+    borderRadius: BorderRadius.circular(50),
+  );
 }
 
 Widget splashScreen() {
