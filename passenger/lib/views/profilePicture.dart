@@ -192,6 +192,7 @@ class _UploaderState extends State<Uploader> {
   StorageUploadTask uploadTask;
   double uploadProgress = 0;
   User _user = new User();
+  bool isLoading = false;
 
   _startUpload() async {
     uploadTask = Utils.PROFILE_PIC_STORAGE.putFile(widget.file);
@@ -204,12 +205,24 @@ class _UploaderState extends State<Uploader> {
     await uploadTask.onComplete;
 
     Utils.PROFILE_PIC_STORAGE.getDownloadURL().then((value) {
-      _user.uploadProfilePic(value).then((value) {
+      setState(() {
+        isLoading = true;
+      });
+      _user.uploadProfilePic(value).then((value) async {
+        setState(() {
+          isLoading = false;
+        });
         if (value) {
-          Routes.navigator.pushReplacementNamed(Routes.home);
+          successFloatingFlushbar(
+              'Done!!, Now Check your emails to verify your email address');
+          await Future.delayed(Duration(seconds: 3));
+          Routes.navigator.popAndPushNamed(Routes.home);
         }
       }).catchError((err) {
-        print(err);
+        setState(() {
+          isLoading = false;
+        });
+        errorFloatingFlushbar(err);
       });
     });
   }
@@ -217,30 +230,36 @@ class _UploaderState extends State<Uploader> {
   @override
   Widget build(BuildContext context) {
     if (uploadTask != null) {
-      return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            if (uploadTask.isPaused)
-              FlatButton(
-                child: Icon(Icons.play_arrow, size: 50),
-                onPressed: () {
-                  uploadTask.resume();
-                },
+      return isLoading
+          ? Container(
+              child: Center(
+                child: CircularProgressIndicator(),
               ),
-            if (uploadTask.isInProgress)
-              FlatButton(
-                child: Icon(Icons.pause, size: 50),
-                onPressed: () {
-                  uploadTask.pause();
-                },
-              ),
-            LinearProgressIndicator(
-              value: uploadProgress,
-              backgroundColor: vinkLightGrey,
-              valueColor: new AlwaysStoppedAnimation<Color>(vinkRed),
-            ),
-          ]);
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                  if (uploadTask.isPaused)
+                    FlatButton(
+                      child: Icon(Icons.play_arrow, size: 50),
+                      onPressed: () {
+                        uploadTask.resume();
+                      },
+                    ),
+                  if (uploadTask.isInProgress)
+                    FlatButton(
+                      child: Icon(Icons.pause, size: 50),
+                      onPressed: () {
+                        uploadTask.pause();
+                      },
+                    ),
+                  LinearProgressIndicator(
+                    value: uploadProgress,
+                    backgroundColor: vinkLightGrey,
+                    valueColor: new AlwaysStoppedAnimation<Color>(vinkRed),
+                  ),
+                ]);
     } else {
       return FlatButton(
         color: Color(0xFF1B1B1B),

@@ -25,13 +25,15 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         isLoading = true;
       });
-      _user.signIn(_email, _password).then((value) async {
+      await _user.signIn(_email, _password).then((value) async {
         setState(() {
           isLoading = false;
         });
 
         if (value as bool) {
+          print(value);
           await _user.getUserForCheck().then((doc) {
+            print(doc);
             if (doc.isNotEmpty) {
               switch (doc['registration_progress'] as int) {
                 case 40:
@@ -69,6 +71,7 @@ class _LoginPageState extends State<LoginPage> {
           });
         }
       }).catchError((err) {
+        print(err);
         setState(() {
           isLoading = false;
         });

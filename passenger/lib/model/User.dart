@@ -5,13 +5,14 @@ import 'package:passenger/routes/routes.gr.dart';
 import 'package:passenger/utils/Utils.dart';
 
 class User {
-  // final
-
   Future<bool> signIn(String email, String password) async {
     try {
-      await Utils.AUTH
-          .signInWithEmailAndPassword(email: email, password: password);
-      return true;
+      return await Utils.AUTH
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((value) {
+        Utils.AUTH_USER = value.user;
+        return true;
+      });
     } catch (e) {
       String err = '';
       switch (e.code) {
@@ -32,6 +33,7 @@ class User {
       await Utils.AUTH
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) async {
+        Utils.AUTH_USER = value.user;
         await Utils.PASSENGER_COLLECTION.doc(value.user.uid).set({
           'name': name,
           'email': email,
@@ -88,6 +90,7 @@ class User {
   }
 
   Future<Map> getUserForCheck() async {
+    print(await Utils.AUTH_USER);
     return await Utils.PASSENGER_COLLECTION
         .doc(Utils.AUTH_USER.uid)
         .get()
@@ -117,9 +120,10 @@ class User {
 
   signOut() async {
     try {
-      await Utils.AUTH.signOut();
-      Routes.navigator
-          .pushNamedAndRemoveUntil(Routes.loginPage, (route) => true);
+      await Utils.AUTH.signOut().then((value) {
+        Utils.AUTH_USER = null;
+        Routes.navigator.popAndPushNamed(Routes.loginPage);
+      });
     } catch (e) {
       print(e);
     }

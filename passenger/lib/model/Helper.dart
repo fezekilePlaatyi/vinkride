@@ -132,8 +132,6 @@ void errorFloatingFlushbar(String message) {
       Icons.close,
       color: Colors.white,
     ),
-    onTap: (flushbar) =>
-        flushbar.dismiss(Routes.navigatorKey.currentState.context),
   ).show(Routes.navigatorKey.currentState.context);
 }
 

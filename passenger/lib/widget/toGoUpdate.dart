@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:passenger/model/Helper.dart';
+import 'package:passenger/model/User.dart';
 
 class ToGoUpdate extends StatelessWidget {
+  User _user = new User();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,7 +42,9 @@ class ToGoUpdate extends StatelessWidget {
             height: 10.0,
           ),
           FlatButton(
-            onPressed: null,
+            onPressed: () {
+              _user.signOut();
+            },
             child: Text(
               'More Details',
               style: textStyle(16, Colors.white),

@@ -67,16 +67,16 @@ class _OnboardingSliderState extends State<OnboardingSlider> {
                     if (Utils.AUTH_USER.emailVerified) {
                       if (doc['is_user_approved'] as bool) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          Routes.navigator.pushNamed(Routes.home);
+                          Routes.navigator.popAndPushNamed(Routes.home);
                         });
                       } else {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          Routes.navigator.pushNamed(Routes.loginPage);
+                          Routes.navigator.popAndPushNamed(Routes.loginPage);
                         });
                       }
                     } else {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        Routes.navigator.pushNamed(Routes.loginPage);
+                        Routes.navigator.popAndPushNamed(Routes.loginPage);
                       });
                     }
                   } else {

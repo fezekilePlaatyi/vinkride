@@ -63,7 +63,7 @@ class _PassengerFormState extends State<PassengerForm> {
         _user.setAbout(_phone_number, _address, _id_copy).then((value) {
           print(value);
           if (value as bool) {
-            Routes.navigator.pushReplacementNamed(Routes.profilePicture);
+            Routes.navigator.popAndPushNamed(Routes.profilePicture);
           }
         }).catchError((err) {
           errorFloatingFlushbar(err);

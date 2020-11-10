@@ -20,7 +20,7 @@ class _HomeState extends State<Home> {
           style: TextStyle(
             color: Color(0xFF1B1B1B),
             fontFamily: 'Roboto',
-            fontSize: 28,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
