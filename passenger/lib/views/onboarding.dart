@@ -70,14 +70,11 @@ class _OnboardingSliderState extends State<OnboardingSlider> {
                           Routes.navigator.pushNamed(Routes.home);
                         });
                       } else {
-                        errorFloatingFlushbar(
-                            'Your account is still being reviewed.');
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           Routes.navigator.pushNamed(Routes.loginPage);
                         });
                       }
                     } else {
-                      errorFloatingFlushbar('Please verify your email address');
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         Routes.navigator.pushNamed(Routes.loginPage);
                       });

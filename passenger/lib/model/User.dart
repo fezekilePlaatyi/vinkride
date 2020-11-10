@@ -87,6 +87,15 @@ class User {
     return Utils.PASSENGER_COLLECTION.doc(Utils.AUTH_USER.uid).snapshots();
   }
 
+  Future<Map> getUserForCheck() async {
+    return await Utils.PASSENGER_COLLECTION
+        .doc(Utils.AUTH_USER.uid)
+        .get()
+        .then((value) {
+      return value.exists ? value.data() : {};
+    });
+  }
+
   getDriver(String id) {
     return Utils.DRIVER_COLLECTION.doc(id).snapshots();
   }

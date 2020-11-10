@@ -17,6 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   User _user = new User();
+
   Future<void> _login() async {
     final form = _formKey.currentState;
     if (form.validate()) {
@@ -24,26 +25,26 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         isLoading = true;
       });
-      _user.signIn(_email, _password).then((value) {
+      _user.signIn(_email, _password).then((value) async {
         setState(() {
           isLoading = false;
         });
+
         if (value as bool) {
-          StreamBuilder(
-            stream: _user.loadCurrentUser(),
-            builder:
-                (BuildContext context, AsyncSnapshot<DocumentSnapshot> snap) {
-              if (snap.hasData) {
-                final doc = snap.data.data();
-                if (doc['registration_progress'] as int == 40) {
+          await _user.getUserForCheck().then((doc) {
+            if (doc.isNotEmpty) {
+              switch (doc['registration_progress'] as int) {
+                case 40:
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     Routes.navigator.pushNamed(Routes.passengerForm);
                   });
-                } else if (doc['registration_progress'] as int == 80) {
+                  break;
+                case 80:
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     Routes.navigator.pushNamed(Routes.profilePicture);
                   });
-                } else if (doc['registration_progress'] as int == 100) {
+                  break;
+                case 100:
                   if (Utils.AUTH_USER.emailVerified) {
                     if (doc['is_user_approved'] as bool) {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -52,23 +53,20 @@ class _LoginPageState extends State<LoginPage> {
                     } else {
                       errorFloatingFlushbar(
                           'Your account is still being reviewed.');
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        Routes.navigator.pushNamed(Routes.loginPage);
-                      });
+                      print('Your account is still being reviewed.');
+                      return _loginForm();
                     }
                   } else {
                     errorFloatingFlushbar('Please verify your email address');
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      Routes.navigator.pushNamed(Routes.loginPage);
-                    });
+                    Utils.AUTH_USER.sendEmailVerification();
+                    return _loginForm();
                   }
-                } else {
+                  break;
+                default:
                   return _loginForm();
-                }
               }
-              return splashScreen();
-            },
-          );
+            }
+          });
         }
       }).catchError((err) {
         setState(() {
@@ -252,17 +250,10 @@ class _LoginPageState extends State<LoginPage> {
                         Routes.navigator.pushNamed(Routes.home);
                       });
                     } else {
-                      errorFloatingFlushbar(
-                          'Your account is still being reviewed.');
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        Routes.navigator.pushNamed(Routes.loginPage);
-                      });
+                      return _loginForm();
                     }
                   } else {
-                    errorFloatingFlushbar('Please verify your email address');
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      Routes.navigator.pushNamed(Routes.loginPage);
-                    });
+                    return _loginForm();
                   }
                 } else {
                   return _loginForm();
