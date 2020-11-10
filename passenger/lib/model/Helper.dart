@@ -132,7 +132,9 @@ void errorFloatingFlushbar(String message) {
       Icons.close,
       color: Colors.white,
     ),
-  ).show(Routes.navigatorKey.currentContext);
+    onTap: (flushbar) =>
+        flushbar.dismiss(Routes.navigatorKey.currentState.context),
+  ).show(Routes.navigatorKey.currentState.context);
 }
 
 void successFloatingFlushbar(String message) {
@@ -170,7 +172,7 @@ void successFloatingFlushbar(String message) {
       Icons.check,
       color: Colors.white,
     ),
-  ).show(Routes.navigatorKey.currentContext);
+  ).show(Routes.navigatorKey.currentState.context);
 }
 
 InputDecoration formDecor(String hint) {
