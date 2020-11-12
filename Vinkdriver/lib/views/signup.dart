@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:passenger/model/Helper.dart';
-import 'package:passenger/model/User.dart';
-import 'package:passenger/routes/routes.gr.dart';
+import 'package:Vinkdriver/model/Helper.dart';
+import 'package:Vinkdriver/model/User.dart';
+import 'package:Vinkdriver/routes/routes.gr.dart';
 
 class SignUP extends StatefulWidget {
   @override
@@ -27,7 +27,7 @@ class _SignUPState extends State<SignUP> {
             isLoading = false;
           });
           if (value as bool) {
-            Routes.navigator.popAndPushNamed(Routes.passengerForm);
+            Routes.navigator.popAndPushNamed(Routes.driverForm);
           }
         }).catchError((err) {
           setState(() {

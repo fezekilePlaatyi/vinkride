@@ -1,0 +1,163 @@
+{
+  "project_info": {
+    "project_number": "539160998833",
+    "firebase_url": "https://vink8-za.firebaseio.com",
+    "project_id": "vink8-za",
+    "storage_bucket": "vink8-za.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539160998833:android:f1c8a92a4744dd35b68390",
+        "android_client_info": {
+          "package_name": "com.vink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "539160998833-p8hj0iq78pc4bf66he5v47bg774a3v81.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDllEaUio-wy0QxBhf2gzoAOD6LnyvmOR0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "539160998833-p8hj0iq78pc4bf66he5v47bg774a3v81.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "539160998833-q7ih2advrgn5cgod9rbhbfnaap5uko16.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.vinkrides.app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539160998833:android:a75e010d46dc024cb68390",
+        "android_client_info": {
+          "package_name": "com.vinkapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "539160998833-p8hj0iq78pc4bf66he5v47bg774a3v81.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDllEaUio-wy0QxBhf2gzoAOD6LnyvmOR0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "539160998833-p8hj0iq78pc4bf66he5v47bg774a3v81.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "539160998833-q7ih2advrgn5cgod9rbhbfnaap5uko16.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.vinkrides.app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539160998833:android:f2569282a7be0a8bb68390",
+        "android_client_info": {
+          "package_name": "com.vinkride.driver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "539160998833-p8hj0iq78pc4bf66he5v47bg774a3v81.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDllEaUio-wy0QxBhf2gzoAOD6LnyvmOR0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "539160998833-p8hj0iq78pc4bf66he5v47bg774a3v81.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "539160998833-q7ih2advrgn5cgod9rbhbfnaap5uko16.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.vinkrides.app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539160998833:android:9d9caaae6370d2f1b68390",
+        "android_client_info": {
+          "package_name": "com.vinkride.passenger"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "539160998833-1q28epd367vssb5f1q63fgsabblucobl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vinkride.passenger",
+            "certificate_hash": "83795b727102c4b6af5a15b944bb0808fcf6b71b"
+          }
+        },
+        {
+          "client_id": "539160998833-p8hj0iq78pc4bf66he5v47bg774a3v81.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDllEaUio-wy0QxBhf2gzoAOD6LnyvmOR0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "539160998833-p8hj0iq78pc4bf66he5v47bg774a3v81.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "539160998833-q7ih2advrgn5cgod9rbhbfnaap5uko16.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.vinkrides.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

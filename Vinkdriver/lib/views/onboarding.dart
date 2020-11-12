@@ -4,12 +4,12 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:passenger/helper/onboardingModel.dart';
-import 'package:passenger/model/Helper.dart';
-import 'package:passenger/model/User.dart';
-import 'package:passenger/routes/routes.gr.dart';
-import 'package:passenger/utils/Utils.dart';
-import 'package:passenger/widget/sliderTile.dart';
+import 'package:Vinkdriver/helper/onboardingModel.dart';
+import 'package:Vinkdriver/model/Helper.dart';
+import 'package:Vinkdriver/model/User.dart';
+import 'package:Vinkdriver/routes/routes.gr.dart';
+import 'package:Vinkdriver/utils/Utils.dart';
+import 'package:Vinkdriver/widget/sliderTile.dart';
 
 class OnboardingSlider extends StatefulWidget {
   @override
@@ -42,7 +42,7 @@ class _OnboardingSliderState extends State<OnboardingSlider> {
     );
   }
 
-    @override
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: _initialization,
@@ -59,7 +59,7 @@ class _OnboardingSliderState extends State<OnboardingSlider> {
                     switch (doc['registration_progress'] as int) {
                       case 40:
                         WidgetsBinding.instance.addPostFrameCallback((_) {
-                          Routes.navigator.pushNamed(Routes.passengerForm);
+                          Routes.navigator.pushNamed(Routes.driverForm);
                         });
                       break;
                       case 80:
@@ -114,7 +114,7 @@ class _OnboardingSliderState extends State<OnboardingSlider> {
             final doc = snap.data.data();
             switch (doc['registration_progress'] as int) {
               case 40:
-                Routes.navigator.pushNamed(Routes.passengerForm);
+                Routes.navigator.pushNamed(Routes.driverForm);
                 break;
               case 80:
                 Routes.navigator.pushNamed(Routes.profilePicture);

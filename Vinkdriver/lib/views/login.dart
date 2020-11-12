@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:passenger/model/Helper.dart';
-import 'package:passenger/model/User.dart';
-import 'package:passenger/routes/routes.gr.dart';
-import 'package:passenger/utils/Utils.dart';
+import 'package:Vinkdriver/model/Helper.dart';
+import 'package:Vinkdriver/model/User.dart';
+import 'package:Vinkdriver/routes/routes.gr.dart';
+import 'package:Vinkdriver/utils/Utils.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -31,13 +31,12 @@ class _LoginPageState extends State<LoginPage> {
         });
 
         if (value as bool) {
-          print(value);
           await _user.getUserForCheck().then((doc) {
             if (doc != null) {
               switch (doc['registration_progress'] as int) {
                 case 40:
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Routes.navigator.pushNamed(Routes.passengerForm);
+                    Routes.navigator.pushNamed(Routes.driverForm);
                   });
                   break;
                 case 80:
@@ -64,9 +63,11 @@ class _LoginPageState extends State<LoginPage> {
                   }
                   break;
                 default:
+                errorFloatingFlushbar('No record found');
                   return _loginForm();
               }
-            }else {
+            } else {
+              errorFloatingFlushbar('No record found');
               return _loginForm();
             }
           });
@@ -243,7 +244,7 @@ class _LoginPageState extends State<LoginPage> {
                   switch (doc['registration_progress'] as int) {
                     case 40:
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                      Routes.navigator.pushNamed(Routes.passengerForm);
+                      Routes.navigator.pushNamed(Routes.driverForm);
                       });
                     break;
                     case 80:
@@ -258,13 +259,9 @@ class _LoginPageState extends State<LoginPage> {
                           Routes.navigator.pushNamed(Routes.home);
                           });
                         } else {
-                          errorFloatingFlushbar(
-                          'Your account is still being reviewed.');
-                          print('Your account is still being reviewed.');
                           return _loginForm();
                         }
                       } else {
-                        errorFloatingFlushbar('Please verify your email address');
                         Utils.AUTH_USER.sendEmailVerification();
                         return _loginForm();
                       }
