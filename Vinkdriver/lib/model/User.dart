@@ -89,6 +89,10 @@ class User {
     return Utils.DRIVER_COLLECTION.doc(Utils.AUTH_USER.uid).snapshots();
   }
 
+  Future<DocumentSnapshot> getUserById(String id) async {
+    return FirebaseFirestore.instance.collection("users").doc(id.trim()).get();
+  }
+
   Future<Map> getUserForCheck() async {
     return await Utils.DRIVER_COLLECTION
         .doc(Utils.AUTH_USER.uid)

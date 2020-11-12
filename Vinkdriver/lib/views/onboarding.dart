@@ -1,15 +1,14 @@
 import 'dart:io';
 import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:Vinkdriver/helper/onboardingModel.dart';
-import 'package:Vinkdriver/model/Helper.dart';
 import 'package:Vinkdriver/model/User.dart';
 import 'package:Vinkdriver/routes/routes.gr.dart';
 import 'package:Vinkdriver/utils/Utils.dart';
 import 'package:Vinkdriver/widget/sliderTile.dart';
+import 'package:Vinkdriver/model/Helper.dart';
 
 class OnboardingSlider extends StatefulWidget {
   @override
@@ -61,12 +60,12 @@ class _OnboardingSliderState extends State<OnboardingSlider> {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           Routes.navigator.pushNamed(Routes.driverForm);
                         });
-                      break;
+                        break;
                       case 80:
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           Routes.navigator.pushNamed(Routes.profilePicture);
                         });
-                      break;
+                        break;
                       case 100:
                         if (Utils.AUTH_USER.emailVerified) {
                           if (doc['is_user_approved'] as bool) {
@@ -75,7 +74,8 @@ class _OnboardingSliderState extends State<OnboardingSlider> {
                             });
                           } else {
                             WidgetsBinding.instance.addPostFrameCallback((_) {
-                              Routes.navigator.popAndPushNamed(Routes.loginPage);
+                              Routes.navigator
+                                  .popAndPushNamed(Routes.loginPage);
                             });
                           }
                         } else {
@@ -83,11 +83,11 @@ class _OnboardingSliderState extends State<OnboardingSlider> {
                             Routes.navigator.popAndPushNamed(Routes.loginPage);
                           });
                         }
-                      break;
+                        break;
                       default:
-                      return _slider();
-                    } 
-                  }else {
+                        return _slider();
+                    }
+                  } else {
                     return _slider();
                   }
                 }
