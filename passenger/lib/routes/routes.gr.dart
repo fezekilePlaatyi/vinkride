@@ -4,15 +4,20 @@
 // AutoRouteGenerator
 // **************************************************************************
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:auto_route/router_utils.dart';
 import 'package:passenger/views/onboarding.dart';
-import 'package:passenger/views/login.dart';
-import 'package:passenger/views/passengerForm.dart';
+import 'package:passenger/views/auth/login.dart';
+import 'package:passenger/views/auth/passengerForm.dart';
 import 'package:passenger/views/Home.dart';
-import 'package:passenger/views/signup.dart';
-import 'package:passenger/views/profilePicture.dart';
+import 'package:passenger/views/auth/signup.dart';
+import 'package:passenger/views/auth/profilePicture.dart';
+import 'package:passenger/views/chat/ChatHistory.dart';
+import 'package:passenger/views/chat/ChatMessage.dart';
+import 'package:passenger/views/chat/previewAttachment.dart';
 
 class Routes {
   static const onboardingSlider = '/';
@@ -21,6 +26,9 @@ class Routes {
   static const home = '/home';
   static const signUp = '/sign-up';
   static const profilePicture = '/profile-picture';
+  static const chatHistory = '/chat-history';
+  static const chatMessage = '/chat-message';
+  static const previewAttachment = '/preview-attachment';
   static GlobalKey<NavigatorState> get navigatorKey =>
       getNavigatorKey<Routes>();
   static NavigatorState get navigator => navigatorKey.currentState;
@@ -58,8 +66,48 @@ class Routes {
           builder: (_) => ProfilePicture(),
           settings: settings,
         );
+      case Routes.chatHistory:
+        return MaterialPageRoute(
+          builder: (_) => ChatHistory(),
+          settings: settings,
+        );
+      case Routes.chatMessage:
+        if (hasInvalidArgs<String>(args, isRequired: true)) {
+          return misTypedArgsRoute<String>(args);
+        }
+        final typedArgs = args as String;
+        return MaterialPageRoute(
+          builder: (_) => ChatMessage(userId: typedArgs),
+          settings: settings,
+        );
+      case Routes.previewAttachment:
+        if (hasInvalidArgs<PreviewAttachmentArguments>(args,
+            isRequired: true)) {
+          return misTypedArgsRoute<PreviewAttachmentArguments>(args);
+        }
+        final typedArgs = args as PreviewAttachmentArguments;
+        return MaterialPageRoute(
+          builder: (_) => PreviewAttachment(
+              userId: typedArgs.userId,
+              image: typedArgs.image,
+              message: typedArgs.message),
+          settings: settings,
+        );
       default:
         return unknownRoutePage(settings.name);
     }
   }
+}
+
+//**************************************************************************
+// Arguments holder classes
+//***************************************************************************
+
+//PreviewAttachment arguments holder class
+class PreviewAttachmentArguments {
+  final String userId;
+  final File image;
+  final String message;
+  PreviewAttachmentArguments(
+      {@required this.userId, @required this.image, @required this.message});
 }

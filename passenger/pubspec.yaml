@@ -27,7 +27,7 @@ dependencies:
   path_provider: ^1.6.0
   image_picker: ^0.6.7+11
   image_cropper: ^1.3.1
-  #file_picker: ^2.0.12  
+  file_picker: ^2.0.12  
   image: ^2.1.14
   shared_preferences: ^0.5.10
   streaming_shared_preferences: ^1.0.1

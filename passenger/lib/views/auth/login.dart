@@ -31,7 +31,6 @@ class _LoginPageState extends State<LoginPage> {
         });
 
         if (value as bool) {
-          print(value);
           await _user.getUserForCheck().then((doc) {
             if (doc != null) {
               switch (doc['registration_progress'] as int) {
@@ -64,9 +63,11 @@ class _LoginPageState extends State<LoginPage> {
                   }
                   break;
                 default:
+                  errorFloatingFlushbar('No record found');
                   return _loginForm();
               }
-            }else {
+            } else {
+              errorFloatingFlushbar('No record found');
               return _loginForm();
             }
           });
@@ -243,35 +244,31 @@ class _LoginPageState extends State<LoginPage> {
                   switch (doc['registration_progress'] as int) {
                     case 40:
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                      Routes.navigator.pushNamed(Routes.passengerForm);
+                        Routes.navigator.pushNamed(Routes.passengerForm);
                       });
-                    break;
+                      break;
                     case 80:
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                      Routes.navigator.pushNamed(Routes.profilePicture);
+                        Routes.navigator.pushNamed(Routes.profilePicture);
                       });
-                    break;
+                      break;
                     case 100:
                       if (Utils.AUTH_USER.emailVerified) {
                         if (doc['is_user_approved'] as bool) {
                           WidgetsBinding.instance.addPostFrameCallback((_) {
-                          Routes.navigator.pushNamed(Routes.home);
+                            Routes.navigator.pushNamed(Routes.home);
                           });
                         } else {
-                          errorFloatingFlushbar(
-                          'Your account is still being reviewed.');
-                          print('Your account is still being reviewed.');
                           return _loginForm();
                         }
                       } else {
-                        errorFloatingFlushbar('Please verify your email address');
                         Utils.AUTH_USER.sendEmailVerification();
                         return _loginForm();
                       }
-                    break;
+                      break;
                     default:
-                    return _loginForm();
-                  } 
+                      return _loginForm();
+                  }
                 } else {
                   return _loginForm();
                 }

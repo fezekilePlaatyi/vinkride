@@ -216,7 +216,7 @@ class _UploaderState extends State<Uploader> {
           successFloatingFlushbar(
               'Done!!, Now Check your emails to verify your email address');
           await Future.delayed(Duration(seconds: 3));
-          Routes.navigator.popAndPushNamed(Routes.home);
+          Routes.navigator.popAndPushNamed(Routes.loginPage);
         }
       }).catchError((err) {
         setState(() {
