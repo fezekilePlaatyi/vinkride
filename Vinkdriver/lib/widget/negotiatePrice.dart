@@ -48,21 +48,6 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
               ),
             ),
             SizedBox(height: 20.0),
-            FlatButton(
-              child: Text(
-                "Adjust money?",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Roboto-Regular',
-                ),
-              ),
-              onPressed: () {
-                setState(() {
-                  amountAdjust = true;
-                });
-              },
-            ),
             amountAdjust
                 ? TextFormField(
                     decoration: formDecor("Enter units in ZARs"),
@@ -71,7 +56,21 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
                       color: Colors.black,
                     ),
                   )
-                : '',
+                : FlatButton(
+                    child: Text(
+                      "Adjust money?",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Roboto-Regular',
+                      ),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        amountAdjust = true;
+                      });
+                    },
+                  ),
             SizedBox(height: 20.0),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -86,7 +85,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
                 SizedBox(width: 10.0),
                 RaisedButton(
                   onPressed: () {
-                    print("hey");
+                    print("Will Save Data");
                   },
                   child: Text('Submit'),
                   textColor: Colors.white,

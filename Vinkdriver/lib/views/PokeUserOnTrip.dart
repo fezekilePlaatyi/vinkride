@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:Vinkdriver/helper/Helper.dart';
 import 'package:Vinkdriver/helper/dialogHelper.dart';
+import 'package:Vinkdriver/widget/negotiatePrice.dart';
 
 class PokeUserOnTrip extends StatefulWidget {
   final userIdPoking;
@@ -64,7 +65,6 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
   }
 
   _displayListOfLoggedInUserRidesOffers(feedsData, userIdPoking) {
-    String currentUserId = auth.currentUser.uid;
     return Container(
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
