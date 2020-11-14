@@ -2,7 +2,7 @@ import 'package:Vinkdriver/model/Feeds.dart';
 import 'package:Vinkdriver/views/CreateTrip.dart';
 import 'package:Vinkdriver/views/SearchRide.dart';
 import 'package:Vinkdriver/widget/Menu.dart';
-import 'package:Vinkdriver/widget/RideRequests.dart';
+import 'package:Vinkdriver/widget/RideRequest.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:Vinkdriver/model/Helper.dart';
@@ -62,11 +62,12 @@ class _HomeState extends State<Home> {
             ),
           ],
         ),
-        body: _DriverHome());
+        body: _DriverHome(feedType));
   }
 
-  _DriverHome() {
-    Container(
+  _DriverHome(String feedType) {
+    
+    return Container(
         child: Stack(children: [
       StreamBuilder(
           stream: feeds.getAllFeeds(feedType),
@@ -90,8 +91,7 @@ class _HomeState extends State<Home> {
                             ) {
                               var feedData = snapshot.data.docs[index].data();
                               var feedId = snapshot.data.docs[index].id;
-
-                              return RideRequests(
+                              return RideRequest(
                                   feedData: feedData, feedId: feedId);
                             },
                           ),
