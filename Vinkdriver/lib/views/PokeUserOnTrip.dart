@@ -1,13 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Vinkdriver/model/Feeds.dart';
-import 'package:Vinkdriver/model/Notifications.dart';
-import 'package:Vinkdriver/services/VinkFirebaseMessagingService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:Vinkdriver/helper/Helper.dart';
 import 'package:Vinkdriver/helper/dialogHelper.dart';
-import 'package:Vinkdriver/widget/negotiatePrice.dart';
 
 class PokeUserOnTrip extends StatefulWidget {
   final userIdPoking;
@@ -21,13 +17,6 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
   Feeds feeds = new Feeds();
   var _currentIndex = "no_selection";
   var rideType = "rideOffer";
-  bool isLoading = false;
-
-  sendFCMMessage(Map notificationData, Map messageData, String reciever) async {
-    VinkFirebaseMessagingService()
-        .buildAndReturnFcmMessageBody(notificationData, messageData, reciever)
-        .then((data) => {VinkFirebaseMessagingService().sendFcmMessage(data)});
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,35 +131,5 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
             ),
           ),
         ]));
-  }
-
-  _loader() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        content: ListTile(
-          subtitle: isLoading
-              ? Container(
-                  height: 50.0,
-                  width: 50.0,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              : Text("Poked successfuly!"),
-        ),
-        actions: <Widget>[
-          isLoading
-              ? SizedBox.shrink()
-              : FlatButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  },
-                  child: Text("Got It!"),
-                )
-        ],
-      ),
-    );
   }
 }
