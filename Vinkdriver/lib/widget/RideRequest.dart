@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:Vinkdriver/helper/Helper.dart';
 import 'package:Vinkdriver/model/User.dart' as VinkUser;
 
-class RideRequests extends StatefulWidget {
+class RideRequest extends StatefulWidget {
   final feedData;
   final feedId;
-  RideRequests({this.feedData, this.feedId});
+  RideRequest({this.feedData, this.feedId});
   @override
-  _RideRequestsState createState() => _RideRequestsState();
+  _RideRequestState createState() => _RideRequestState();
 }
 
-class _RideRequestsState extends State<RideRequests> {
+class _RideRequestState extends State<RideRequest> {
   @override
   Widget build(BuildContext context) {
     var feedData = widget.feedData;
-    VinkUser.User user;
+    VinkUser.User user = new VinkUser.User();
 
     return GestureDetector(
       onTap: () => {},

@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 import 'package:Vinkdriver/model/Feeds.dart';
 import 'package:Vinkdriver/services/PlaceService.dart';
 import 'package:Vinkdriver/widget/AddressSearch.dart';
+import 'package:Vinkdriver/widget/RideRequest.dart';
 
 class SearchRide extends StatefulWidget {
   var typeOfRide;
@@ -141,8 +142,7 @@ class _SearchRideState extends State<SearchRide> {
                                           snapshot.data.docs[index].data();
                                       var feedId = snapshot.data.docs[index].id;
 
-                                      // return Text("Some trip ${feedData}");
-                                      return DriverFeed(
+                                      return RideRequest(
                                           feedData: feedData, feedId: feedId);
                                     },
                                   ),
