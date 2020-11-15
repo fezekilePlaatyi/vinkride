@@ -1,13 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:Vinkdriver/helper/helper.dart';
 import 'package:Vinkdriver/model/Notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Vinkdriver/services/VinkFirebaseMessagingService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 
 class NegotiatePrice extends StatefulWidget {
-  final rideId, userId;
-  NegotiatePrice({this.rideId, this.userId});
+  final rideId, userId, amountWillingToPay, feedData;
+  NegotiatePrice(
+      {this.rideId, this.userId, this.amountWillingToPay, this.feedData});
   @override
   _NegotiatePriceState createState() => _NegotiatePriceState();
 }
@@ -18,6 +22,8 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
   var amountAdjust = false;
   var userIdPoking;
   var rideId;
+  var amountWillingToPay;
+  var feedDataPokedTo;
 
   @override
   void initState() {
@@ -35,6 +41,8 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
     setState(() {
       userIdPoking = widget.userId;
       rideId = widget.rideId;
+      amountWillingToPay = widget.amountWillingToPay;
+      feedDataPokedTo = widget.feedData;
     });
 
     return Dialog(
@@ -66,10 +74,12 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
               ),
             ),
             SizedBox(height: 20.0),
+            Text("They willing to R$amountWillingToPay"),
             amountAdjust
                 ? TextFormField(
                     decoration: formDecor("Enter units in ZARs"),
                     controller: amountAdjustEditingController,
+                    keyboardType: TextInputType.number,
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.black,
@@ -104,12 +114,14 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
                 SizedBox(width: 10.0),
                 RaisedButton(
                   onPressed: () {
-                    // ;
-                    // isLoading = true;
                     _loader(true);
 
                     String currentUserId = auth.currentUser.uid;
-                    var amountAdjustment = amountAdjustEditingController.text;
+                    var amountAdjustment =
+                        amountAdjustEditingController.text != ""
+                            ? amountAdjustEditingController.text
+                            : amountWillingToPay;
+
                     _savePokeToDatabase(
                         userIdPoking, currentUserId, rideId, amountAdjustment);
                   },
@@ -139,10 +151,12 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
       'is_seen': false,
       'amount': amountAdjustment,
       'notification_type': 'pokedToJoinTrip',
-      'trip_id': rideId
+      'trip_id': rideId,
+      'departurePoint': feedDataPokedTo['departure_point'],
+      'destinationPoint': feedDataPokedTo['destination_point'],
+      'departureDatetime': DateFormat('dd-MM-yy kk:mm')
+          .format(feedDataPokedTo['departure_datetime'].toDate())
     };
-
-    print(notificationDataToDB);
 
     notifications
         .addNewNotification(notificationDataToDB, userIdPoking)
@@ -166,7 +180,11 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
       'driverId': currentUserId,
       'notificationType': 'pokedToJoinTrip',
       'amount': amountAdjustment,
-      'trip_id': rideId
+      'trip_id': rideId,
+      'departurePoint': feedDataPokedTo['departure_point'],
+      'destinationPoint': feedDataPokedTo['destination_point'],
+      'departureDatetime': DateFormat('dd-MM-yy kk:mm')
+          .format(feedDataPokedTo['departure_datetime'].toDate())
     };
 
     VinkFirebaseMessagingService()

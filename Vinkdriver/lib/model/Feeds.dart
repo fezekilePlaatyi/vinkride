@@ -5,7 +5,7 @@ class Feeds {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final feedsRef = FirebaseFirestore.instance.collection("vink_feeds");
   final userRef = FirebaseFirestore.instance.collection("users");
-  final currentUserId = "FirebaseAuth.instance.currentUser.uid";
+  final currentUserId = FirebaseAuth.instance.currentUser.uid;
 
   addFeed(Map<String, dynamic> feedData) {
     return feedsRef
