@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:passenger/model/Helper.dart';
+import 'package:passenger/models/Helper.dart';
 
 class PassengerSingleFeed extends StatelessWidget {
   @override

@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:passenger/model/Helper.dart';
+import 'package:passenger/models/Helper.dart';
 import 'package:passenger/routes/routes.gr.dart';
 import 'package:passenger/utils/Utils.dart';
 
@@ -34,7 +34,7 @@ class User {
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) async {
         Utils.AUTH_USER = value.user;
-        await Utils.PASSENGER_COLLECTION.doc(value.user.uid).set({
+        await Utils.DRIVER_COLLECTION.doc(value.user.uid).set({
           'name': name,
           'email': email,
           'created_at': Utils.NOW,
@@ -56,7 +56,7 @@ class User {
   Future<bool> setAbout(
       String phone_number, String address, String id_copy) async {
     try {
-      await Utils.PASSENGER_COLLECTION.doc(Utils.AUTH_USER.uid).update({
+      await Utils.DRIVER_COLLECTION.doc(Utils.AUTH_USER.uid).update({
         'phone_number': phone_number,
         'address': address,
         'id_copy': id_copy,
@@ -74,7 +74,7 @@ class User {
 
   Future<bool> uploadProfilePic(String profile_pic) async {
     try {
-      await Utils.PASSENGER_COLLECTION.doc(Utils.AUTH_USER.uid).update({
+      await Utils.DRIVER_COLLECTION.doc(Utils.AUTH_USER.uid).update({
         'profile_pic': profile_pic,
         'registration_progress': 100,
       });
@@ -86,12 +86,15 @@ class User {
   }
 
   loadCurrentUser() {
-    return Utils.PASSENGER_COLLECTION.doc(Utils.AUTH_USER.uid).snapshots();
+    return Utils.DRIVER_COLLECTION.doc(Utils.AUTH_USER.uid).snapshots();
+  }
+
+  Future<DocumentSnapshot> getUserById(String id) async {
+    return FirebaseFirestore.instance.collection("users").doc(id.trim()).get();
   }
 
   Future<Map> getUserForCheck() async {
-    print(await Utils.AUTH_USER);
-    return await Utils.PASSENGER_COLLECTION
+    return await Utils.DRIVER_COLLECTION
         .doc(Utils.AUTH_USER.uid)
         .get()
         .then((value) {
@@ -110,7 +113,7 @@ class User {
   Future<DocumentSnapshot> isLoggedIn() async {
     try {
       if (Utils.AUTH.currentUser != null) {
-        return Utils.PASSENGER_COLLECTION.doc(Utils.AUTH_USER.uid).get();
+        return Utils.DRIVER_COLLECTION.doc(Utils.AUTH_USER.uid).get();
       }
       return null;
     } catch (e) {

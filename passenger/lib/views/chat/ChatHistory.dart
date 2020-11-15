@@ -1,9 +1,9 @@
 import 'package:passenger/routes/routes.gr.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:passenger/model/Chat.dart';
-import 'package:passenger/model/Helper.dart';
-import 'package:passenger/model/User.dart';
+import 'package:passenger/models/Chat.dart';
+import 'package:passenger/models/Helper.dart';
+import 'package:passenger/models/User.dart';
 
 class ChatHistory extends StatefulWidget {
   @override

@@ -4,12 +4,12 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:passenger/model/onboardingModel.dart';
-import 'package:passenger/model/Helper.dart';
-import 'package:passenger/model/User.dart';
+import 'package:passenger/models/onboardingModel.dart';
+import 'package:passenger/models/Helper.dart';
+import 'package:passenger/models/User.dart';
 import 'package:passenger/routes/routes.gr.dart';
 import 'package:passenger/utils/Utils.dart';
-import 'package:passenger/widget/sliderTile.dart';
+import 'package:passenger/widgets/sliderTile.dart';
 
 class OnboardingSlider extends StatefulWidget {
   @override
