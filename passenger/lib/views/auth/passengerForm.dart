@@ -35,7 +35,7 @@ class _PassengerFormState extends State<PassengerForm> {
   }
 
   _uploadImage() async {
-    StorageUploadTask storageUploadTask = Utils.ID_STORAGE.putFile(_image);
+    UploadTask storageUploadTask = Utils.ID_STORAGE.putFile(_image);
 
     setState(() => isUploading = true);
     storageUploadTask.events.listen((event) {
@@ -44,15 +44,16 @@ class _PassengerFormState extends State<PassengerForm> {
               100);
     });
 
-    await storageUploadTask.onComplete;
-    Utils.ID_STORAGE.getDownloadURL().then((value) {
-      setState(() {
-        isUploading = false;
-        _id_copy = value;
-      });
+    await storageUploadTask.whenComplete(() {
+      Utils.ID_STORAGE.getDownloadURL().then((value) {
+        setState(() {
+          isUploading = false;
+          _id_copy = value;
+        });
 
-      print('$isUploading  Check  $_id_copy');
-    }).catchError((err) => print(err));
+        print('$isUploading  Check  $_id_copy');
+      }).catchError((err) => print(err));
+    });
   }
 
   Future<void> uploadUserData() async {

@@ -15,13 +15,13 @@ class Utils {
   static User AUTH_USER = FirebaseAuth.instance.currentUser;
 
   //---------------------> STORAGE <-----------------------
-  static StorageReference ID_STORAGE =
+  static Reference ID_STORAGE =
       FirebaseStorage.instance.ref().child('ID_DOCUMENTS/${AUTH_USER.uid}');
 
-  static StorageReference PROFILE_PIC_STORAGE =
+  static Reference PROFILE_PIC_STORAGE =
       FirebaseStorage.instance.ref().child('PROFILE_PICTURE/${AUTH_USER.uid}');
 
-  static StorageReference CHAT_FILES_STORAGE =
+  static Reference CHAT_FILES_STORAGE =
       FirebaseStorage.instance.ref().child('CHAT_FILES/$MILLI_SECONDS');
   // ------------------> COLLECTIONS <---------------------
   static final DRIVER_COLLECTION = DB.collection('drivers');
