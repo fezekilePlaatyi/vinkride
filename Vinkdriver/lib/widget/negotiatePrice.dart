@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:Vinkdriver/helper/helper.dart';
+import 'package:Vinkdriver/model/Notifications.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:Vinkdriver/services/VinkFirebaseMessagingService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class NegotiatePrice extends StatefulWidget {
   final rideId, userId;
@@ -9,7 +13,11 @@ class NegotiatePrice extends StatefulWidget {
 }
 
 class _NegotiatePriceState extends State<NegotiatePrice> {
+  final amountAdjustEditingController = TextEditingController();
+  final FirebaseAuth auth = FirebaseAuth.instance;
   var amountAdjust = false;
+  var userIdPoking;
+  var rideId;
 
   @override
   void initState() {
@@ -18,7 +26,17 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
   }
 
   @override
+  void dispose() {
+    amountAdjustEditingController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    setState(() {
+      userIdPoking = widget.userId;
+      rideId = widget.rideId;
+    });
+
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
@@ -51,6 +69,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
             amountAdjust
                 ? TextFormField(
                     decoration: formDecor("Enter units in ZARs"),
+                    controller: amountAdjustEditingController,
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.black,
@@ -85,7 +104,14 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
                 SizedBox(width: 10.0),
                 RaisedButton(
                   onPressed: () {
-                    print("Will Save Data");
+                    // ;
+                    // isLoading = true;
+                    _loader(true);
+
+                    String currentUserId = auth.currentUser.uid;
+                    var amountAdjustment = amountAdjustEditingController.text;
+                    _savePokeToDatabase(
+                        userIdPoking, currentUserId, rideId, amountAdjustment);
                   },
                   child: Text('Submit'),
                   textColor: Colors.white,
@@ -101,4 +127,81 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
           ],
         ),
       );
+
+  _savePokeToDatabase(String userIdPoking, String currentUserId, String rideId,
+      String amountAdjustment) {
+    Notifications notifications = new Notifications();
+
+    Map<String, dynamic> notificationDataToDB = {
+      'date_created': FieldValue.serverTimestamp(),
+      'to_user': userIdPoking,
+      'from_user': currentUserId,
+      'is_seen': false,
+      'amount': amountAdjustment,
+      'notification_type': 'pokedToJoinTrip',
+      'trip_id': rideId
+    };
+
+    print(notificationDataToDB);
+
+    notifications
+        .addNewNotification(notificationDataToDB, userIdPoking)
+        .then((value) {
+      _sendNotification(currentUserId, rideId, userIdPoking, amountAdjustment);
+      Navigator.of(context).pop();
+      _loader(false);
+    });
+  }
+
+  _sendNotification(String currentUserId, String rideId, String userIdPoking,
+      String amountAdjustment) {
+    var notificationData = {
+      'title': "New Notification",
+      'body':
+          "A Driver has poked you to avaliable Trip, click here for more details.",
+      'notificationType': 'pokedToJoinTrip'
+    };
+
+    var messageData = {
+      'driverId': currentUserId,
+      'notificationType': 'pokedToJoinTrip',
+      'amount': amountAdjustment,
+      'trip_id': rideId
+    };
+
+    VinkFirebaseMessagingService()
+        .buildAndReturnFcmMessageBody(
+            notificationData, messageData, userIdPoking)
+        .then((data) => {VinkFirebaseMessagingService().sendFcmMessage(data)});
+  }
+
+  _loader(bool isLoading) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: ListTile(
+          subtitle: isLoading
+              ? Container(
+                  height: 100.0,
+                  width: 80.0,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : Text("Poked successfuly!"),
+        ),
+        actions: <Widget>[
+          isLoading
+              ? SizedBox.shrink()
+              : FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                  child: Text("Got It!"),
+                )
+        ],
+      ),
+    );
+  }
 }
