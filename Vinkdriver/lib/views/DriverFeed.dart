@@ -15,7 +15,7 @@ class DriverFeed extends StatefulWidget {
 
 class _DriverFeedState extends State<DriverFeed> {
   final FirebaseAuth auth = FirebaseAuth.instance;
-  VinkUser.User user;
+  VinkUser.User user = new VinkUser.User();
   var feedData;
   var feedId;
   var currentUserId;

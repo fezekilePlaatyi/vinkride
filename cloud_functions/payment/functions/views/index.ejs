@@ -1,0 +1,50 @@
+<HTML>
+	<HEAD>
+	   <TITLE>Ozow Tester</TITLE>
+	</HEAD>
+	<BODY>
+	   <input type="button" id="payUsingOzow" value="Ozow">	   
+	   <script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+	   <script src="/sha512.js" type="text/javascript"></script>
+	   <script type="text/javascript" src="/ipay-noredirect-1.0.min.js"></script>
+	   <script>					  
+		  var ozow = new ozow();
+		  $('#payUsingOzow').click(function(){				
+				
+				var paymentUrl = 'https://stagingpay.ozow.com' 
+				var postData = {
+					"SiteCode":"TSTSTE0001",
+					"CountryCode":"ZA",
+					"CurrencyCode":"ZAR",
+					"Amount":"0.01",
+					"TransactionReference":"12345",
+					"BankReference":"12345",
+					"CancelUrl":"http://test.i-pay.co.za/responsetest.php",
+					"ErrorUrl":"http://test.i-pay.co.za/responsetest.php",
+					"SuccessUrl":"http://test.i-pay.co.za/responsetest.php",
+					"NotifyUrl":"http://test.i-pay.co.za/responsetest.php",
+					"IsTest":"true",
+					"HashCheck":"7e4ec86c769a451e742573ec20bfa851085820d6d6ca6d4a0b6a37e727a0f74693612001ca6585aae1e02fd0e8a736ea48d8a0add80b9e29d03bcf6827c81f47"
+				};
+				ozow.createPaymentModal(paymentUrl, postData)
+
+
+				$.ajax({
+				url: 'YourRestEndPoint',
+				headers: {
+					'Authorization':'Basic xxxxxxxxxxxxx',
+					'X-CSRF-TOKEN':'xxxxxxxxxxxxxxxxxxxx',
+					'Content-Type':'application/json'
+				},
+				method: 'POST',
+				dataType: 'json',
+				data: YourData,
+				success: function(data){
+				console.log('succes: '+data);
+				}
+			});
+
+		  	})			
+	   </script>
+	</BODY>
+ </HTML>

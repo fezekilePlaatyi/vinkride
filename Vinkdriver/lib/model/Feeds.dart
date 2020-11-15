@@ -84,6 +84,14 @@ class Feeds {
     return feedsRef.doc(feedId.trim()).get();
   }
 
+  getRidesByUserId(String userId, String rideType) {
+    return feedsRef
+        .orderBy("date_updated", descending: true)
+        .where("sender_uid", isEqualTo: userId.trim())
+        .where("feed_type", isEqualTo: rideType)
+        .snapshots();
+  }
+
   getFeedsByUserId(String userId) {
     return feedsRef
         .orderBy("date_updated", descending: true)

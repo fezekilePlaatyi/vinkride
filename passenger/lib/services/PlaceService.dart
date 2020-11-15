@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:Vinkdriver/constants.dart';
+import 'package:passenger/constants.dart';
 import 'package:http/http.dart';
 
 class Place {
@@ -40,7 +40,7 @@ class PlaceApiProvider {
 
   final sessionToken;
 
-  final apiKey = Constants.INTERCITY_PROJECT_KEY;
+  final apiKey = Constants.GMAPS_API_KEY;
 
   Future<List<Suggestion>> fetchSuggestions(String input, String lang) async {
     final request =

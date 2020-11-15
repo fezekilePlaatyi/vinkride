@@ -15,6 +15,7 @@ class PassengerForm extends StatefulWidget {
 }
 
 class _PassengerFormState extends State<PassengerForm> {
+  // ignore: non_constant_identifier_names
   String _address, _id_copy, _phone_number;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   File _image;
@@ -82,8 +83,8 @@ class _PassengerFormState extends State<PassengerForm> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(15),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            // mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Image.asset(
                 'assets/images/logo.png',
