@@ -1,3 +1,4 @@
+import 'package:Vinkdriver/model/Helper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Vinkdriver/model/Feeds.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,33 +25,56 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
     String currentUserId = auth.currentUser.uid;
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Select a trip to poke user to.'),
+      backgroundColor: Color(0xFFFCF9F9),
+      appBar: AppBar(
+        backgroundColor: Color(0xFFFCF9F9),
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.chevron_left,
+            color: Color(0xFFCC1718),
+            size: 30.0,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-        body: SingleChildScrollView(
-            child: StreamBuilder(
-                stream: feeds.getRidesByUserId(currentUserId, rideType),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    var feedsData = snapshot.data.docs.toList();
-                    if (feedsData.length > 0)
-                      return _displayListOfLoggedInUserRidesOffers(
-                          feedsData, userIdPoking);
-                    else
-                      return Container(
-                          alignment: Alignment(.1, -8),
-                          child: Text(
-                            "No Ride to poke user to!",
-                            style: TextStyle(
-                                fontSize: 25, fontWeight: FontWeight.w700),
-                          ));
-                  }
-                })));
+        title: Text(
+          'Poke To Trip',
+          style: TextStyle(
+            color: vinkBlack,
+            fontFamily: 'Roboto',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(15.0),
+        child: StreamBuilder(
+          stream: feeds.getRidesByUserId(currentUserId, rideType),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              var feedsData = snapshot.data.docs.toList();
+              if (feedsData.length > 0)
+                return _displayListOfLoggedInUserRidesOffers(
+                    feedsData, userIdPoking);
+              else
+                return Container(
+                  alignment: Alignment(.1, -8),
+                  child: Text(
+                    "No Ride to poke user to!",
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
+                  ),
+                );
+            }
+          },
+        ),
+      ),
+    );
   }
 
   _displayListOfLoggedInUserRidesOffers(feedsData, userIdPoking) {
@@ -59,42 +83,46 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            Container(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                  child: FlatButton(
+                child: Text(
+                  "CANCEL",
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    height: 1.5,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Roboto-Regular',
+                  ),
+                ),
+                onPressed: () => {Navigator.of(context).pop(true)},
+              )),
+              Container(
                 child: FlatButton(
-              child: Text(
-                "CANCEL",
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  height: 1.5,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Roboto-Regular',
+                  child: Text(
+                    "POKE",
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      height: 1.5,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Roboto-Regular',
+                    ),
+                  ),
+                  onPressed: () {
+                    if (_currentIndex == "no_selection") {
+                      return;
+                    }
+                    var rideId = _currentIndex;
+                    DialogHelper.insertPrice(context, rideId, userIdPoking);
+                  },
                 ),
               ),
-              onPressed: () => {Navigator.of(context).pop(true)},
-            )),
-            Container(
-                child: FlatButton(
-              child: Text(
-                "POKE",
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  height: 1.5,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Roboto-Regular',
-                ),
-              ),
-              onPressed: () {
-                if (_currentIndex == "no_selection") {
-                  return;
-                }
-                var rideId = _currentIndex;
-                DialogHelper.insertPrice(context, rideId, userIdPoking);
-              },
-            )),
-          ]),
+            ],
+          ),
           Container(
             child: Row(
               children: <Widget>[
@@ -110,19 +138,14 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
                       var departureDatetime = DateFormat('dd-MM-yy kk:mm')
                           .format(feedData['departure_datetime'].toDate());
 
-                      return RadioListTile(
-                        value: feedsData[index].id,
-                        groupValue: _currentIndex,
-                        title: Text(
-                            "A trip from $departurePoint to $destinationPoint at $departureDatetime"),
-                        onChanged: (val) {
-                          print(val);
-                          setState(() {
-                            _currentIndex = val;
-                          });
-                        },
-                        activeColor: Colors.red,
-                        selected: false,
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 10.0),
+                        child: _myScheduledTrips(
+                          departurePoint,
+                          destinationPoint,
+                          departureDatetime,
+                          userIdPoking,
+                        ),
                       );
                     },
                   ),
@@ -131,5 +154,79 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
             ),
           ),
         ]));
+  }
+
+  Widget _myScheduledTrips(departure, destination, departureDate, pokeId) {
+    return Material(
+      elevation: 0.2,
+      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+      color: Colors.white,
+      child: ListTile(
+        title: Text(
+          '$departure to $destination',
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 16.0,
+            color: vinkBlack,
+            fontFamily: 'roboto',
+          ),
+        ),
+        subtitle: Text(
+          departureDate,
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 15.0,
+            color: vinkDarkGrey,
+            fontFamily: 'roboto',
+          ),
+        ),
+        trailing: RaisedButton(
+          color: vinkBlack,
+          onPressed: () {
+            if (_currentIndex == "no_selection") {
+              return;
+            }
+            var rideId = _currentIndex;
+            DialogHelper.insertPrice(context, rideId, pokeId);
+          },
+          child: Text(
+            'Poke',
+            style: textStyle(16.0, Colors.white),
+          ),
+          shape: darkButton(),
+        ),
+      ),
+    );
+  }
+
+  _loader() {
+    var isLoading;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: ListTile(
+          subtitle: isLoading
+              ? Container(
+                  height: 50.0,
+                  width: 50.0,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : Text("Poked successfuly!"),
+        ),
+        actions: <Widget>[
+          isLoading
+              ? SizedBox.shrink()
+              : FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                  child: Text("Got It!"),
+                )
+        ],
+      ),
+    );
   }
 }
