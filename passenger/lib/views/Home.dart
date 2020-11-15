@@ -18,13 +18,14 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final FirebaseAuth auth = FirebaseAuth.instance;
+  String currentUserIdAsFCMChannel;
 
   @override
   void initState() {
     super.initState();
     final FirebaseMessaging _fcm = FirebaseMessaging();
 
-    String currentUserIdAsFCMChannel = auth.currentUser.uid;
+    currentUserIdAsFCMChannel = auth.currentUser.uid;
     VinkFirebaseMessagingService.init(currentUserIdAsFCMChannel);
     print("CHANNEL ID: $currentUserIdAsFCMChannel");
 
@@ -38,8 +39,24 @@ class _HomeState extends State<Home> {
           context: context,
           builder: (context) => AlertDialog(
             content: ListTile(
-              title: Text("Poked"),
-            ),
+                title: Text(
+                    "Poked to join a trip ${messageData['departurePoint']} To ${messageData['destinationPoint']}"),
+                subtitle: Text(
+                    "Time: ${messageData['departureDatetime']}. Fare - ${messageData['amount']}")),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("No thanks"),
+              ),
+              FlatButton(
+                onPressed: () {
+                  _addPassengerToTrip(messageData);
+                },
+                child: Text("Accept"),
+              ),
+            ],
           ),
         );
       }
@@ -176,5 +193,20 @@ class _HomeState extends State<Home> {
             }
           }),
     );
+  }
+
+  _addPassengerToTrip(Map messageData) {
+    Feeds feed = new Feeds();
+    Map<String, dynamic> newPassangerData = {
+      'date_requested': FieldValue.serverTimestamp(),
+      'payment_status': 'no_paid',
+    };
+
+    feed
+        .addPassengerToFeedTrip(
+            messageData['trip_id'], currentUserIdAsFCMChannel, newPassangerData)
+        .then((value) {
+      print("onFinishing adding passnger to trip $value");
+    });
   }
 }

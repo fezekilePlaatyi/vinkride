@@ -72,7 +72,7 @@ class _SideMenuState extends State<SideMenu> {
                       fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  user["isDriver"] as bool ? 'Driver' : 'Passenger',
+                  'Passenger',
                   style: TextStyle(
                     fontSize: 16.0,
                     color: Color(0xFFF2F2F2),

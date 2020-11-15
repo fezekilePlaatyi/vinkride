@@ -6,7 +6,7 @@ import 'package:passenger/utils/utilities.dart';
 
 class DisplayPassengerList extends StatefulWidget {
   final tripId;
-  DisplayPassengerList({this.tripId});
+  const DisplayPassengerList({this.tripId});
   @override
   DisplayPassengerListState createState() => DisplayPassengerListState();
 }
