@@ -124,13 +124,8 @@ class _ImageCaptureState extends State<ProfilePicture> {
                       defaultPic,
                     ),
                     SizedBox(height: 20.0),
-                    Text(
-                      'Upload Profile Picture',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'Roboto',
-                      ),
-                    ),
+                    Text('Upload Profile Picture',
+                        style: textStyle(16, vinkBlack)),
                   ],
                 )),
           ] else if (_imageFile != null) ...[
