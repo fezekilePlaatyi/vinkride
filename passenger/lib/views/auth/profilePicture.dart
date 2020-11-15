@@ -189,7 +189,7 @@ class Uploader extends StatefulWidget {
 
 class _UploaderState extends State<Uploader> {
   String filePath;
-  StorageUploadTask uploadTask;
+  UploadTask uploadTask;
   double uploadProgress = 0;
   User _user = new User();
   bool isLoading = false;
@@ -202,27 +202,27 @@ class _UploaderState extends State<Uploader> {
             (event.snapshot.bytesTransferred / event.snapshot.totalByteCount));
       });
     });
-    await uploadTask.onComplete;
-
-    Utils.PROFILE_PIC_STORAGE.getDownloadURL().then((value) {
-      setState(() {
-        isLoading = true;
-      });
-      _user.uploadProfilePic(value).then((value) async {
+    await uploadTask.whenComplete(() {
+      Utils.PROFILE_PIC_STORAGE.getDownloadURL().then((value) {
         setState(() {
-          isLoading = false;
+          isLoading = true;
         });
-        if (value) {
-          successFloatingFlushbar(
-              'Done!!, Now Check your emails to verify your email address');
-          await Future.delayed(Duration(seconds: 3));
-          Routes.navigator.popAndPushNamed(Routes.loginPage);
-        }
-      }).catchError((err) {
-        setState(() {
-          isLoading = false;
+        _user.uploadProfilePic(value).then((value) async {
+          setState(() {
+            isLoading = false;
+          });
+          if (value) {
+            successFloatingFlushbar(
+                'Done!!, Now Check your emails to verify your email address');
+            await Future.delayed(Duration(seconds: 3));
+            Routes.navigator.popAndPushNamed(Routes.loginPage);
+          }
+        }).catchError((err) {
+          setState(() {
+            isLoading = false;
+          });
+          errorFloatingFlushbar(err);
         });
-        errorFloatingFlushbar(err);
       });
     });
   }
@@ -240,20 +240,6 @@ class _UploaderState extends State<Uploader> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                  if (uploadTask.isPaused)
-                    FlatButton(
-                      child: Icon(Icons.play_arrow, size: 50),
-                      onPressed: () {
-                        uploadTask.resume();
-                      },
-                    ),
-                  if (uploadTask.isInProgress)
-                    FlatButton(
-                      child: Icon(Icons.pause, size: 50),
-                      onPressed: () {
-                        uploadTask.pause();
-                      },
-                    ),
                   LinearProgressIndicator(
                     value: uploadProgress,
                     backgroundColor: vinkLightGrey,

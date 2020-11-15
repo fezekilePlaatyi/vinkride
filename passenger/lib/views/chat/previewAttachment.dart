@@ -154,8 +154,8 @@ class _PreviewAttachmentState extends State<PreviewAttachment> {
   }
 
   _sendImage() async {
-    StorageReference storage = Utils.CHAT_FILES_STORAGE;
-    StorageUploadTask uploadTask = storage.putFile(_image);
+    Reference storage = Utils.CHAT_FILES_STORAGE;
+    UploadTask uploadTask = storage.putFile(_image);
     uploadTask.events.listen((event) {
       setState(() {
         uploadProgress =
@@ -164,13 +164,14 @@ class _PreviewAttachmentState extends State<PreviewAttachment> {
         print(uploadProgress);
       });
     });
-    await uploadTask.onComplete;
-    print('uploadCompleted');
-    storage.getDownloadURL().then((value) {
-      print(value);
-      setState(() {
-        attachment = value.toString();
-        _isUploading = false;
+    await uploadTask.whenComplete(() {
+      print('uploadCompleted');
+      storage.getDownloadURL().then((value) {
+        print(value);
+        setState(() {
+          attachment = value.toString();
+          _isUploading = false;
+        });
       });
     });
   }
