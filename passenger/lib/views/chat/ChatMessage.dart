@@ -9,10 +9,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:passenger/constants.dart';
-import 'package:passenger/model/Chat.dart';
-import 'package:passenger/model/DynamicLinks.dart';
-import 'package:passenger/model/Helper.dart';
-import 'package:passenger/model/User.dart';
+import 'package:passenger/models/Chat.dart';
+import 'package:passenger/models/DynamicLinks.dart';
+import 'package:passenger/models/Helper.dart';
+import 'package:passenger/models/User.dart';
 import 'package:passenger/services/DeviceLocation.dart';
 
 class ChatMessage extends StatefulWidget {

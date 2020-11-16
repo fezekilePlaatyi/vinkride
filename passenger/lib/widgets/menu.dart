@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:passenger/constants.dart';
-import 'package:passenger/model/DynamicLinks.dart';
-import 'package:passenger/model/Helper.dart';
-import 'package:passenger/model/User.dart';
+import 'package:passenger/models/DynamicLinks.dart';
+import 'package:passenger/models/Helper.dart';
+import 'package:passenger/models/User.dart';
 // import 'package:passenger/model/ShareToOtherPlatforms.dart';
 // import 'package:passenger/model/User.dart';
 // import 'package:passenger/services/DeviceLocation.dart';
@@ -73,7 +72,7 @@ class _SideMenuState extends State<SideMenu> {
                       fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  user["isDriver"] as bool ? 'Driver' : 'Passenger',
+                  'Passenger',
                   style: TextStyle(
                     fontSize: 16.0,
                     color: Color(0xFFF2F2F2),

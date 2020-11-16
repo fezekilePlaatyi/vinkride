@@ -9,11 +9,6 @@
       "type": "dart",
       "request": "launch",
       "program": "lib/main.dart"
-    },
-    {
-      "name": "passenger",
-      "request": "launch",
-      "type": "dart"
     }
   ]
 }

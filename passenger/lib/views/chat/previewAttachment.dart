@@ -4,8 +4,8 @@ import 'package:passenger/utils/Utils.dart';
 import 'package:emoji_picker/emoji_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:passenger/model/Chat.dart';
-import 'package:passenger/model/Helper.dart';
+import 'package:passenger/models/Chat.dart';
+import 'package:passenger/models/Helper.dart';
 
 class PreviewAttachment extends StatefulWidget {
   final File image;
