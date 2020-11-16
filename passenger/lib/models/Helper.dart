@@ -10,8 +10,8 @@ import 'package:simple_moment/simple_moment.dart';
 
 final defaultPic =
     'https://aed.cals.arizona.edu/sites/aed.cals.arizona.edu/files/images/people/default-profile_1.png';
-final vinkLightGrey = Color(0xfff2f2f2);
-final vinkRed = Color(0xffcc1718);
+final vinkLightGrey = Color(0xFFF2F2F2);
+final vinkRed = Color(0xFFCC1718);
 final vinkBlack = Color(0xFF1B1B1B);
 final vinkDarkGrey = Color(0xFF9E9E9E);
 
