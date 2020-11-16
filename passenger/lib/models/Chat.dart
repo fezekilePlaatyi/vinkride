@@ -23,8 +23,7 @@ class Chat {
     }
 
     var messageArr = [_message];
-
-    await Utils.DRIVER_COLLECTION
+    await Utils.PASSENGER_COLLECTION
         .doc(this.id)
         .collection('chats')
         .doc(receiver)
@@ -33,7 +32,7 @@ class Chat {
       'text_messages': FieldValue.arrayUnion(messageArr)
     }).catchError((err) async {
       if (err.code == 'not-found') {
-        await Utils.DRIVER_COLLECTION
+        await Utils.PASSENGER_COLLECTION
             .doc(this.id)
             .collection('chats')
             .doc(receiver)
@@ -44,7 +43,7 @@ class Chat {
       }
     });
 
-    await Utils.PASSENGER_COLLECTION
+    await Utils.DRIVER_COLLECTION
         .doc(receiver)
         .collection('chats')
         .doc(this.id)
@@ -53,7 +52,7 @@ class Chat {
       'text_messages': FieldValue.arrayUnion(messageArr)
     }).catchError((err) async {
       if (err.code == 'not-found') {
-        await Utils.PASSENGER_COLLECTION
+        await Utils.DRIVER_COLLECTION
             .doc(receiver)
             .collection('chats')
             .doc(this.id)
@@ -66,7 +65,7 @@ class Chat {
   }
 
   loadMessages(String receiver) {
-    return Utils.DRIVER_COLLECTION
+    return Utils.PASSENGER_COLLECTION
         .doc(this.id)
         .collection('chats')
         .doc(receiver.trim())
@@ -75,7 +74,7 @@ class Chat {
 
   loadChatHistoryList() {
     try {
-      return Utils.DRIVER_COLLECTION
+      return Utils.PASSENGER_COLLECTION
           .doc(this.id)
           .collection('chats')
           .orderBy('last_date', descending: true)
@@ -87,34 +86,10 @@ class Chat {
 
   markAsRead(sender) async {
     try {
-      await Utils.DRIVER_COLLECTION
-          .doc(id)
-          .collection('chats')
-          .doc(sender)
-          .get()
-          .then((res) async {
-        if (res.exists) {
-          var doc = res.data();
-          List text_messages = doc['text_messages'];
-          text_messages.forEach((message) {
-            if (message['receiver'] == id) {
-              var index = text_messages.indexOf(message);
-              text_messages[index]['is_read'] = true;
-            }
-          });
-
-          await Utils.DRIVER_COLLECTION
-              .doc(id)
-              .collection('chats')
-              .doc(sender)
-              .update({'text_messages': text_messages});
-        }
-      });
-
       await Utils.PASSENGER_COLLECTION
-          .doc(sender)
-          .collection('chats')
           .doc(id)
+          .collection('chats')
+          .doc(sender)
           .get()
           .then((res) async {
         if (res.exists) {
@@ -128,12 +103,38 @@ class Chat {
           });
 
           await Utils.PASSENGER_COLLECTION
-              .doc(sender)
+              .doc(id)
               .collection('chats')
               .doc(sender)
               .update({'text_messages': text_messages});
         }
       });
-    } catch (e) {}
+
+      await Utils.DRIVER_COLLECTION
+          .doc(sender)
+          .collection('chats')
+          .doc(id)
+          .get()
+          .then((res) async {
+        if (res.exists) {
+          var doc = res.data();
+          List text_messages = doc['text_messages'];
+          text_messages.forEach((message) {
+            if (message['receiver'] == id) {
+              var index = text_messages.indexOf(message);
+              text_messages[index]['is_read'] = true;
+            }
+          });
+
+          await Utils.DRIVER_COLLECTION
+              .doc(sender)
+              .collection('chats')
+              .doc(id)
+              .update({'text_messages': text_messages});
+        }
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 }

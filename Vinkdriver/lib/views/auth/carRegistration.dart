@@ -29,6 +29,13 @@ class _CarRegitrationState extends State<CarRegitration> {
               SizedBox(
                 height: 40,
               ),
+              FadeAnimantion(
+                1.00,
+                TextFormField(
+                  style: textStyle(16, vinkBlack),
+                  decoration: formDecor('Car Name'),
+                ),
+              ),
               FadeAnimation(
                 1.2,
                 TextFormField(

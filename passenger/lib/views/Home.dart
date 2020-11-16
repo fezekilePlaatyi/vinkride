@@ -6,10 +6,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:passenger/models/Feeds.dart';
 import 'package:passenger/models/Helper.dart';
 import 'package:passenger/services/VinkFirebaseMessagingService.dart';
-import 'package:passenger/views/createTrip.dart';
 import 'package:passenger/views/SearchRide.dart';
 import 'package:passenger/widgets/driverFeed.dart';
 import 'package:passenger/widgets/menu.dart';
+import 'package:passenger/routes/routes.gr.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -104,13 +104,8 @@ class _HomeState extends State<Home> {
         ),
         actions: [
           IconButton(
-            onPressed: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SearchRide(),
-                ),
-              )
+            onPressed: () {
+              Routes.navigator.pushNamed(Routes.searchRide);
             },
             icon: Icon(
               Icons.search,
@@ -168,11 +163,8 @@ class _HomeState extends State<Home> {
                         height: 60.0,
                         child: RaisedButton(
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        CreateTrip(feedType: 'rideRequest')));
+                            Routes.navigator.pushNamed(Routes.createTrip,
+                                arguments: 'rideRequest');
                           },
                           child: Icon(
                             FontAwesomeIcons.plus,
