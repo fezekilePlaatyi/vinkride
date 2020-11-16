@@ -65,7 +65,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     Feeds feeds = new Feeds();
-    var feedType = 'offer';
+    var feedType = 'rideOffer';
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       drawer: Drawer(

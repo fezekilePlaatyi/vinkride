@@ -33,7 +33,7 @@ class DisplayPassengerListState extends State<DisplayPassengerList> {
                   var feedPassengerData = feedDataPassengerDocs[index].data();
                   var feedPassengerId = feedDataPassengerDocs[index].id;
                   return FutureBuilder(
-                      future: user.getUserById(feedPassengerId),
+                      future: user.getUserById(feedPassengerId, 'passengers'),
                       builder: (BuildContext context,
                           AsyncSnapshot<DocumentSnapshot> snapshot) {
                         if (!snapshot.hasData) {

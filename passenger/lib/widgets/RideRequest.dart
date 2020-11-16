@@ -29,7 +29,7 @@ class _RideRequestState extends State<RideRequest> {
           children: [
             Container(
               child: FutureBuilder(
-                  future: user.getUserById(feedData['sender_uid']),
+                  future: user.getUserById(feedData['sender_uid'], 'passengers'),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (!snapshot.hasData) {
                       return Container(

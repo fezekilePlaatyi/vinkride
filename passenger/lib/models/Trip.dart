@@ -9,8 +9,11 @@ class Trip {
   String currentUserId = FirebaseAuth.instance.currentUser.uid;
 
   joinTrip(feedId, feedData, context) {
-    user.getUserById(currentUserId).then((documentSnapshot) {
+    user.getUserById(currentUserId, 'passengers').then((documentSnapshot) {
       var userDetails = documentSnapshot.data();
+
+
+
       if (userDetails.containsKey('token_for_recurring_payment') &&
           userDetails['token_for_recurring_payment'] != null) {
         Navigator.push(
