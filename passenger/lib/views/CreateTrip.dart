@@ -11,8 +11,8 @@ import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 
 class CreateTrip extends StatefulWidget {
-  final feedType;
-  CreateTrip({this.feedType});
+  final String feedType;
+  const CreateTrip({this.feedType});
   @override
   _CreateTripPageState createState() => _CreateTripPageState();
 }
@@ -53,38 +53,36 @@ class _CreateTripPageState extends State<CreateTrip> {
   Widget build(BuildContext context) {
     theFeedType = widget.feedType;
 
-    return MaterialApp(
-      home: new Scaffold(
-        appBar: AppBar(
-          backgroundColor: Color(0xFFFCF9F9),
-          elevation: 0,
-          leading: IconButton(
-            icon: Icon(
-              Icons.chevron_left,
-              color: Color(0xFFCC1718),
-              size: 30.0,
-            ),
-            onPressed: () => Navigator.of(context).pop(),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFFFCF9F9),
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.chevron_left,
+            color: Color(0xFFCC1718),
+            size: 30.0,
           ),
-          centerTitle: true,
-          title: Text(
-            'Add ${theFeedType == 'rideOffer' ? 'Ride Offer' : 'Inter-Interest'} ',
-            style: TextStyle(
-              color: Color(0xFF1B1B1B),
-              fontFamily: 'Roboto',
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        centerTitle: true,
+        title: Text(
+          'Add ${theFeedType == 'rideOffer' ? 'Ride Offer' : 'Inter-Interest'} ',
+          style: TextStyle(
+            color: Color(0xFF1B1B1B),
+            fontFamily: 'Roboto',
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        body: SingleChildScrollView(
-          child: new Container(
-            margin: new EdgeInsets.all(15.0),
-            child: new Form(
-              key: _key,
-              autovalidateMode: AutovalidateMode.always,
-              child: FormUI(theFeedType),
-            ),
+      ),
+      body: SingleChildScrollView(
+        child: new Container(
+          margin: new EdgeInsets.all(15.0),
+          child: new Form(
+            key: _key,
+            autovalidateMode: AutovalidateMode.always,
+            child: FormUI(theFeedType),
           ),
         ),
       ),
@@ -197,35 +195,38 @@ class _CreateTripPageState extends State<CreateTrip> {
                   autocorrect: true,
                   decoration: formDecor('Describe your vehicle'),
                   validator: validateAlphaNumeric,
-                ))
+                ),
+              )
             : '',
         new SizedBox(height: 15.0),
         Container(
-            alignment: Alignment.center,
-            margin: const EdgeInsets.only(top: 10.0),
-            child: SizedBox(
-                width: 300, // specific value
-                child: RaisedButton(
-                  color: Colors.black87,
-                  child: GestureDetector(
-                    child: Text(
-                      'Add',
-                      style: TextStyle(
-                        fontSize: 18,
-                        letterSpacing: 1,
-                      ),
-                    ),
+          alignment: Alignment.center,
+          margin: const EdgeInsets.only(top: 10.0),
+          child: SizedBox(
+            width: 300, // specific value
+            child: RaisedButton(
+              color: Colors.black87,
+              child: GestureDetector(
+                child: Text(
+                  'Add',
+                  style: TextStyle(
+                    fontSize: 18,
+                    letterSpacing: 1,
                   ),
-                  textColor: Colors.white,
-                  shape: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black12),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  padding: const EdgeInsets.all(15),
-                  onPressed: () {
-                    _postTrip();
-                  },
-                )))
+                ),
+              ),
+              textColor: Colors.white,
+              shape: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.black12),
+                borderRadius: BorderRadius.circular(50),
+              ),
+              padding: const EdgeInsets.all(15),
+              onPressed: () {
+                _postTrip();
+              },
+            ),
+          ),
+        )
       ],
     );
   }

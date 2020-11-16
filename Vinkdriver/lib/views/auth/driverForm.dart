@@ -15,7 +15,7 @@ class DriverForm extends StatefulWidget {
 }
 
 class _DriverFormState extends State<DriverForm> {
-  String _address, _id_copy, _phone_number;
+  String _address, _licency_copy, _phone_number;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   File _image;
   var uploadProgress = 0.00;
@@ -34,7 +34,7 @@ class _DriverFormState extends State<DriverForm> {
   }
 
   _uploadImage() async {
-    StorageUploadTask storageUploadTask = Utils.ID_STORAGE.putFile(_image);
+    StorageUploadTask storageUploadTask = Utils.LICENCE_STORAGE.putFile(_image);
 
     setState(() => isUploading = true);
     storageUploadTask.events.listen((event) {
@@ -44,13 +44,13 @@ class _DriverFormState extends State<DriverForm> {
     });
 
     await storageUploadTask.onComplete;
-    Utils.ID_STORAGE.getDownloadURL().then((value) {
+    Utils.LICENCE_STORAGE.getDownloadURL().then((value) {
       setState(() {
         isUploading = false;
-        _id_copy = value;
+        _licency_copy = value;
       });
 
-      print('$isUploading  Check  $_id_copy');
+      print('$isUploading  Check  $_licency_copy');
     }).catchError((err) => print(err));
   }
 
@@ -60,7 +60,7 @@ class _DriverFormState extends State<DriverForm> {
     if (form.validate()) {
       form.save();
       if (_image != null) {
-        _user.setAbout(_phone_number, _address, _id_copy).then((value) {
+        _user.setAbout(_phone_number, _address, _licency_copy).then((value) {
           print(value);
           if (value as bool) {
             Routes.navigator.popAndPushNamed(Routes.profilePicture);
@@ -69,7 +69,7 @@ class _DriverFormState extends State<DriverForm> {
           errorFloatingFlushbar(err);
         });
       } else {
-        errorFloatingFlushbar('Upload your ID Copy');
+        errorFloatingFlushbar('Upload your Licence Copy');
       }
     }
   }
@@ -149,7 +149,7 @@ class _DriverFormState extends State<DriverForm> {
                                     children: [
                                       Text(
                                         _image == null
-                                            ? 'Upload your ID copy.'
+                                            ? 'Upload your Licence copy.'
                                             : (isUploading
                                                 ? 'Upload in progress...'
                                                 : 'Done Uploading'),

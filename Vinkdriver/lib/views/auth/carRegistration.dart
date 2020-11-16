@@ -27,6 +27,10 @@ class _CarRegitrationState extends State<CarRegitration> {
               ),
               TextFormField(
                 style: textStyle(16, vinkBlack),
+                decoration: formDecor('Car Name'),
+              ),
+              TextFormField(
+                style: textStyle(16, vinkBlack),
                 decoration: formDecor('Car Model'),
               ),
               SizedBox(height: 10.0),

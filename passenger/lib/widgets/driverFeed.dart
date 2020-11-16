@@ -126,12 +126,20 @@ class DriverFeedState extends State<DriverFeed> {
                                               ),
                                             ),
                                             child: CircleAvatar(
+                                              backgroundColor: Colors.white24,
                                               child: ClipOval(
                                                 child: SizedBox(
                                                   height: 50.0,
                                                   width: 50.0,
                                                   child: Image.network(
-                                                    defaultPic,
+                                                    userDetails.containsKey(
+                                                                "profile_pic") &&
+                                                            userDetails[
+                                                                    'profile_pic'] !=
+                                                                null
+                                                        ? userDetails[
+                                                            'profile_pic']
+                                                        : defaultPic,
                                                     fit: BoxFit.fill,
                                                   ),
                                                 ),
@@ -151,6 +159,7 @@ class DriverFeedState extends State<DriverFeed> {
                                       ),
                                     ),
                                     child: CircleAvatar(
+                                      backgroundColor: Colors.white,
                                       child: ClipOval(
                                         child: SizedBox(
                                           height: 50.0,
@@ -209,6 +218,7 @@ class DriverFeedState extends State<DriverFeed> {
   Widget driverDetails(userDetails) {
     return ListTile(
       leading: CircleAvatar(
+        backgroundColor: Colors.white,
         radius: 25.0,
         child: ClipOval(
           child: SizedBox(

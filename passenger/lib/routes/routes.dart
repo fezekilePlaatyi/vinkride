@@ -1,5 +1,9 @@
 import 'package:auto_route/auto_route_annotations.dart';
+import 'package:passenger/views/CreateTrip.dart';
 import 'package:passenger/views/Home.dart';
+import 'package:passenger/views/SearchRide.dart';
+import 'package:passenger/views/ViewingTrip.dart';
+import 'package:passenger/views/VinkDetails.dart';
 import 'package:passenger/views/auth/passengerForm.dart';
 import 'package:passenger/views/auth/login.dart';
 import 'package:passenger/views/auth/profilePicture.dart';
@@ -8,6 +12,7 @@ import 'package:passenger/views/chat/ChatHistory.dart';
 import 'package:passenger/views/chat/ChatMessage.dart';
 import 'package:passenger/views/chat/previewAttachment.dart';
 import 'package:passenger/views/onboarding.dart';
+import 'package:passenger/views/user/myFeeds.dart';
 
 @autoRouter
 class $Routes {
@@ -21,4 +26,9 @@ class $Routes {
   ChatHistory chatHistory;
   ChatMessage chatMessage;
   PreviewAttachment previewAttachment;
+  ViewingTrip viewingTrip;
+  MyFeeds myFeeds;
+  VinkDetails vinkDetails;
+  CreateTrip createTrip;
+  SearchRide searchRide;
 }

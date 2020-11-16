@@ -15,8 +15,9 @@ class Utils {
   static User AUTH_USER = FirebaseAuth.instance.currentUser;
 
   //---------------------> STORAGE <-----------------------
-  static StorageReference ID_STORAGE =
-      FirebaseStorage.instance.ref().child('ID_DOCUMENTS/${AUTH_USER.uid}');
+  static StorageReference LICENCE_STORAGE = FirebaseStorage.instance
+      .ref()
+      .child('LICENCE_DOCUMENTS/${AUTH_USER.uid}');
 
   static StorageReference PROFILE_PIC_STORAGE =
       FirebaseStorage.instance.ref().child('PROFILE_PICTURE/${AUTH_USER.uid}');

@@ -8,8 +8,8 @@ import 'package:passenger/widgets/AddressSearch.dart';
 import 'package:passenger/widgets/RideRequest.dart';
 
 class SearchRide extends StatefulWidget {
-  var typeOfRide;
-  SearchRide({this.typeOfRide});
+  final String typeOfRide;
+  const SearchRide({this.typeOfRide});
   @override
   State<StatefulWidget> createState() => _SearchRideState();
 }

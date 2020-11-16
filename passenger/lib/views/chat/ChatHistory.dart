@@ -78,6 +78,7 @@ class _ChatHistoryState extends State<ChatHistory> {
                                     child: Text(
                                       "No active chats!",
                                       style: TextStyle(
+                                          color: Colors.black54,
                                           fontSize: 25,
                                           fontWeight: FontWeight.w700),
                                     ))),
