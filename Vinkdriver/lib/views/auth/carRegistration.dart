@@ -1,4 +1,5 @@
 import 'package:Vinkdriver/model/Helper.dart';
+import 'package:Vinkdriver/views/animations/fadeAnimation.dart';
 import 'package:flutter/material.dart';
 
 class CarRegitration extends StatefulWidget {
@@ -18,37 +19,47 @@ class _CarRegitrationState extends State<CarRegitration> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Image.asset(
-                'assets/images/logo.png',
-                height: 90,
+              FadeAnimation(
+                1,
+                Image.asset(
+                  'assets/images/logo.png',
+                  height: 90,
+                ),
               ),
               SizedBox(
                 height: 40,
               ),
-              TextFormField(
-                style: textStyle(16, vinkBlack),
-                decoration: formDecor('Car Model'),
+              FadeAnimation(
+                1.2,
+                TextFormField(
+                  style: textStyle(16, vinkBlack),
+                  decoration: formDecor('Car Model'),
+                ),
               ),
               SizedBox(height: 10.0),
-              TextFormField(
-                style: textStyle(16, vinkBlack),
-                decoration: formDecor('Car Registration No.'),
+              FadeAnimation(
+                1.4,
+                TextFormField(
+                  style: textStyle(16, vinkBlack),
+                  decoration: formDecor('Car Registration No.'),
+                ),
               ),
               SizedBox(
                 height: 20,
               ),
-              RaisedButton(
-                color: vinkBlack,
-                child: GestureDetector(
+              FadeAnimation(
+                1.6,
+                RaisedButton(
+                  color: vinkBlack,
                   child: Text(
                     'Finish',
                     style: textStyle(16, Colors.white),
                   ),
+                  textColor: Colors.white,
+                  shape: darkButton(),
+                  padding: const EdgeInsets.all(15),
+                  onPressed: () => {},
                 ),
-                textColor: Colors.white,
-                shape: darkButton(),
-                padding: const EdgeInsets.all(15),
-                onPressed: () => {},
               ),
             ],
           ),
