@@ -29,15 +29,15 @@ class _CarRegitrationState extends State<CarRegitration> {
               SizedBox(
                 height: 40,
               ),
-              FadeAnimantion(
-                1.00,
+              FadeAnimation(
+                1.2,
                 TextFormField(
                   style: textStyle(16, vinkBlack),
                   decoration: formDecor('Car Name'),
                 ),
               ),
               FadeAnimation(
-                1.2,
+                1.4,
                 TextFormField(
                   style: textStyle(16, vinkBlack),
                   decoration: formDecor('Car Model'),
@@ -45,7 +45,7 @@ class _CarRegitrationState extends State<CarRegitration> {
               ),
               SizedBox(height: 10.0),
               FadeAnimation(
-                1.4,
+                1.6,
                 TextFormField(
                   style: textStyle(16, vinkBlack),
                   decoration: formDecor('Car Registration No.'),
@@ -55,7 +55,7 @@ class _CarRegitrationState extends State<CarRegitration> {
                 height: 20,
               ),
               FadeAnimation(
-                1.6,
+                1.8,
                 RaisedButton(
                   color: vinkBlack,
                   child: Text(
