@@ -54,16 +54,31 @@ class User {
   }
 
   Future<bool> setAbout(
-      String phone_number, String address, String id_copy) async {
+      String phone_number, String address, String licence_copy) async {
     try {
       await Utils.DRIVER_COLLECTION.doc(Utils.AUTH_USER.uid).update({
         'phone_number': phone_number,
         'address': address,
-        'id_copy': id_copy,
+        'licence_copy': licence_copy,
         'registration_progress': 80
       }).catchError((err) {
         errorFloatingFlushbar(err.message);
         return false;
+      });
+      return true;
+    } catch (e) {
+      errorFloatingFlushbar(e);
+      return false;
+    }
+  }
+
+  Future<bool> setCarRecord(
+      {String carName, String carModel, String carRegistrationNumber}) async {
+    try {
+      await Utils.DRIVER_COLLECTION.doc(Utils.AUTH_USER.uid).update({
+        'car_name': carName,
+        'car_model': carModel,
+        'car_registration_number': carRegistrationNumber
       });
       return true;
     } catch (e) {

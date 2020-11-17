@@ -34,7 +34,7 @@ class User {
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) async {
         Utils.AUTH_USER = value.user;
-        await Utils.DRIVER_COLLECTION.doc(value.user.uid).set({
+        await Utils.PASSENGER_COLLECTION.doc(value.user.uid).set({
           'name': name,
           'email': email,
           'created_at': Utils.NOW,
@@ -56,7 +56,7 @@ class User {
   Future<bool> setAbout(
       String phone_number, String address, String id_copy) async {
     try {
-      await Utils.DRIVER_COLLECTION.doc(Utils.AUTH_USER.uid).update({
+      await Utils.PASSENGER_COLLECTION.doc(Utils.AUTH_USER.uid).update({
         'phone_number': phone_number,
         'address': address,
         'id_copy': id_copy,
@@ -74,7 +74,7 @@ class User {
 
   Future<bool> uploadProfilePic(String profile_pic) async {
     try {
-      await Utils.DRIVER_COLLECTION.doc(Utils.AUTH_USER.uid).update({
+      await Utils.PASSENGER_COLLECTION.doc(Utils.AUTH_USER.uid).update({
         'profile_pic': profile_pic,
         'registration_progress': 100,
       });
@@ -86,7 +86,7 @@ class User {
   }
 
   loadCurrentUser() {
-    return Utils.DRIVER_COLLECTION.doc(Utils.AUTH_USER.uid).snapshots();
+    return Utils.PASSENGER_COLLECTION.doc(Utils.AUTH_USER.uid).snapshots();
   }
 
   Future<DocumentSnapshot> getUserById(String userId, String userType) async {
@@ -97,7 +97,7 @@ class User {
   }
 
   Future<Map> getUserForCheck() async {
-    return await Utils.DRIVER_COLLECTION
+    return await Utils.PASSENGER_COLLECTION
         .doc(Utils.AUTH_USER.uid)
         .get()
         .then((value) {

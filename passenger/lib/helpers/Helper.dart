@@ -5,12 +5,11 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:passenger/models/Helper.dart';
 import 'package:simple_moment/simple_moment.dart';
 
 final defaultPic =
     'https://aed.cals.arizona.edu/sites/aed.cals.arizona.edu/files/images/people/default-profile_1.png';
-final vinkLightGrey = Color(0xfff2f2f2);
-final vinkRed = Color(0xffcc1719);
 final userRef = FirebaseFirestore.instance.collection("users");
 final chatRef = FirebaseFirestore.instance.collection("chats");
 final requestRef = FirebaseFirestore.instance.collection("requests");
@@ -173,23 +172,6 @@ errorPage(BuildContext context) {
       builder: (context) => AlertDialog(
             title: Text("Error occured.."),
           ));
-}
-
-InputDecoration formDecor(String hint) {
-  return InputDecoration(
-    filled: true,
-    fillColor: Colors.white,
-    hintText: hint,
-    contentPadding: const EdgeInsets.all(15),
-    focusedBorder: UnderlineInputBorder(
-      borderSide: BorderSide(color: Colors.black12),
-      borderRadius: BorderRadius.circular(0),
-    ),
-    enabledBorder: UnderlineInputBorder(
-      borderSide: BorderSide(color: Colors.black12),
-      borderRadius: BorderRadius.circular(0),
-    ),
-  );
 }
 
 InputDecoration searchBarDeco(String hint) {

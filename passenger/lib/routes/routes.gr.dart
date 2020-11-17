@@ -18,6 +18,11 @@ import 'package:passenger/views/auth/profilePicture.dart';
 import 'package:passenger/views/chat/ChatHistory.dart';
 import 'package:passenger/views/chat/ChatMessage.dart';
 import 'package:passenger/views/chat/previewAttachment.dart';
+import 'package:passenger/views/ViewingTrip.dart';
+import 'package:passenger/views/user/myFeeds.dart';
+import 'package:passenger/views/VinkDetails.dart';
+import 'package:passenger/views/CreateTrip.dart';
+import 'package:passenger/views/SearchRide.dart';
 
 class Routes {
   static const onboardingSlider = '/';
@@ -29,6 +34,11 @@ class Routes {
   static const chatHistory = '/chat-history';
   static const chatMessage = '/chat-message';
   static const previewAttachment = '/preview-attachment';
+  static const viewingTrip = '/viewing-trip';
+  static const myFeeds = '/my-feeds';
+  static const vinkDetails = '/vink-details';
+  static const createTrip = '/create-trip';
+  static const searchRide = '/search-ride';
   static GlobalKey<NavigatorState> get navigatorKey =>
       getNavigatorKey<Routes>();
   static NavigatorState get navigator => navigatorKey.currentState;
@@ -91,6 +101,43 @@ class Routes {
               userId: typedArgs.userId,
               image: typedArgs.image,
               message: typedArgs.message),
+          settings: settings,
+        );
+      case Routes.viewingTrip:
+        if (hasInvalidArgs<String>(args, isRequired: true)) {
+          return misTypedArgsRoute<String>(args);
+        }
+        final typedArgs = args as String;
+        return MaterialPageRoute(
+          builder: (_) => ViewingTrip(tripId: typedArgs),
+          settings: settings,
+        );
+      case Routes.myFeeds:
+        return MaterialPageRoute(
+          builder: (_) => MyFeeds(),
+          settings: settings,
+        );
+      case Routes.vinkDetails:
+        return MaterialPageRoute(
+          builder: (_) => VinkDetails(),
+          settings: settings,
+        );
+      case Routes.createTrip:
+        if (hasInvalidArgs<String>(args)) {
+          return misTypedArgsRoute<String>(args);
+        }
+        final typedArgs = args as String;
+        return MaterialPageRoute(
+          builder: (_) => CreateTrip(feedType: typedArgs),
+          settings: settings,
+        );
+      case Routes.searchRide:
+        if (hasInvalidArgs<String>(args)) {
+          return misTypedArgsRoute<String>(args);
+        }
+        final typedArgs = args as String;
+        return MaterialPageRoute(
+          builder: (_) => SearchRide(typeOfRide: typedArgs),
           settings: settings,
         );
       default:

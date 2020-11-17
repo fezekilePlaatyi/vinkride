@@ -118,29 +118,38 @@ class DriverFeedState extends State<DriverFeed> {
                                             var userDetails =
                                                 snapshot.data.data();
                                             return Container(
-                                              margin: const EdgeInsets.only(
-                                                  left: 0),
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: Color(0xFFF2F2F2),
-                                                ),
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(50),
-                                                ),
-                                              ),
-                                              child: CircleAvatar(
-                                                child: ClipOval(
-                                                  child: SizedBox(
-                                                    height: 50.0,
-                                                    width: 50.0,
-                                                    child: Image.network(
-                                                      defaultPic,
-                                                      fit: BoxFit.fill,
-                                                    ),
+                                                margin: const EdgeInsets.only(
+                                                    left: 0),
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: Color(0xFFF2F2F2),
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                    Radius.circular(50),
                                                   ),
                                                 ),
-                                              ),
-                                            );
+                                                child: CircleAvatar(
+                                                  backgroundColor:
+                                                      Colors.white24,
+                                                  child: ClipOval(
+                                                    child: SizedBox(
+                                                      height: 50.0,
+                                                      width: 50.0,
+                                                      child: Image.network(
+                                                        userDetails.containsKey(
+                                                                    "profile_pic") &&
+                                                                userDetails[
+                                                                        'profile_pic'] !=
+                                                                    null
+                                                            ? userDetails[
+                                                                'profile_pic']
+                                                            : defaultPic,
+                                                        fit: BoxFit.fill,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ));
                                           }
                                         }),
                                     Container(
@@ -217,6 +226,7 @@ class DriverFeedState extends State<DriverFeed> {
   Widget driverDetails(userDetails) {
     return ListTile(
       leading: CircleAvatar(
+        backgroundColor: Colors.white,
         radius: 25.0,
         child: ClipOval(
           child: SizedBox(

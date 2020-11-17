@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:passenger/animations/fadeAnimation.dart';
 import 'package:passenger/models/Helper.dart';
 import 'package:passenger/models/User.dart';
 import 'package:passenger/routes/routes.gr.dart';
@@ -92,23 +93,29 @@ class _ImageCaptureState extends State<ProfilePicture> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.photo_camera,
-                size: 30,
-                color: Color(0xFFCC1718),
+            FadeAnimation(
+              0.5,
+              IconButton(
+                icon: Icon(
+                  Icons.photo_camera,
+                  size: 30,
+                  color: Color(0xFFCC1718),
+                ),
+                onPressed: () => _pickImage(ImageSource.camera),
+                color: Colors.white,
               ),
-              onPressed: () => _pickImage(ImageSource.camera),
-              color: Colors.white,
             ),
-            IconButton(
-              icon: Icon(
-                Icons.photo_library,
-                size: 30,
-                color: Color(0xFFCC1718),
+            FadeAnimation(
+              1,
+              IconButton(
+                icon: Icon(
+                  Icons.photo_library,
+                  size: 30,
+                  color: Color(0xFFCC1718),
+                ),
+                onPressed: () => _pickImage(ImageSource.gallery),
+                color: Colors.white,
               ),
-              onPressed: () => _pickImage(ImageSource.gallery),
-              color: Colors.white,
             ),
           ],
         ),
@@ -117,13 +124,18 @@ class _ImageCaptureState extends State<ProfilePicture> {
         children: <Widget>[
           if (_imageFile == null) ...[
             Container(
-                padding: EdgeInsets.all(32),
-                child: Column(
-                  children: [
+              padding: EdgeInsets.all(32),
+              child: Column(
+                children: [
+                  FadeAnimation(
+                    1,
                     Image.network(
                       defaultPic,
                     ),
-                    SizedBox(height: 20.0),
+                  ),
+                  SizedBox(height: 20.0),
+                  FadeAnimation(
+                    1.2,
                     Text(
                       'Upload Profile Picture',
                       style: TextStyle(
@@ -131,8 +143,10 @@ class _ImageCaptureState extends State<ProfilePicture> {
                         fontFamily: 'Roboto',
                       ),
                     ),
-                  ],
-                )),
+                  ),
+                ],
+              ),
+            ),
           ] else if (_imageFile != null) ...[
             Container(
               padding: EdgeInsets.all(32),
@@ -141,26 +155,32 @@ class _ImageCaptureState extends State<ProfilePicture> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                FlatButton(
-                  color: Color(0xFF1B1B1B),
-                  child: Icon(
-                    Icons.crop,
-                    color: Colors.white,
-                  ),
-                  onPressed: _cropImage,
-                  shape: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
+                FadeAnimation(
+                  1,
+                  FlatButton(
+                    color: Color(0xFF1B1B1B),
+                    child: Icon(
+                      Icons.crop,
+                      color: Colors.white,
+                    ),
+                    onPressed: _cropImage,
+                    shape: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
                   ),
                 ),
-                FlatButton(
-                  color: Color(0xFF1B1B1B),
-                  child: Icon(
-                    Icons.refresh,
-                    color: Colors.white,
-                  ),
-                  onPressed: _clear,
-                  shape: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
+                FadeAnimation(
+                  1.2,
+                  FlatButton(
+                    color: Color(0xFF1B1B1B),
+                    child: Icon(
+                      Icons.refresh,
+                      color: Colors.white,
+                    ),
+                    onPressed: _clear,
+                    shape: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
                   ),
                 ),
               ],
@@ -247,15 +267,18 @@ class _UploaderState extends State<Uploader> {
                   ),
                 ]);
     } else {
-      return FlatButton(
-        color: Color(0xFF1B1B1B),
-        child: Text(
-          'Upload',
-          style: TextStyle(color: Colors.white),
-        ),
-        onPressed: _startUpload,
-        shape: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50),
+      return FadeAnimation(
+        1.6,
+        FlatButton(
+          color: Color(0xFF1B1B1B),
+          child: Text(
+            'Upload',
+            style: TextStyle(color: Colors.white),
+          ),
+          onPressed: _startUpload,
+          shape: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(50),
+          ),
         ),
       );
     }

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:Vinkdriver/views/animations/fadeAnimation.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +16,7 @@ class DriverForm extends StatefulWidget {
 }
 
 class _DriverFormState extends State<DriverForm> {
-  String _address, _id_copy, _phone_number;
+  String _address, _licency_copy, _phone_number;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   File _image;
   var uploadProgress = 0.00;
@@ -34,7 +35,7 @@ class _DriverFormState extends State<DriverForm> {
   }
 
   _uploadImage() async {
-    StorageUploadTask storageUploadTask = Utils.ID_STORAGE.putFile(_image);
+    StorageUploadTask storageUploadTask = Utils.LICENCE_STORAGE.putFile(_image);
 
     setState(() => isUploading = true);
     storageUploadTask.events.listen((event) {
@@ -44,13 +45,13 @@ class _DriverFormState extends State<DriverForm> {
     });
 
     await storageUploadTask.onComplete;
-    Utils.ID_STORAGE.getDownloadURL().then((value) {
+    Utils.LICENCE_STORAGE.getDownloadURL().then((value) {
       setState(() {
         isUploading = false;
-        _id_copy = value;
+        _licency_copy = value;
       });
 
-      print('$isUploading  Check  $_id_copy');
+      print('$isUploading  Check  $_licency_copy');
     }).catchError((err) => print(err));
   }
 
@@ -60,7 +61,7 @@ class _DriverFormState extends State<DriverForm> {
     if (form.validate()) {
       form.save();
       if (_image != null) {
-        _user.setAbout(_phone_number, _address, _id_copy).then((value) {
+        _user.setAbout(_phone_number, _address, _licency_copy).then((value) {
           print(value);
           if (value as bool) {
             Routes.navigator.popAndPushNamed(Routes.profilePicture);
@@ -69,7 +70,7 @@ class _DriverFormState extends State<DriverForm> {
           errorFloatingFlushbar(err);
         });
       } else {
-        errorFloatingFlushbar('Upload your ID Copy');
+        errorFloatingFlushbar('Upload your Licence Copy');
       }
     }
   }
@@ -85,17 +86,22 @@ class _DriverFormState extends State<DriverForm> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Image.asset(
-                'assets/images/logo.png',
-                height: 90,
+              FadeAnimation(
+                1,
+                Image.asset(
+                  'assets/images/logo.png',
+                  height: 90,
+                ),
               ),
               SizedBox(
                 height: 40,
               ),
               Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
+                key: _formKey,
+                child: Column(
+                  children: [
+                    FadeAnimation(
+                      1.2,
                       TextFormField(
                         style: textStyle(16, vinkBlack),
                         autocorrect: true,
@@ -113,9 +119,12 @@ class _DriverFormState extends State<DriverForm> {
                           return null;
                         },
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    FadeAnimation(
+                      1.4,
                       TextFormField(
                         style: textStyle(16, vinkBlack),
                         decoration: formDecor("Address"),
@@ -129,19 +138,22 @@ class _DriverFormState extends State<DriverForm> {
                           return null;
                         },
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Card(
-                        color: Colors.white,
-                        elevation: 0.0,
-                        child: Container(
-                          height: 80,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20.0, vertical: 2.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Card(
+                      color: Colors.white,
+                      elevation: 0.0,
+                      child: Container(
+                        height: 80,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 2.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            FadeAnimation(
+                              1.6,
                               Row(
                                 children: <Widget>[
                                   Column(
@@ -149,7 +161,7 @@ class _DriverFormState extends State<DriverForm> {
                                     children: [
                                       Text(
                                         _image == null
-                                            ? 'Upload your ID copy.'
+                                            ? 'Upload your Licence copy.'
                                             : (isUploading
                                                 ? 'Upload in progress...'
                                                 : 'Done Uploading'),
@@ -176,6 +188,9 @@ class _DriverFormState extends State<DriverForm> {
                                   ),
                                 ],
                               ),
+                            ),
+                            FadeAnimation(
+                              1.8,
                               RaisedButton(
                                 color: Color(0xFF1B1B1B),
                                 child: Text(
@@ -187,29 +202,35 @@ class _DriverFormState extends State<DriverForm> {
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 onPressed: () => selectImage(),
-                              )
-                            ],
-                          ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                    ],
-                  )),
-              RaisedButton(
-                color: vinkBlack,
-                child: GestureDetector(
-                  child: Text(
-                    'Save and continue',
-                    style: textStyle(16, Colors.white),
-                  ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
                 ),
-                textColor: Colors.white,
-                shape: darkButton(),
-                padding: const EdgeInsets.all(15),
-                onPressed: () =>
-                    {!isUploading && _image != null ? uploadUserData() : null},
+              ),
+              FadeAnimation(
+                2,
+                RaisedButton(
+                  color: vinkBlack,
+                  child: GestureDetector(
+                    child: Text(
+                      'Save and continue',
+                      style: textStyle(16, Colors.white),
+                    ),
+                  ),
+                  textColor: Colors.white,
+                  shape: darkButton(),
+                  padding: const EdgeInsets.all(15),
+                  onPressed: () => {
+                    !isUploading && _image != null ? uploadUserData() : null
+                  },
+                ),
               ),
             ],
           ),

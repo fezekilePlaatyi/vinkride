@@ -1,8 +1,9 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:passenger/helpers/Helper.dart';
+import 'package:passenger/animations/fadeAnimation.dart';
 import 'package:passenger/models/Feeds.dart';
+import 'package:passenger/models/Helper.dart';
 import 'package:passenger/services/PlaceService.dart';
 import 'package:passenger/widgets/AddressSearch.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -93,139 +94,182 @@ class _CreateTripPageState extends State<CreateTrip> {
 
   Widget FormUI(String theFeedType) {
     return new Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        new TextFormField(
-          controller: departureEditingController,
-          readOnly: true,
-          onTap: () async {
-            // generate a new token here
-            final sessionToken = Uuid().v4();
-            final Suggestion result = await showSearch(
-              context: context,
-              delegate: AddressSearch(sessionToken),
-            );
-            // This will change the text displayed in the TextField
-            if (result != null) {
-              final placeDetails = await PlaceApiProvider(sessionToken)
-                  .getPlaceDetailFromId(result.placeId);
+        new FadeAnimation(
+          1,
+          TextFormField(
+            controller: departureEditingController,
+            readOnly: true,
+            onTap: () async {
+              // generate a new token here
+              final sessionToken = Uuid().v4();
+              final Suggestion result = await showSearch(
+                context: context,
+                delegate: AddressSearch(sessionToken),
+              );
+              // This will change the text displayed in the TextField
+              if (result != null) {
+                final placeDetails = await PlaceApiProvider(sessionToken)
+                    .getPlaceDetailFromId(result.placeId);
 
-              if (placeDetails.city != null) {
-                setState(() {
-                  departureEditingController.text = placeDetails.city;
-                });
+                if (placeDetails.city != null) {
+                  setState(() {
+                    departureEditingController.text = placeDetails.city;
+                  });
+                }
               }
-            }
-          },
-          decoration: formDecor('Departure'),
-          maxLength: 32,
-          validator: validateName,
+            },
+            decoration: formDecor('Departure'),
+            style: textStyle(16, vinkBlack),
+            maxLength: 32,
+            validator: validateName,
+          ),
         ),
-        new TextFormField(
-          decoration: formDecor('Destination'),
-          controller: destinationEditingController,
-          readOnly: true,
-          onTap: () async {
-            // generate a new token here
-            final sessionToken = Uuid().v4();
-            final Suggestion result = await showSearch(
-              context: context,
-              delegate: AddressSearch(sessionToken),
-            );
-            // This will change the text displayed in the TextField
-            if (result != null) {
-              final placeDetails = await PlaceApiProvider(sessionToken)
-                  .getPlaceDetailFromId(result.placeId);
+        new FadeAnimation(
+          1.2,
+          TextFormField(
+            decoration: formDecor('Destination'),
+            style: textStyle(16, vinkBlack),
+            controller: destinationEditingController,
+            readOnly: true,
+            onTap: () async {
+              // generate a new token here
+              final sessionToken = Uuid().v4();
+              final Suggestion result = await showSearch(
+                context: context,
+                delegate: AddressSearch(sessionToken),
+              );
+              // This will change the text displayed in the TextField
+              if (result != null) {
+                final placeDetails = await PlaceApiProvider(sessionToken)
+                    .getPlaceDetailFromId(result.placeId);
 
-              if (placeDetails.city != null) {
-                setState(() {
-                  destinationEditingController.text = placeDetails.city;
-                });
+                if (placeDetails.city != null) {
+                  setState(() {
+                    destinationEditingController.text = placeDetails.city;
+                  });
+                }
               }
-            }
-          },
-          maxLength: 32,
-          validator: validateName,
+            },
+            maxLength: 32,
+            validator: validateName,
+          ),
         ),
-        ListTile(
-          leading: const Icon(Icons.monetization_on, color: Color(0xFFCC1718)),
-          title: new TextFormField(
-            controller: tripFareEditingController,
-            keyboardType: TextInputType.number,
-            inputFormatters: [
-              LengthLimitingTextInputFormatter(5),
-              FilteringTextInputFormatter.digitsOnly
-            ],
-            decoration: formDecor(
-                '${theFeedType == 'rideOffer' ? 'Trip fare' : 'How much you will to pay'}'),
-            validator: validateTripAmount,
+        FadeAnimation(
+          1.4,
+          ListTile(
+            leading: const Icon(
+              Icons.monetization_on,
+              color: Color(0xFFCC1718),
+              size: 25.0,
+            ),
+            title: new TextFormField(
+              controller: tripFareEditingController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(5),
+                FilteringTextInputFormatter.digitsOnly
+              ],
+              decoration: formDecor(
+                  '${theFeedType == 'rideOffer' ? 'Trip fare' : 'How much you will to pay'}'),
+              style: textStyle(16, vinkBlack),
+              validator: validateTripAmount,
+            ),
           ),
         ),
         theFeedType != 'riderOffer'
-            ? ListTile(
-                leading: const Icon(Icons.format_list_numbered_rtl,
-                    color: Color(0xFFCC1718)),
-                title: new TextFormField(
-                  controller: vehicleNumberOfSeatsEditingController,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(2),
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  decoration: formDecor('Number Of Seats'),
-                  validator: validateNumberOfSeats,
-                ))
+            ? FadeAnimation(
+                1.4,
+                ListTile(
+                  leading: const Icon(
+                    Icons.format_list_numbered_rtl,
+                    color: Color(0xFFCC1718),
+                    size: 25.0,
+                  ),
+                  title: new TextFormField(
+                    controller: vehicleNumberOfSeatsEditingController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(2),
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                    decoration: formDecor('Number Of Seats'),
+                    style: textStyle(16, vinkBlack),
+                    validator: validateNumberOfSeats,
+                  ),
+                ),
+              )
             : '',
-        ListTile(
-          title: Text(
-              "${pickedDate.day} - ${pickedDate.month} - ${pickedDate.year}"),
-          leading: const Icon(Icons.date_range, color: Color(0xFFCC1718)),
-          trailing: Icon(Icons.keyboard_arrow_down),
-          onTap: _pickDate,
+        FadeAnimation(
+          1.6,
+          ListTile(
+            contentPadding: const EdgeInsets.all(0),
+            title: Text(
+              "${pickedDate.day} - ${pickedDate.month} - ${pickedDate.year}",
+              style: textStyle(16, vinkBlack),
+            ),
+            leading: const Icon(
+              Icons.date_range,
+              color: Color(0xFFCC1718),
+              size: 25.0,
+            ),
+            trailing: Icon(Icons.keyboard_arrow_down),
+            onTap: _pickDate,
+          ),
         ),
-        ListTile(
-          title: Text("${time.hour}:${time.minute}"),
-          leading: const Icon(Icons.timer, color: Color(0xFFCC1718)),
-          trailing: Icon(Icons.keyboard_arrow_down),
-          onTap: _pickTime,
+        FadeAnimation(
+          1.8,
+          ListTile(
+            contentPadding: const EdgeInsets.all(0),
+            title: Text(
+              "${time.hour}:${time.minute}",
+              style: textStyle(16, vinkBlack),
+            ),
+            leading: const Icon(
+              Icons.timer,
+              color: Color(0xFFCC1718),
+              size: 25.0,
+            ),
+            trailing: Icon(Icons.keyboard_arrow_down),
+            onTap: _pickTime,
+          ),
         ),
         theFeedType != 'riderOffer'
-            ? ListTile(
-                leading:
-                    const Icon(Icons.directions_car, color: Color(0xFFCC1718)),
-                title: new TextFormField(
-                  controller: vehicleDescriptionEditingController,
-                  autocorrect: true,
-                  decoration: formDecor('Describe your vehicle'),
-                  validator: validateAlphaNumeric,
-                ))
+            ? FadeAnimation(
+                1.8,
+                ListTile(
+                  contentPadding: const EdgeInsets.all(0),
+                  leading: const Icon(
+                    Icons.directions_car,
+                    color: Color(0xFFCC1718),
+                    size: 25.0,
+                  ),
+                  title: new TextFormField(
+                    controller: vehicleDescriptionEditingController,
+                    autocorrect: true,
+                    decoration: formDecor('Describe your vehicle'),
+                    style: textStyle(16, vinkBlack),
+                    validator: validateAlphaNumeric,
+                  ),
+                ),
+              )
             : '',
         new SizedBox(height: 15.0),
-        Container(
-            alignment: Alignment.center,
-            margin: const EdgeInsets.only(top: 10.0),
-            child: SizedBox(
-                width: 300, // specific value
-                child: RaisedButton(
-                  color: Colors.black87,
-                  child: GestureDetector(
-                    child: Text(
-                      'Add',
-                      style: TextStyle(
-                        fontSize: 18,
-                        letterSpacing: 1,
-                      ),
-                    ),
-                  ),
-                  textColor: Colors.white,
-                  shape: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black12),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  padding: const EdgeInsets.all(15),
-                  onPressed: () {
-                    _postTrip();
-                  },
-                )))
+        FadeAnimation(
+          2,
+          RaisedButton(
+            color: vinkBlack,
+            child: GestureDetector(
+              child: Text('Add', style: textStyle(16, Colors.white)),
+            ),
+            shape: darkButton(),
+            padding: const EdgeInsets.all(15),
+            onPressed: () {
+              _postTrip();
+            },
+          ),
+        ),
       ],
     );
   }

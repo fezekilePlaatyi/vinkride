@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:passenger/models/DynamicLinks.dart';
 import 'package:passenger/models/Helper.dart';
 import 'package:passenger/models/User.dart';
+import 'package:passenger/routes/routes.gr.dart';
 // import 'package:passenger/model/ShareToOtherPlatforms.dart';
 // import 'package:passenger/model/User.dart';
 // import 'package:passenger/services/DeviceLocation.dart';
@@ -72,7 +73,7 @@ class _SideMenuState extends State<SideMenu> {
                       fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  user["isDriver"] as bool ? 'Driver' : 'Passenger',
+                  'Passenger',
                   style: TextStyle(
                     fontSize: 16.0,
                     color: Color(0xFFF2F2F2),
@@ -121,16 +122,6 @@ class _SideMenuState extends State<SideMenu> {
             'Notifications',
             style: TextStyle(color: Color(0xFF1B1B1B)),
           ),
-          onTap: () {
-            Navigator.of(context).pop();
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => null,
-                // NotificationsDisplay(),
-              ),
-            );
-          },
         ),
         ListTile(
           leading: Icon(
@@ -142,13 +133,7 @@ class _SideMenuState extends State<SideMenu> {
             style: TextStyle(color: Color(0xFF1B1B1B)),
           ),
           onTap: () {
-            Navigator.of(context).pop();
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => ChatHistory(),
-              ),
-            );
+            Routes.navigator.popAndPushNamed(Routes.chatHistory);
           },
         ),
         ListTile(
@@ -161,14 +146,7 @@ class _SideMenuState extends State<SideMenu> {
             color: Color(0xFFCC1719),
           ),
           onTap: () {
-            Navigator.of(context).pop();
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => null,
-                // MyFeeds(),
-              ),
-            );
+            Routes.navigator.popAndPushNamed(Routes.myFeeds);
           },
         ),
         ListTile(
@@ -180,16 +158,6 @@ class _SideMenuState extends State<SideMenu> {
             FontAwesomeIcons.userAlt,
             color: Color(0xFFCC1719),
           ),
-          onTap: () {
-            Navigator.of(context).pop();
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => null,
-                // Profile(),
-              ),
-            );
-          },
         ),
         ListTile(
           leading: Icon(
@@ -218,14 +186,7 @@ class _SideMenuState extends State<SideMenu> {
             color: Color(0xFFCC1719),
           ),
           onTap: () {
-            Navigator.of(context).pop();
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => null,
-                // VinkDetails(),
-              ),
-            );
+            Routes.navigator.popAndPushNamed(Routes.vinkDetails);
           },
         ),
         ListTile(
@@ -238,7 +199,7 @@ class _SideMenuState extends State<SideMenu> {
             color: Color(0xFFCC1719),
           ),
           onTap: () {
-            // _userInfo.logOut(context);
+            _user.signOut();
           },
         ),
       ],
