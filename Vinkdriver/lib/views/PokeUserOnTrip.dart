@@ -1,20 +1,19 @@
 import 'package:Vinkdriver/model/Helper.dart';
+import 'package:Vinkdriver/utils/Utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Vinkdriver/model/Feeds.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:Vinkdriver/helper/dialogHelper.dart';
 
 class PokeUserOnTrip extends StatefulWidget {
-  final userIdPoking;
-  PokeUserOnTrip({this.userIdPoking});
+  final String userIdPoking;
+  const PokeUserOnTrip({this.userIdPoking});
   @override
   PokeUserOnTripState createState() => PokeUserOnTripState();
 }
 
 class PokeUserOnTripState extends State<PokeUserOnTrip> {
-  final FirebaseAuth auth = FirebaseAuth.instance;
   Feeds feeds = new Feeds();
   var _currentIndex = "no_selection";
   var rideType = "rideOffer";
@@ -22,7 +21,7 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
   @override
   Widget build(BuildContext context) {
     var userIdPoking = widget.userIdPoking;
-    String currentUserId = auth.currentUser.uid;
+    String currentUserId = Utils.AUTH_USER.uid;
 
     return Scaffold(
       backgroundColor: Color(0xFFFCF9F9),
@@ -58,6 +57,7 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
                 child: CircularProgressIndicator(),
               );
             } else {
+              print('Testing ${snapshot.data.docs}');
               var feedsData = snapshot.data.docs.toList();
               if (feedsData.length > 0)
                 return _displayListOfLoggedInUserRidesOffers(

@@ -11,8 +11,8 @@ import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 
 class CreateTrip extends StatefulWidget {
-  final feedType;
-  CreateTrip({this.feedType});
+  final String feedType;
+  const CreateTrip({this.feedType});
   @override
   _CreateTripPageState createState() => _CreateTripPageState();
 }

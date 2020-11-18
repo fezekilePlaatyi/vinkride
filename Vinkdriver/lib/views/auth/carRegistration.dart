@@ -8,6 +8,8 @@ class CarRegitration extends StatefulWidget {
 }
 
 class _CarRegitrationState extends State<CarRegitration> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String _carName, _carModel, _carRegistrationNumber;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

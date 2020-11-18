@@ -6,9 +6,9 @@ import 'package:Vinkdriver/helper/Helper.dart';
 import 'package:Vinkdriver/model/User.dart' as VinkUser;
 
 class DriverFeed extends StatefulWidget {
-  var feedData;
-  var feedId;
-  DriverFeed({this.feedData, this.feedId});
+  final Map feedData;
+  final String feedId;
+  const DriverFeed({this.feedData, this.feedId});
   @override
   _DriverFeedState createState() => _DriverFeedState();
 }
@@ -213,7 +213,9 @@ class _DriverFeedState extends State<DriverFeed> {
             height: 80.0,
             width: 80.0,
             child: Image.network(
-              userDetails['profile_pic'],
+              userDetails.containsKey('profile_pic')
+                  ? userDetails['profile_pic']
+                  : defaultPic,
               height: 80,
               width: 80,
               fit: BoxFit.cover,

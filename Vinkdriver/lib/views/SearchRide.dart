@@ -8,8 +8,8 @@ import 'package:Vinkdriver/widget/AddressSearch.dart';
 import 'package:Vinkdriver/widget/RideRequest.dart';
 
 class SearchRide extends StatefulWidget {
-  var typeOfRide;
-  SearchRide({this.typeOfRide});
+  final String typeOfRide;
+  const SearchRide({this.typeOfRide});
   @override
   State<StatefulWidget> createState() => _SearchRideState();
 }
