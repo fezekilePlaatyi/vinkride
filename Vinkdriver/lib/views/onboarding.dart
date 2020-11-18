@@ -56,12 +56,17 @@ class _OnboardingSliderState extends State<OnboardingSlider> {
                   final doc = snap.data.data();
                   if (doc != null) {
                     switch (doc['registration_progress'] as int) {
-                      case 40:
+                      case 30:
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           Routes.navigator.pushNamed(Routes.driverForm);
                         });
                         break;
-                      case 80:
+                      case 60:
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          Routes.navigator.pushNamed(Routes.carRegistration);
+                        });
+                        break;
+                      case 90:
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           Routes.navigator.pushNamed(Routes.profilePicture);
                         });

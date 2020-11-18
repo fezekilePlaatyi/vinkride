@@ -39,7 +39,7 @@ class User {
           'email': email,
           'created_at': Utils.NOW,
           'is_user_approved': false,
-          'registration_progress': 40
+          'registration_progress': 30
         });
         await Utils.AUTH_USER.sendEmailVerification();
       }).catchError((err) {
@@ -60,7 +60,7 @@ class User {
         'phone_number': phone_number,
         'address': address,
         'licence_copy': licence_copy,
-        'registration_progress': 80
+        'registration_progress': 60
       }).catchError((err) {
         errorFloatingFlushbar(err.message);
         return false;
@@ -78,7 +78,8 @@ class User {
       await Utils.DRIVER_COLLECTION.doc(Utils.AUTH_USER.uid).update({
         'car_name': carName,
         'car_model': carModel,
-        'car_registration_number': carRegistrationNumber
+        'car_registration_number': carRegistrationNumber,
+        'registration_progress': 90,
       });
       return true;
     } catch (e) {

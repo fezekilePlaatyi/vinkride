@@ -1,5 +1,7 @@
+import 'package:Vinkdriver/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'Enum.dart';
 
 class Feeds {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -112,7 +114,7 @@ class Feeds {
         .orderBy("date_updated", descending: true)
         .where("sender_uid", isEqualTo: userId.trim())
         .where("feed_status", isEqualTo: status.trim())
-        .where("feed_type", isEqualTo: 'offer')
+        .where("feed_type", isEqualTo: TripConst.RIDE_OFFER)
         .snapshots();
   }
 
@@ -126,7 +128,7 @@ class Feeds {
         .orderBy("date_updated", descending: true)
         .where("departure_point", isEqualTo: departure.trim())
         .where("destination_point", isEqualTo: destination.trim())
-        .where("feed_type", isEqualTo: "rideOffer")
+        .where("feed_type", isEqualTo: TripConst.RIDE_OFFER)
         .snapshots();
   }
 

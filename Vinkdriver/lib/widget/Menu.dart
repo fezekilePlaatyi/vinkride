@@ -139,7 +139,7 @@ class _SideMenuState extends State<SideMenu> {
             color: Color(0xFFCC1719),
           ),
           onTap: () {
-            Routes.navigator.popAndPushNamed(Routes.driverFeed);
+            Routes.navigator.popAndPushNamed(Routes.myFeeds);
           },
         ),
         ListTile(

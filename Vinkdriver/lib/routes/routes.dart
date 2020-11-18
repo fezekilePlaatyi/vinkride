@@ -5,9 +5,11 @@ import 'package:Vinkdriver/views/DriverFeed.dart';
 import 'package:Vinkdriver/views/PokeUserOnTrip.dart';
 import 'package:Vinkdriver/views/SearchRide.dart';
 import 'package:Vinkdriver/views/VinkDetails.dart';
+import 'package:Vinkdriver/views/auth/carRegistration.dart';
 import 'package:Vinkdriver/views/chat/ChatHistory.dart';
 import 'package:Vinkdriver/views/chat/ChatMessage.dart';
 import 'package:Vinkdriver/views/chat/previewAttachment.dart';
+import 'package:Vinkdriver/views/user/myFeeds.dart';
 import 'package:Vinkdriver/widget/negotiatePrice.dart';
 import 'package:auto_route/auto_route_annotations.dart';
 import 'package:Vinkdriver/views/Home.dart';
@@ -35,4 +37,6 @@ class $Routes {
   NegotiatePrice negotiatePrice;
   SearchRide searchRide;
   CreateTrip createTrip;
+  CarRegitration carRegistration;
+  MyFeeds myFeeds;
 }

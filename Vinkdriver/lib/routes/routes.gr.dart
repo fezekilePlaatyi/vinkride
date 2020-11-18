@@ -24,6 +24,8 @@ import 'package:Vinkdriver/views/VinkDetails.dart';
 import 'package:Vinkdriver/widget/negotiatePrice.dart';
 import 'package:Vinkdriver/views/SearchRide.dart';
 import 'package:Vinkdriver/views/CreateTrip.dart';
+import 'package:Vinkdriver/views/auth/carRegistration.dart';
+import 'package:Vinkdriver/views/user/myFeeds.dart';
 
 class Routes {
   static const onboardingSlider = '/';
@@ -41,6 +43,8 @@ class Routes {
   static const negotiatePrice = '/negotiate-price';
   static const searchRide = '/search-ride';
   static const createTrip = '/create-trip';
+  static const carRegistration = '/car-registration';
+  static const myFeeds = '/my-feeds';
   static GlobalKey<NavigatorState> get navigatorKey =>
       getNavigatorKey<Routes>();
   static NavigatorState get navigator => navigatorKey.currentState;
@@ -156,6 +160,16 @@ class Routes {
         final typedArgs = args as String;
         return MaterialPageRoute(
           builder: (_) => CreateTrip(feedType: typedArgs),
+          settings: settings,
+        );
+      case Routes.carRegistration:
+        return MaterialPageRoute(
+          builder: (_) => CarRegitration(),
+          settings: settings,
+        );
+      case Routes.myFeeds:
+        return MaterialPageRoute(
+          builder: (_) => MyFeeds(),
           settings: settings,
         );
       default:

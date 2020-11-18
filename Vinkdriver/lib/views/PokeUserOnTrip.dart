@@ -1,3 +1,4 @@
+import 'package:Vinkdriver/constants.dart';
 import 'package:Vinkdriver/model/Helper.dart';
 import 'package:Vinkdriver/utils/Utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,7 +17,6 @@ class PokeUserOnTrip extends StatefulWidget {
 class PokeUserOnTripState extends State<PokeUserOnTrip> {
   Feeds feeds = new Feeds();
   var _currentIndex = "no_selection";
-  var rideType = "rideOffer";
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(15.0),
         child: StreamBuilder(
-          stream: feeds.getRidesByUserId(currentUserId, rideType),
+          stream: feeds.getRidesByUserId(currentUserId, TripConst.RIDE_OFFER),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (!snapshot.hasData) {
