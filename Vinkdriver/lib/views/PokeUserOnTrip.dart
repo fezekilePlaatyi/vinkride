@@ -16,7 +16,6 @@ class PokeUserOnTrip extends StatefulWidget {
 
 class PokeUserOnTripState extends State<PokeUserOnTrip> {
   Feeds feeds = new Feeds();
-  var _currentIndex = "no_selection";
 
   @override
   Widget build(BuildContext context) {
@@ -83,46 +82,7 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                  child: FlatButton(
-                child: Text(
-                  "CANCEL",
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    height: 1.5,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Roboto-Regular',
-                  ),
-                ),
-                onPressed: () => {Navigator.of(context).pop(true)},
-              )),
-              Container(
-                child: FlatButton(
-                  child: Text(
-                    "POKE",
-                    style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      height: 1.5,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Roboto-Regular',
-                    ),
-                  ),
-                  onPressed: () {
-                    if (_currentIndex == "no_selection") {
-                      return;
-                    }
-                    var rideId = _currentIndex;
-                    DialogHelper.insertPrice(context, rideId, userIdPoking);
-                  },
-                ),
-              ),
-            ],
-          ),
+          
           Container(
             child: Row(
               children: <Widget>[
@@ -133,19 +93,11 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
                     itemCount: feedsData.length,
                     itemBuilder: (BuildContext context, int index) {
                       var feedData = feedsData[index].data();
-                      var departurePoint = feedData['departure_point'];
-                      var destinationPoint = feedData['destination_point'];
-                      var departureDatetime = DateFormat('dd-MM-yy kk:mm')
-                          .format(feedData['departure_datetime'].toDate());
+                      var feedId = feedsData[index].id;
 
                       return Container(
                         margin: const EdgeInsets.only(bottom: 10.0),
-                        child: _myScheduledTrips(
-                          departurePoint,
-                          destinationPoint,
-                          departureDatetime,
-                          userIdPoking,
-                        ),
+                        child: _myScheduledTrips(feedId, feedData),
                       );
                     },
                   ),
@@ -156,7 +108,12 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
         ]));
   }
 
-  Widget _myScheduledTrips(departure, destination, departureDate, pokeId) {
+  Widget _myScheduledTrips(feedId, feedData) {
+    var departure = feedData['departure_point'];
+    var destination = feedData['destination_point'];
+    var departureDate = DateFormat('dd-MM-yy kk:mm')
+        .format(feedData['departure_datetime'].toDate());
+
     return Material(
       elevation: 0.2,
       borderRadius: BorderRadius.all(Radius.circular(20.0)),
@@ -183,11 +140,7 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
         trailing: RaisedButton(
           color: vinkBlack,
           onPressed: () {
-            if (_currentIndex == "no_selection") {
-              return;
-            }
-            var rideId = _currentIndex;
-            DialogHelper.insertPrice(context, rideId, pokeId);
+            DialogHelper.insertPrice(context, feedId, feedData);
           },
           child: Text(
             'Poke',
@@ -199,34 +152,5 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
     );
   }
 
-  _loader() {
-    var isLoading;
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        content: ListTile(
-          subtitle: isLoading
-              ? Container(
-                  height: 50.0,
-                  width: 50.0,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              : Text("Poked successfuly!"),
-        ),
-        actions: <Widget>[
-          isLoading
-              ? SizedBox.shrink()
-              : FlatButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  },
-                  child: Text("Got It!"),
-                )
-        ],
-      ),
-    );
-  }
+  
 }

@@ -3,11 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:passenger/constants.dart';
 import 'package:passenger/models/Feeds.dart';
 import 'package:passenger/models/Helper.dart';
 import 'package:passenger/services/VinkFirebaseMessagingService.dart';
-import 'package:passenger/views/SearchRide.dart';
 import 'package:passenger/widgets/driverFeed.dart';
 import 'package:passenger/widgets/menu.dart';
 import 'package:passenger/routes/routes.gr.dart';
@@ -24,60 +22,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    final FirebaseMessaging _fcm = FirebaseMessaging();
-
-    currentUserIdAsFCMChannel = auth.currentUser.uid;
-    VinkFirebaseMessagingService.init(currentUserIdAsFCMChannel);
-    print("CHANNEL ID: $currentUserIdAsFCMChannel");
-
-    _fcm.configure(onMessage: (Map<String, dynamic> message) async {
-      var messageData = message['data'];
-      var notificationType = messageData['notificationType'];
-      print("onMessage Received. Data ${notificationType.toString()}");
-
-      if (notificationType == 'pokedToJoinTrip') {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            content: ListTile(
-                title: Text(
-                    "Poked to join a trip ${messageData['departurePoint']} To ${messageData['destinationPoint']}"),
-                subtitle: Text(
-                    "Time: ${messageData['departureDatetime']}. Fare - ${messageData['amount']}")),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text("No thanks"),
-              ),
-              FlatButton(
-                onPressed: () {
-                  _addPassengerToTrip(messageData);
-                },
-                child: Text("Accept"),
-              ),
-            ],
-          ),
-        );
-      }
-    }, onLaunch: (Map<String, dynamic> message) async {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: ListTile(
-            title: Text("Notification"),
-          ),
-        ),
-      );
-    }, onResume: (Map<String, dynamic> message) async {
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                  content: ListTile(
-                title: Text("Notification"),
-              )));
-    });
+    _firebaseCloudHandler();
   }
 
   @override
@@ -187,6 +132,117 @@ class _HomeState extends State<Home> {
               );
             }
           }),
+    );
+  }
+
+  _firebaseCloudHandler() {
+    final FirebaseMessaging _fcm = FirebaseMessaging();
+
+    currentUserIdAsFCMChannel = auth.currentUser.uid;
+    VinkFirebaseMessagingService.init(currentUserIdAsFCMChannel);
+    print("CHANNEL ID: $currentUserIdAsFCMChannel");
+
+    _fcm.configure(onMessage: (Map<String, dynamic> message) async {
+      var messageData = message['data'];
+      var notificationType = messageData['notificationType'];
+      print("onMessage Received. Data ${notificationType.toString()}");
+
+      if (notificationType == 'pokedToJoinTrip') {
+        _pokeHandler(messageData);
+      } else if (notificationType == 'rejectedToJoinTrip') {
+        _joingTripRequestDeclineHandler(messageData);
+      } else if (notificationType == 'acceptedToJoinTrip') {
+        _requestAcceptedHandler(messageData);
+      } else {}
+    }, onLaunch: (Map<String, dynamic> message) async {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: ListTile(
+            title: Text("Notification"),
+          ),
+        ),
+      );
+    }, onResume: (Map<String, dynamic> message) async {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                  content: ListTile(
+                title: Text("Notification"),
+              )));
+    });
+  }
+
+  _requestAcceptedHandler(messageData) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: ListTile(
+          title: Text(
+              "Accepted to joing Trip - ${messageData['departurePoint']} To ${messageData['destinationPoint']}"),
+        ),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("Procced to pay."),
+          ),
+          FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("Got It!"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _pokeHandler(messageData) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: ListTile(
+            title: Text(
+                "Poked to join a trip ${messageData['departurePoint']} To ${messageData['destinationPoint']}"),
+            subtitle: Text(
+                "Time: ${messageData['departureDatetime']}. Fare - ${messageData['amount']}")),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("No thanks"),
+          ),
+          FlatButton(
+            onPressed: () {
+              _addPassengerToTrip(messageData);
+            },
+            child: Text("Accept"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _joingTripRequestDeclineHandler(messageData) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: ListTile(
+          title: Text(
+              "Request Rejected - ${messageData['departurePoint']} To ${messageData['destinationPoint']}"),
+        ),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("Got It!"),
+          ),
+        ],
+      ),
     );
   }
 

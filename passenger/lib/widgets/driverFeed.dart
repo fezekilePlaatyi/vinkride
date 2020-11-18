@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:passenger/helpers/dialogHelper.dart';
 import 'package:passenger/models/Helper.dart';
 import 'package:passenger/models/Trip.dart';
 import 'package:passenger/models/User.dart' as VinkUser;
@@ -313,7 +314,10 @@ class DriverFeedState extends State<DriverFeed> {
 
   Widget joinTripButton() {
     return RaisedButton(
-      onPressed: () => trip.joinTrip(feedId, feedData, context),
+      onPressed: () {
+        var userIdRequesting = currentUserId;
+        DialogHelper.insertPrice(context, feedId, feedData);
+      },
       color: Color(0xFF1B1B1B),
       padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
       child: Text(

@@ -141,7 +141,7 @@ class Routes {
             args as NegotiatePriceArguments ?? NegotiatePriceArguments();
         return MaterialPageRoute(
           builder: (_) => NegotiatePrice(
-              rideId: typedArgs.rideId, userId: typedArgs.userId),
+              rideId: typedArgs.rideId, feedData: typedArgs.feedData),
           settings: settings,
         );
       case Routes.searchRide:

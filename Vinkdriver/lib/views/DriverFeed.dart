@@ -350,7 +350,9 @@ class _DriverFeedState extends State<DriverFeed> {
 
   Widget joinTripButton() {
     return RaisedButton(
-      onPressed: () => trip.joinTrip(feedId, feedData, context),
+      onPressed: () {
+        print("Joining");
+      },
       color: Color(0xFF1B1B1B),
       padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
       child: Text(
