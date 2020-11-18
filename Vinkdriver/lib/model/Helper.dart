@@ -190,6 +190,28 @@ InputDecoration formDecor(String hint) {
   );
 }
 
+InputDecoration inAppFormsDecor(String hint, icon) {
+  return InputDecoration(
+    filled: true,
+    fillColor: Color(0xFFFFFFFFF),
+    hintText: hint,
+    contentPadding: const EdgeInsets.all(15),
+    prefixIcon: Icon(
+      icon,
+      color: vinkBlack,
+      size: 20.0,
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide.none,
+      borderRadius: BorderRadius.circular(50),
+    ),
+    enabledBorder: UnderlineInputBorder(
+      borderSide: BorderSide.none,
+      borderRadius: BorderRadius.circular(50),
+    ),
+  );
+}
+
 InputDecoration searchBarDeco(String hint) {
   return InputDecoration(
     filled: true,

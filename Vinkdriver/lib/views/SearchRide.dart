@@ -1,3 +1,4 @@
+import 'package:Vinkdriver/model/Helper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Vinkdriver/views/DriverFeed.dart';
 import 'package:flutter/material.dart';
@@ -34,25 +35,56 @@ class _SearchRideState extends State<SearchRide> {
     var typeOfRide = widget.typeOfRide;
 
     return Scaffold(
+      backgroundColor: Color(0xFFFCF9F9),
+      appBar: AppBar(
         backgroundColor: Color(0xFFFCF9F9),
-        appBar: AppBar(
-          backgroundColor: Color(0xFFFCF9F9),
-          elevation: 0,
-          title: Text(
-            'Search Trips',
-            style: TextStyle(
-              color: Color(0xFF1B1B1B),
-              fontFamily: 'Roboto',
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-            ),
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.chevron_left,
+            color: Color(0xFFCC1718),
+            size: 30.0,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text(
+          'Search Trip',
+          style: TextStyle(
+            color: vinkBlack,
+            fontFamily: 'Roboto',
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        body: Stack(children: [
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
-              Widget>[
-            ListTile(
-              title: new TextField(
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(height: 30.0),
+            Text(
+              'Find a ride \ngoing in your direction.',
+              style: TextStyle(
+                color: vinkDarkGrey,
+                fontFamily: 'Roboto',
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            SizedBox(height: 50.0),
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey[350],
+                    blurRadius: 10.0,
+                    offset: Offset(0, 5.0),
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(50),
+                color: Colors.white,
+              ),
+              child: new TextField(
                 controller: departureEditingController,
                 readOnly: true,
                 onTap: () async {
@@ -80,11 +112,24 @@ class _SearchRideState extends State<SearchRide> {
                   }
                 },
                 decoration:
-                    new InputDecoration(hintText: 'Enter departure city...'),
+                    inAppFormsDecor("Enter place of departure", Icons.search),
+                style: textStyle(16, vinkDarkGrey),
               ),
             ),
-            ListTile(
-              title: new TextField(
+            SizedBox(height: 20.0),
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey[350],
+                    blurRadius: 10.0,
+                    offset: Offset(0, 5.0),
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(50),
+                color: Colors.white,
+              ),
+              child: new TextField(
                 controller: destinationEditingController,
                 readOnly: true,
                 onTap: () async {
@@ -111,8 +156,8 @@ class _SearchRideState extends State<SearchRide> {
                     }
                   }
                 },
-                decoration:
-                    new InputDecoration(hintText: 'Enter destination city...'),
+                decoration: inAppFormsDecor("Enter destination", Icons.search),
+                style: textStyle(16, vinkDarkGrey),
               ),
             ),
             departureIsDefined == true && destinationIsDefined == true
@@ -163,8 +208,10 @@ class _SearchRideState extends State<SearchRide> {
                 : Container(
                     width: 0,
                     height: 0,
-                  )
-          ])
-        ]));
+                  ),
+          ],
+        ),
+      ),
+    );
   }
 }

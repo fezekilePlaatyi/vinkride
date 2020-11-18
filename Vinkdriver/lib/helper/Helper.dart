@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:Vinkdriver/model/Helper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,8 +10,6 @@ import 'package:simple_moment/simple_moment.dart';
 
 final defaultPic =
     'https://aed.cals.arizona.edu/sites/aed.cals.arizona.edu/files/images/people/default-profile_1.png';
-final vinkLightGrey = Color(0xfff2f2f2);
-final vinkRed = Color(0xffcc1719);
 final userRef = FirebaseFirestore.instance.collection("users");
 final chatRef = FirebaseFirestore.instance.collection("chats");
 final requestRef = FirebaseFirestore.instance.collection("requests");
