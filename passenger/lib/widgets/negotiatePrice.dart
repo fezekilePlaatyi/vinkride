@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:passenger/models/Helper.dart';
+=======
+import 'package:passenger/models/helper.dart';
+>>>>>>> main
 import 'package:passenger/models/Notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:passenger/services/VinkFirebaseMessagingService.dart';
