@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:passenger/constants.dart';
 import 'package:passenger/models/Feeds.dart';
 import 'package:passenger/models/Helper.dart';
 import 'package:passenger/services/VinkFirebaseMessagingService.dart';
@@ -82,7 +83,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     Feeds feeds = new Feeds();
-    var feedType = 'offer';
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       drawer: Drawer(
@@ -127,60 +127,63 @@ class _HomeState extends State<Home> {
       ),
       backgroundColor: Color(0xFFFCF9F9),
       body: StreamBuilder(
-          stream: feeds.getAllFeeds(feedType),
+          stream: feeds.getAllFeeds(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (!snapshot.hasData) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
+              return loader();
             } else {
-              return Container(
-                child: Stack(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        child: ListView.builder(
-                          itemCount: snapshot.data.docs.length,
-                          itemBuilder: (
-                            context,
-                            index,
-                          ) {
-                            var feedData = snapshot.data.docs[index].data();
-                            var feedId = snapshot.data.docs[index].id;
+              if (snapshot.data.docs.length > 0) {
+                return Container(
+                  child: Stack(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          child: ListView.builder(
+                            itemCount: snapshot.data.docs.length,
+                            itemBuilder: (
+                              context,
+                              index,
+                            ) {
+                              var feedData = snapshot.data.docs[index].data();
+                              var feedId = snapshot.data.docs[index].id;
 
-                            return DriverFeed(
-                                feedData: feedData, feedId: feedId);
-                          },
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 20,
-                      right: 20,
-                      child: ButtonTheme(
-                        minWidth: 60.0,
-                        height: 60.0,
-                        child: RaisedButton(
-                          onPressed: () {
-                            Routes.navigator.pushNamed(Routes.createTrip,
-                                arguments: 'rideRequest');
-                          },
-                          child: Icon(
-                            FontAwesomeIcons.plus,
-                            size: 16.0,
-                            color: Color(0xFFFFFFFF),
-                          ),
-                          color: vinkRed,
-                          shape: OutlineInputBorder(
-                            borderSide: BorderSide(color: vinkRed),
-                            borderRadius: BorderRadius.circular(50),
+                              return DriverFeed(
+                                  feedData: feedData, feedId: feedId);
+                            },
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                      Positioned(
+                        bottom: 20,
+                        right: 20,
+                        child: ButtonTheme(
+                          minWidth: 60.0,
+                          height: 60.0,
+                          child: RaisedButton(
+                            onPressed: () {
+                              Routes.navigator.pushNamed(Routes.createTrip,
+                                  arguments: 'rideRequest');
+                            },
+                            child: Icon(
+                              FontAwesomeIcons.plus,
+                              size: 16.0,
+                              color: Color(0xFFFFFFFF),
+                            ),
+                            color: vinkRed,
+                            shape: OutlineInputBorder(
+                              borderSide: BorderSide(color: vinkRed),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+              return Container(
+                child: Text('No feeds'),
               );
             }
           }),

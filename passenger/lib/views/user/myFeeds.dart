@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:passenger/constants.dart';
 import 'package:passenger/routes/routes.gr.dart';
 import 'package:passenger/widgets/userTrips.dart';
 
@@ -8,7 +9,7 @@ class MyFeeds extends StatefulWidget {
 }
 
 class MyFeedsState extends State<MyFeeds> {
-  String _tabItemName = "active";
+  String _tabItemName = TripConst.ACTIVE_TRIP;
   var title = 'My Feed';
 
   @override
@@ -49,13 +50,13 @@ class MyFeedsState extends State<MyFeeds> {
                   onTap: (value) {
                     switch (value) {
                       case 0:
-                        setState(() => _tabItemName = "active");
+                        setState(() => _tabItemName = TripConst.ACTIVE_TRIP);
                         break;
                       case 1:
-                        setState(() => _tabItemName = "oncoming");
+                        setState(() => _tabItemName = TripConst.ONCOMING_TRIP);
                         break;
                       case 2:
-                        setState(() => _tabItemName = "history");
+                        setState(() => _tabItemName = TripConst.COMPLETED_TRIP);
                         break;
 
                       default:
@@ -91,22 +92,6 @@ class MyFeedsState extends State<MyFeeds> {
 
   _widgetChanger(String tabItemName) {
     return UserTrips(feedStatus: tabItemName, parentContext: context);
-    // switch (tabItemName) {
-    //   case "active":
-    //     return UserTrips(feedStatus: 'active', parentContext: context);
-    //     break;
-
-    //   case "oncoming":
-    //     return UserTrips(feedStatus: 'open', parentContext: context);
-    //     break;
-
-    //   case "history":
-    //     return UserTrips(feedStatus: 'closed', parentContext: context);
-    //     break;
-
-    //   default:
-    //     return CircularProgressIndicator();
-    // }
   }
 
   TextStyle _tabTextStyle() {

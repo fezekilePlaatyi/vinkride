@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:passenger/helpers/helper.dart';
+import 'package:passenger/models/Helper.dart';
 import 'package:passenger/models/Notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:passenger/services/VinkFirebaseMessagingService.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:passenger/utils/Utils.dart';
 
 class NegotiatePrice extends StatefulWidget {
   final rideId, userId;
@@ -14,7 +14,6 @@ class NegotiatePrice extends StatefulWidget {
 
 class _NegotiatePriceState extends State<NegotiatePrice> {
   final amountAdjustEditingController = TextEditingController();
-  final FirebaseAuth auth = FirebaseAuth.instance;
   var amountAdjust = false;
   var userIdPoking;
   var rideId;
@@ -108,7 +107,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
                     // isLoading = true;
                     _loader(true);
 
-                    String currentUserId = auth.currentUser.uid;
+                    String currentUserId = Utils.AUTH_USER.uid;
                     var amountAdjustment = amountAdjustEditingController.text;
                     _savePokeToDatabase(
                         userIdPoking, currentUserId, rideId, amountAdjustment);

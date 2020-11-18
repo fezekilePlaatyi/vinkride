@@ -8,11 +8,15 @@ import 'package:passenger/services/VinkFirebaseMessagingService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class JoinTrip extends StatefulWidget {
-  final tripId;
-  final driverId;
-  final tripData;
-  final paymentToken;
-  JoinTrip({this.tripId, this.driverId, this.tripData, this.paymentToken});
+  final String tripId;
+  final String driverId;
+  final Map tripData;
+  final String paymentToken;
+  const JoinTrip(
+      {@required this.tripId,
+      @required this.driverId,
+      @required this.tripData,
+      this.paymentToken});
   @override
   JoinTripState createState() => JoinTripState();
 }
