@@ -7,8 +7,9 @@ import 'package:Vinkdriver/services/VinkFirebaseMessagingService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class NegotiatePrice extends StatefulWidget {
-  final rideId, feedData;
-  NegotiatePrice({this.rideId, this.feedData});
+  final String rideId;
+  final Map feedData;
+  const NegotiatePrice({this.rideId, this.feedData});
   @override
   _NegotiatePriceState createState() => _NegotiatePriceState();
 }

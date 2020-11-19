@@ -201,6 +201,6 @@ class DriverFeedArguments {
 //NegotiatePrice arguments holder class
 class NegotiatePriceArguments {
   final String rideId;
-  final String userId;
-  NegotiatePriceArguments({this.rideId, this.userId});
+  final Map<dynamic, dynamic> feedData;
+  NegotiatePriceArguments({this.rideId, this.feedData});
 }
