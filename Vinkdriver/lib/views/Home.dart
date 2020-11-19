@@ -66,7 +66,6 @@ class _HomeState extends State<Home> {
   }
 
   _DriverHome(String feedType) {
-    
     return Container(
         child: Stack(children: [
       StreamBuilder(
@@ -91,6 +90,7 @@ class _HomeState extends State<Home> {
                             ) {
                               var feedData = snapshot.data.docs[index].data();
                               var feedId = snapshot.data.docs[index].id;
+                              // return Text("Feed data $feedata");
                               return RideRequest(
                                   feedData: feedData, feedId: feedId);
                             },

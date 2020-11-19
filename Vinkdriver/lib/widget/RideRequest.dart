@@ -30,7 +30,8 @@ class _RideRequestState extends State<RideRequest> {
           children: [
             Container(
               child: FutureBuilder(
-                  future: user.getUserById(feedData['sender_uid']),
+                  future:
+                      user.getUserById(feedData['sender_uid'], 'passengers'),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (!snapshot.hasData) {
                       return Container(
@@ -40,6 +41,7 @@ class _RideRequestState extends State<RideRequest> {
                       );
                     } else {
                       var userDetails = snapshot.data.data();
+
                       return ListTile(
                         leading: CircleAvatar(
                           radius: 25.0,
@@ -47,12 +49,15 @@ class _RideRequestState extends State<RideRequest> {
                             child: SizedBox(
                               height: 80.0,
                               width: 80.0,
-                              child: Image.network(
-                                userDetails['profile_pic'],
-                                height: 80,
-                                width: 80,
-                                fit: BoxFit.cover,
-                              ),
+                              child: userDetails.containsKey('profile_pic')
+                                  ? Image.network(
+                                      userDetails['profile_pic'].toString(),
+                                      fit: BoxFit.fill,
+                                    )
+                                  : Image.network(
+                                      defaultPic,
+                                      fit: BoxFit.fill,
+                                    ),
                             ),
                           ),
                         ),
@@ -229,7 +234,8 @@ class _RideRequestState extends State<RideRequest> {
                           context,
                           MaterialPageRoute(
                               builder: (_) => PokeUserOnTrip(
-                                  userIdPoking: feedData['sender_uid'])));
+                                  userIdPoking: feedData['sender_uid'],
+                                  amountWillingToPay: feedData['trip_fare'])));
                     },
                     color: Color(0xFF1B1B1B),
                     padding:

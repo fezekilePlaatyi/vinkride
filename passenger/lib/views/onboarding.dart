@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:passenger/animations/fadeAnimation.dart';
 import 'package:passenger/models/onboardingModel.dart';
 import 'package:passenger/models/Helper.dart';
 import 'package:passenger/models/User.dart';
@@ -168,41 +169,53 @@ class _OnboardingSliderState extends State<OnboardingSlider> {
         },
       ),
       bottomSheet: currentIndex != slides.length - 1
-          ? Container(
-              color: Colors.white,
-              height: Platform.isIOS ? 70.0 : 60.0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  FlatButton(
-                    onPressed: () {
-                      pageController.animateToPage(
-                        slides.length - 1,
-                        duration: Duration(milliseconds: 400),
-                        curve: Curves.linear,
-                      );
-                    },
-                    child: Text('SKIP'),
-                  ),
-                  Row(
-                    children: [
-                      for (int i = 0; i < slides.length; i++)
-                        currentIndex == i
-                            ? pageIndicator(true)
-                            : pageIndicator(false)
-                    ],
-                  ),
-                  FlatButton(
-                    onPressed: () {
-                      pageController.animateToPage(
-                        currentIndex + 1,
-                        duration: Duration(milliseconds: 400),
-                        curve: Curves.linear,
-                      );
-                    },
-                    child: Text('NEXT'),
-                  ),
-                ],
+          ? FadeAnimation(
+              1,
+              Container(
+                color: Colors.white,
+                height: Platform.isIOS ? 70.0 : 60.0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    FadeAnimation(
+                      1.2,
+                      FlatButton(
+                        onPressed: () {
+                          pageController.animateToPage(
+                            slides.length - 1,
+                            duration: Duration(milliseconds: 400),
+                            curve: Curves.linear,
+                          );
+                        },
+                        child: Text('SKIP'),
+                      ),
+                    ),
+                    FadeAnimation(
+                      1.4,
+                      Row(
+                        children: [
+                          for (int i = 0; i < slides.length; i++)
+                            currentIndex == i
+                                ? pageIndicator(true)
+                                : pageIndicator(false)
+                        ],
+                      ),
+                    ),
+                    FadeAnimation(
+                      1.6,
+                      FlatButton(
+                        onPressed: () {
+                          pageController.animateToPage(
+                            currentIndex + 1,
+                            duration: Duration(milliseconds: 400),
+                            curve: Curves.linear,
+                          );
+                        },
+                        child: Text('NEXT'),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             )
           : Container(
@@ -214,14 +227,17 @@ class _OnboardingSliderState extends State<OnboardingSlider> {
                 onPressed: () {
                   Routes.navigator.pushNamed(Routes.loginPage);
                 },
-                child: Text(
-                  'Login',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'roboto',
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18.0,
-                    letterSpacing: 2.0,
+                child: FadeAnimation(
+                  1.8,
+                  Text(
+                    'Login',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'roboto',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18.0,
+                      letterSpacing: 2.0,
+                    ),
                   ),
                 ),
               ),

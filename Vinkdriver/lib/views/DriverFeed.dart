@@ -42,7 +42,7 @@ class _DriverFeedState extends State<DriverFeed> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FutureBuilder(
-            future: user.getUserById(feedData['sender_uid']),
+            future: user.getUserById(feedData['sender_uid'], 'drivers'),
             builder: (BuildContext context,
                 AsyncSnapshot<DocumentSnapshot> snapshot) {
               if (!snapshot.hasData) {
@@ -99,8 +99,8 @@ class _DriverFeedState extends State<DriverFeed> {
                               child: Stack(
                                 children: <Widget>[
                                   FutureBuilder(
-                                      future: user
-                                          .getUserById(feedData['sender_uid']),
+                                      future: user.getUserById(
+                                          feedData['sender_uid'], 'passenger'),
                                       builder: (BuildContext context,
                                           AsyncSnapshot<DocumentSnapshot>
                                               snapshot) {

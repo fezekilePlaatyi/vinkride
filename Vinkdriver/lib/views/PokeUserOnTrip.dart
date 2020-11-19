@@ -8,7 +8,8 @@ import 'package:Vinkdriver/helper/dialogHelper.dart';
 
 class PokeUserOnTrip extends StatefulWidget {
   final userIdPoking;
-  PokeUserOnTrip({this.userIdPoking});
+  final amountWillingToPay;
+  PokeUserOnTrip({this.userIdPoking, this.amountWillingToPay});
   @override
   PokeUserOnTripState createState() => PokeUserOnTripState();
 }
@@ -18,11 +19,13 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
   Feeds feeds = new Feeds();
   var _currentIndex = "no_selection";
   var rideType = "rideOffer";
+  var amountWillingToPay;
 
   @override
   Widget build(BuildContext context) {
     var userIdPoking = widget.userIdPoking;
     String currentUserId = auth.currentUser.uid;
+    amountWillingToPay = widget.amountWillingToPay;
 
     return Scaffold(
       backgroundColor: Color(0xFFFCF9F9),
@@ -83,46 +86,6 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                  child: FlatButton(
-                child: Text(
-                  "CANCEL",
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    height: 1.5,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Roboto-Regular',
-                  ),
-                ),
-                onPressed: () => {Navigator.of(context).pop(true)},
-              )),
-              Container(
-                child: FlatButton(
-                  child: Text(
-                    "POKE",
-                    style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      height: 1.5,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Roboto-Regular',
-                    ),
-                  ),
-                  onPressed: () {
-                    if (_currentIndex == "no_selection") {
-                      return;
-                    }
-                    var rideId = _currentIndex;
-                    DialogHelper.insertPrice(context, rideId, userIdPoking);
-                  },
-                ),
-              ),
-            ],
-          ),
           Container(
             child: Row(
               children: <Widget>[
@@ -132,6 +95,7 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
                     shrinkWrap: true,
                     itemCount: feedsData.length,
                     itemBuilder: (BuildContext context, int index) {
+                      var feedId = feedsData[index].id;
                       var feedData = feedsData[index].data();
                       var departurePoint = feedData['departure_point'];
                       var destinationPoint = feedData['destination_point'];
@@ -141,11 +105,12 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
                       return Container(
                         margin: const EdgeInsets.only(bottom: 10.0),
                         child: _myScheduledTrips(
-                          departurePoint,
-                          destinationPoint,
-                          departureDatetime,
-                          userIdPoking,
-                        ),
+                            departurePoint,
+                            destinationPoint,
+                            departureDatetime,
+                            userIdPoking,
+                            feedId,
+                            feedData),
                       );
                     },
                   ),
@@ -156,7 +121,8 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
         ]));
   }
 
-  Widget _myScheduledTrips(departure, destination, departureDate, pokeId) {
+  Widget _myScheduledTrips(
+      departure, destination, departureDate, pokeId, rideId, feedData) {
     return Material(
       elevation: 0.2,
       borderRadius: BorderRadius.all(Radius.circular(20.0)),
@@ -183,11 +149,8 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
         trailing: RaisedButton(
           color: vinkBlack,
           onPressed: () {
-            if (_currentIndex == "no_selection") {
-              return;
-            }
-            var rideId = _currentIndex;
-            DialogHelper.insertPrice(context, rideId, pokeId);
+            DialogHelper.insertPrice(
+                context, rideId, pokeId, amountWillingToPay, feedData);
           },
           child: Text(
             'Poke',

@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:passenger/animations/fadeAnimation.dart';
 import 'package:passenger/models/Helper.dart';
 import 'package:passenger/models/User.dart';
 import 'package:passenger/routes/routes.gr.dart';
@@ -90,9 +91,12 @@ class _PassengerFormState extends State<PassengerForm> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Image.asset(
-                  'assets/images/logo.png',
-                  height: 90,
+                FadeAnimation(
+                  1,
+                  Image.asset(
+                    'assets/images/logo.png',
+                    height: 90,
+                  ),
                 ),
                 SizedBox(
                   height: 40,
@@ -101,40 +105,46 @@ class _PassengerFormState extends State<PassengerForm> {
                     key: _formKey,
                     child: Column(
                       children: [
-                        TextFormField(
-                          style: textStyle(16, vinkBlack),
-                          autocorrect: true,
-                          autofocus: true,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(10),
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          decoration: formDecor('Contact Number'),
-                          onSaved: (input) => _phone_number = input,
-                          validator: (input) {
-                            if (input.isEmpty) {
-                              return 'You will be called at some point';
-                            }
-                            return null;
-                          },
+                        FadeAnimation(
+                          1.2,
+                          TextFormField(
+                            style: textStyle(16, vinkBlack),
+                            autocorrect: true,
+                            autofocus: true,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(10),
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            decoration: formDecor('Contact Number'),
+                            onSaved: (input) => _phone_number = input,
+                            validator: (input) {
+                              if (input.isEmpty) {
+                                return 'You will be called at some point';
+                              }
+                              return null;
+                            },
+                          ),
                         ),
                         SizedBox(
                           height: 10,
                         ),
-                        TextFormField(
-                          autofocus: true,
-                          style: textStyle(16, vinkBlack),
-                          decoration: formDecor("Address"),
-                          onSaved: (input) => _address = input,
-                          validator: (input) {
-                            if (input.isEmpty) {
-                              return 'Your address is important to us';
-                            } else if (!isValidAddress(input)) {
-                              return 'Invalid address';
-                            }
-                            return null;
-                          },
+                        FadeAnimation(
+                          1.4,
+                          TextFormField(
+                            autofocus: true,
+                            style: textStyle(16, vinkBlack),
+                            decoration: formDecor("Address"),
+                            onSaved: (input) => _address = input,
+                            validator: (input) {
+                              if (input.isEmpty) {
+                                return 'Your address is important to us';
+                              } else if (!isValidAddress(input)) {
+                                return 'Invalid address';
+                              }
+                              return null;
+                            },
+                          ),
                         ),
                         SizedBox(
                           height: 10,
@@ -151,52 +161,59 @@ class _PassengerFormState extends State<PassengerForm> {
                               children: <Widget>[
                                 Row(
                                   children: <Widget>[
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          _image == null
-                                              ? 'Upload your ID copy.'
-                                              : (isUploading
-                                                  ? 'Upload in progress...'
-                                                  : 'Done Uploading'),
-                                          style: textStyle(15.0, vinkBlack),
-                                        ),
-                                        SizedBox(height: 10),
-                                        isUploading
-                                            ? Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    .45,
-                                                child: LinearProgressIndicator(
-                                                  backgroundColor:
-                                                      Color(0xFFB3B3B3),
-                                                  value: uploadProgress,
-                                                  valueColor:
-                                                      new AlwaysStoppedAnimation<
-                                                          Color>(vinkBlack),
-                                                ),
-                                              )
-                                            : SizedBox.shrink()
-                                      ],
+                                    FadeAnimation(
+                                      1.6,
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            _image == null
+                                                ? 'Upload your ID copy.'
+                                                : (isUploading
+                                                    ? 'Upload in progress...'
+                                                    : 'Done Uploading'),
+                                            style: textStyle(15.0, vinkBlack),
+                                          ),
+                                          SizedBox(height: 10),
+                                          isUploading
+                                              ? Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      .45,
+                                                  child:
+                                                      LinearProgressIndicator(
+                                                    backgroundColor:
+                                                        Color(0xFFB3B3B3),
+                                                    value: uploadProgress,
+                                                    valueColor:
+                                                        new AlwaysStoppedAnimation<
+                                                            Color>(vinkBlack),
+                                                  ),
+                                                )
+                                              : SizedBox.shrink()
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
-                                RaisedButton(
-                                  color: Color(0xFF1B1B1B),
-                                  child: Text(
-                                    'Upload ID',
-                                    style: textStyle(16, Colors.white),
+                                FadeAnimation(
+                                  1.8,
+                                  RaisedButton(
+                                    color: Color(0xFF1B1B1B),
+                                    child: Text(
+                                      'Upload ID',
+                                      style: textStyle(16, Colors.white),
+                                    ),
+                                    shape: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.black12),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    onPressed: () => selectImage(),
                                   ),
-                                  shape: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.black12),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  onPressed: () => selectImage(),
-                                )
+                                ),
                               ],
                             ),
                           ),
@@ -206,20 +223,23 @@ class _PassengerFormState extends State<PassengerForm> {
                         ),
                       ],
                     )),
-                RaisedButton(
-                  color: vinkBlack,
-                  child: GestureDetector(
-                    child: Text(
-                      'Save and continue',
-                      style: textStyle(16, Colors.white),
+                FadeAnimation(
+                  2,
+                  RaisedButton(
+                    color: vinkBlack,
+                    child: GestureDetector(
+                      child: Text(
+                        'Save and continue',
+                        style: textStyle(16, Colors.white),
+                      ),
                     ),
+                    textColor: Colors.white,
+                    shape: darkButton(),
+                    padding: const EdgeInsets.all(15),
+                    onPressed: () => {
+                      !isUploading && _image != null ? uploadUserData() : null
+                    },
                   ),
-                  textColor: Colors.white,
-                  shape: darkButton(),
-                  padding: const EdgeInsets.all(15),
-                  onPressed: () => {
-                    !isUploading && _image != null ? uploadUserData() : null
-                  },
                 ),
               ],
             ),

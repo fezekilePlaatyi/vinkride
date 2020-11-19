@@ -162,8 +162,8 @@ class _ViewingTripState extends State<ViewingTrip> {
                                 padding: const EdgeInsets.only(
                                     left: 15.0, right: 15.0),
                                 child: FutureBuilder(
-                                    future: user
-                                        .getUserById(feedData['sender_uid']),
+                                    future: user.getUserById(
+                                        feedData['sender_uid'], 'drivers'),
                                     builder: (BuildContext context,
                                         AsyncSnapshot<DocumentSnapshot>
                                             snapshot) {
