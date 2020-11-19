@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:passenger/constants.dart';
+import 'package:passenger/routes/routes.gr.dart';
 
 class Feeds {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -26,14 +28,14 @@ class Feeds {
     await firestore.runTransaction((transaction) async {
       DocumentSnapshot txSnapshot = await transaction.get(documentReference);
       DocumentSnapshot userOnTripSnapshot =
-      await transaction.get(userOnTripDocumentReference);
+          await transaction.get(userOnTripDocumentReference);
 
       if (!txSnapshot.exists) {
         throw Exception("Document does not exist!");
       }
 
       int updatedVehicleSeatsNumber =
-      int.parse(txSnapshot.data()['vehicle_seats_number']);
+          int.parse(txSnapshot.data()['vehicle_seats_number']);
 
       if (!userOnTripSnapshot.exists) {
         print("User not existing on Users Already on trip");
@@ -52,6 +54,17 @@ class Feeds {
         .then((value) => value);
   }
 
+  joinTrip(feedId, feedData, context) {
+    Routes.navigator.pushNamed(
+      Routes.joinTrip,
+      arguments: JoinTripArguments(
+        tripData: feedData,
+        tripId: feedId,
+        driverId: feedData['sender_uid'],
+      ),
+    );
+  }
+
   updatePassangerPaymentStatus(
       String feedId, String passengerId, String paymentStatus) {
     Map<String, dynamic> passangerPaymentUpdateData = {
@@ -66,10 +79,11 @@ class Feeds {
         .update(passangerPaymentUpdateData);
   }
 
-  Stream<QuerySnapshot> getAllFeeds(String feedType) {
+  Stream<QuerySnapshot> getAllFeeds() {
     return feedsRef
         .orderBy("date_updated", descending: true)
-        .where("feed_type", isEqualTo: feedType)
+        .where("feed_type", isEqualTo: TripConst.RIDE_OFFER)
+        .where('feed_status', isEqualTo: TripConst.ONCOMING_TRIP)
         .snapshots();
   }
 
@@ -112,7 +126,7 @@ class Feeds {
         .orderBy("date_updated", descending: true)
         .where("sender_uid", isEqualTo: userId.trim())
         .where("feed_status", isEqualTo: status.trim())
-        .where("feed_type", isEqualTo: 'offer')
+        .where("feed_type", isEqualTo: TripConst.RIDE_OFFER)
         .snapshots();
   }
 

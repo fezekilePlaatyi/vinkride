@@ -1,19 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:passenger/constants.dart';
 import 'package:passenger/models/DynamicLinks.dart';
 import 'package:passenger/models/Feeds.dart';
-// import 'package:passenger/models/ShareToOtherPlatforms.dart';
 import 'package:passenger/services/DeviceLocation.dart';
-import 'package:passenger/utils/utilities.dart';
+import 'package:passenger/utils/Utils.dart';
 
 class UserTrips extends StatefulWidget {
-  final feedStatus;
-  final parentContext;
-  UserTrips({this.feedStatus, this.parentContext});
+  final String feedStatus;
+  final BuildContext parentContext;
+  const UserTrips({this.feedStatus, this.parentContext});
   @override
   UserTripsState createState() => UserTripsState();
 }
@@ -22,22 +20,17 @@ class UserTripsState extends State<UserTrips> {
   Feeds feeds = new Feeds();
   DynamicLinks links = new DynamicLinks();
   DeviceLocation deviceLocation = new DeviceLocation();
-  final FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
-    String currentUserId = auth.currentUser.uid;
+    String currentUserId = Utils.AUTH_USER.uid;
     String feedStatus = widget.feedStatus;
     var parentContext = widget.parentContext;
 
     return StreamBuilder(
         stream: feeds.getTripsByUserId(currentUserId, feedStatus),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
+          if (snapshot.hasData) {
             if (snapshot.data.docs.length > 0) {
               return Expanded(
                   child: ListView.builder(
@@ -124,7 +117,7 @@ class UserTripsState extends State<UserTrips> {
                                             )
                                           ]),
                                           Column(children: [
-                                            feedStatus == 'active'
+                                            feedStatus == TripConst.ACTIVE_TRIP
                                                 ? IconButton(
                                                     icon: Icon(
                                                       Icons.stop,
@@ -139,7 +132,8 @@ class UserTripsState extends State<UserTrips> {
                                                     },
                                                   )
                                                 : Text(''),
-                                            feedStatus == 'open'
+                                            feedStatus ==
+                                                    TripConst.ONCOMING_TRIP
                                                 ? IconButton(
                                                     icon: Icon(
                                                       Icons.cancel,

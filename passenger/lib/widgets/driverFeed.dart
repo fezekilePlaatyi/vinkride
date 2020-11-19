@@ -5,6 +5,7 @@ import 'package:passenger/helpers/dialogHelper.dart';
 import 'package:passenger/models/Helper.dart';
 import 'package:passenger/models/Trip.dart';
 import 'package:passenger/models/User.dart' as VinkUser;
+import 'package:passenger/routes/routes.gr.dart';
 import 'package:passenger/views/ViewingTrip.dart';
 
 class DriverFeed extends StatefulWidget {
@@ -44,8 +45,8 @@ class DriverFeedState extends State<DriverFeed> {
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: FutureBuilder(
-            future: user.getUserById(feedData['sender_uid'], 'drivers'),
+        child: StreamBuilder(
+            stream: user.getDriver(feedData['sender_uid']),
             builder: (BuildContext context,
                 AsyncSnapshot<DocumentSnapshot> snapshot) {
               if (!snapshot.hasData) {
@@ -54,16 +55,13 @@ class DriverFeedState extends State<DriverFeed> {
                   width: 0,
                 );
               } else {
-                var userDetails = snapshot.data.data();
-                if (userDetails != null) {
+                if (snapshot.data.exists) {
+                  var userDetails = snapshot.data.data();
+                  print('Testing $userDetails');
                   return GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ViewingTrip(tripId: feedId),
-                        ),
-                      );
+                      Routes.navigator
+                          .pushNamed(Routes.viewingTrip, arguments: feedId);
                     },
                     child: Column(
                       children: [
@@ -102,56 +100,6 @@ class DriverFeedState extends State<DriverFeed> {
                               GestureDetector(
                                 child: Stack(
                                   children: <Widget>[
-                                    FutureBuilder(
-                                        future: user.getUserById(
-                                            feedData['sender_uid'],
-                                            'passengers'),
-                                        builder: (BuildContext context,
-                                            AsyncSnapshot<DocumentSnapshot>
-                                                snapshot) {
-                                          if (!snapshot.hasData) {
-                                            return Container(
-                                              height: 0,
-                                              width: 0,
-                                            );
-                                          } else {
-                                            var userDetails =
-                                                snapshot.data.data();
-                                            return Container(
-                                                margin: const EdgeInsets.only(
-                                                    left: 0),
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                    color: Color(0xFFF2F2F2),
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                    Radius.circular(50),
-                                                  ),
-                                                ),
-                                                child: CircleAvatar(
-                                                  backgroundColor:
-                                                      Colors.white24,
-                                                  child: ClipOval(
-                                                    child: SizedBox(
-                                                      height: 50.0,
-                                                      width: 50.0,
-                                                      child: Image.network(
-                                                        userDetails.containsKey(
-                                                                    "profile_pic") &&
-                                                                userDetails[
-                                                                        'profile_pic'] !=
-                                                                    null
-                                                            ? userDetails[
-                                                                'profile_pic']
-                                                            : defaultPic,
-                                                        fit: BoxFit.fill,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ));
-                                          }
-                                        }),
                                     Container(
                                       margin: const EdgeInsets.only(left: 20),
                                       decoration: BoxDecoration(
@@ -163,6 +111,7 @@ class DriverFeedState extends State<DriverFeed> {
                                         ),
                                       ),
                                       child: CircleAvatar(
+                                        backgroundColor: Colors.white,
                                         child: ClipOval(
                                           child: SizedBox(
                                             height: 50.0,
@@ -212,11 +161,8 @@ class DriverFeedState extends State<DriverFeed> {
                       ],
                     ),
                   );
-                } else {
-                  return Container(
-                    height: 0,
-                  );
                 }
+                return Container();
               }
             }),
       ),
@@ -372,19 +318,8 @@ class DriverFeedState extends State<DriverFeed> {
   Widget joinTripButton(feedData) {
     return RaisedButton(
       onPressed: () {
-        // var rideId = feedData;
-        // var amountWillingToPay = feedData['trip_fare'];
         var userIdRequesting = currentUserId;
-
-        // // feedData = widget.feedData;
-        // // feedId = widget.feedId;
-        // print(feedData);
-        // print(feedId);
-        // return;
-
-        DialogHelper.insertPrice(
-            context, feedId, userIdRequesting, feedData['trip_fare'], feedData);
-        // trip.joinTrip(feedId, feedData, context);
+        DialogHelper.insertPrice(context, feedId, feedData);
       },
       color: Color(0xFF1B1B1B),
       padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),

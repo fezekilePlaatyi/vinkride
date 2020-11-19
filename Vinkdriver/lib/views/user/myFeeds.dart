@@ -1,7 +1,7 @@
+import 'package:Vinkdriver/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:passenger/constants.dart';
-import 'package:passenger/routes/routes.gr.dart';
-import 'package:passenger/widgets/userTrips.dart';
+import 'package:Vinkdriver/routes/routes.gr.dart';
+import 'package:Vinkdriver/widget/userTrips.dart';
 
 class MyFeeds extends StatefulWidget {
   @override
@@ -9,7 +9,7 @@ class MyFeeds extends StatefulWidget {
 }
 
 class MyFeedsState extends State<MyFeeds> {
-  String _tabItemName = TripConst.ACTIVE_TRIP;
+  String _tabItemName = "active";
   var title = 'My Feed';
 
   @override

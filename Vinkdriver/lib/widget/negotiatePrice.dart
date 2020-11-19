@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:Vinkdriver/helper/helper.dart';
+import 'package:intl/intl.dart';
+import 'package:Vinkdriver/model/Helper.dart';
 import 'package:Vinkdriver/model/Notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Vinkdriver/services/VinkFirebaseMessagingService.dart';
@@ -9,9 +10,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 class NegotiatePrice extends StatefulWidget {
+<<<<<<< HEAD
   final rideId, userId, amountWillingToPay, feedData;
   NegotiatePrice(
       {this.rideId, this.userId, this.amountWillingToPay, this.feedData});
+=======
+  final String rideId;
+  final Map feedData;
+  const NegotiatePrice({this.rideId, this.feedData});
+>>>>>>> conflictResolve
   @override
   _NegotiatePriceState createState() => _NegotiatePriceState();
 }
@@ -20,10 +27,13 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
   final amountAdjustEditingController = TextEditingController();
   final FirebaseAuth auth = FirebaseAuth.instance;
   var amountAdjust = false;
-  var userIdPoking;
   var rideId;
+<<<<<<< HEAD
   var amountWillingToPay;
   var feedDataPokedTo;
+=======
+  var feedData;
+>>>>>>> conflictResolve
 
   @override
   void initState() {
@@ -39,10 +49,13 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
   @override
   Widget build(BuildContext context) {
     setState(() {
-      userIdPoking = widget.userId;
       rideId = widget.rideId;
+<<<<<<< HEAD
       amountWillingToPay = widget.amountWillingToPay;
       feedDataPokedTo = widget.feedData;
+=======
+      feedData = widget.feedData;
+>>>>>>> conflictResolve
     });
 
     return Dialog(
@@ -74,7 +87,11 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
               ),
             ),
             SizedBox(height: 20.0),
+<<<<<<< HEAD
             Text("They willing to R$amountWillingToPay"),
+=======
+            Text("Willing to pay -  R${feedData['trip_fare']}"),
+>>>>>>> conflictResolve
             amountAdjust
                 ? TextFormField(
                     decoration: formDecor("Enter units in ZARs"),
@@ -87,7 +104,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
                   )
                 : FlatButton(
                     child: Text(
-                      "Adjust money?",
+                      "Negotiate price?",
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -116,6 +133,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
                   onPressed: () {
                     _loader(true);
 
+<<<<<<< HEAD
                     String currentUserId = auth.currentUser.uid;
                     var amountAdjustment =
                         amountAdjustEditingController.text != ""
@@ -124,6 +142,14 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
 
                     _savePokeToDatabase(
                         userIdPoking, currentUserId, rideId, amountAdjustment);
+=======
+                    var amountAdjustment =
+                        amountAdjustEditingController.text != ""
+                            ? amountAdjustEditingController.text
+                            : feedData['trip_fare'];
+
+                    _saveRequestToDatabase(amountAdjustment);
+>>>>>>> conflictResolve
                   },
                   child: Text('Submit'),
                   textColor: Colors.white,
@@ -140,56 +166,71 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
         ),
       );
 
-  _savePokeToDatabase(String userIdPoking, String currentUserId, String rideId,
-      String amountAdjustment) {
+  _saveRequestToDatabase(amountAdjustment) {
     Notifications notifications = new Notifications();
+    String currentUserId = auth.currentUser.uid;
 
     Map<String, dynamic> notificationDataToDB = {
       'date_created': FieldValue.serverTimestamp(),
-      'to_user': userIdPoking,
+      'to_user': feedData['sender_uid'],
       'from_user': currentUserId,
       'is_seen': false,
       'amount': amountAdjustment,
       'notification_type': 'pokedToJoinTrip',
       'trip_id': rideId,
+<<<<<<< HEAD
       'departurePoint': feedDataPokedTo['departure_point'],
       'destinationPoint': feedDataPokedTo['destination_point'],
       'departureDatetime': DateFormat('dd-MM-yy kk:mm')
           .format(feedDataPokedTo['departure_datetime'].toDate())
+=======
+      'departurePoint': feedData['departure_point'],
+      'destinationPoint': feedData['destination_point'],
+      'departureDatetime': DateFormat('dd-MM-yy kk:mm')
+          .format(feedData['departure_datetime'].toDate())
+>>>>>>> conflictResolve
     };
 
     notifications
-        .addNewNotification(notificationDataToDB, userIdPoking)
+        .addNewNotification(notificationDataToDB, feedData['sender_uid'])
         .then((value) {
-      _sendNotification(currentUserId, rideId, userIdPoking, amountAdjustment);
+      _sendNotification(currentUserId, amountAdjustment);
       Navigator.of(context).pop();
       _loader(false);
     });
   }
 
-  _sendNotification(String currentUserId, String rideId, String userIdPoking,
-      String amountAdjustment) {
+  _sendNotification(currentUserId, amountAdjustment) {
     var notificationData = {
       'title': "New Notification",
       'body':
-          "A Driver has poked you to avaliable Trip, click here for more details.",
+          "A Passenger requested to join your Trip, click here for more details.",
       'notificationType': 'pokedToJoinTrip'
     };
 
     var messageData = {
-      'driverId': currentUserId,
+      'passengerId': currentUserId,
       'notificationType': 'pokedToJoinTrip',
       'amount': amountAdjustment,
       'trip_id': rideId,
+<<<<<<< HEAD
       'departurePoint': feedDataPokedTo['departure_point'],
       'destinationPoint': feedDataPokedTo['destination_point'],
       'departureDatetime': DateFormat('dd-MM-yy kk:mm')
           .format(feedDataPokedTo['departure_datetime'].toDate())
+=======
+      'departurePoint': feedData['departure_point'],
+      'destinationPoint': feedData['destination_point'],
+      'departureDatetime': DateFormat('dd-MM-yy kk:mm')
+          .format(feedData['departure_datetime'].toDate())
+>>>>>>> conflictResolve
     };
+
+    print('Owner ${feedData['sender_uid']} Current $currentUserId');
 
     VinkFirebaseMessagingService()
         .buildAndReturnFcmMessageBody(
-            notificationData, messageData, userIdPoking)
+            notificationData, messageData, feedData['sender_uid'])
         .then((data) => {VinkFirebaseMessagingService().sendFcmMessage(data)});
   }
 
@@ -198,7 +239,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
       context: context,
       builder: (context) => AlertDialog(
         content: ListTile(
-          subtitle: isLoading
+          title: isLoading
               ? Container(
                   height: 100.0,
                   width: 80.0,
@@ -207,6 +248,9 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
                   ),
                 )
               : Text("Poked successfuly!"),
+          subtitle: isLoading
+              ? Container(height: 0)
+              : Text("Please wait for passenger's response."),
         ),
         actions: <Widget>[
           isLoading

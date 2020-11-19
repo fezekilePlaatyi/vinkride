@@ -13,6 +13,8 @@ import 'package:passenger/views/chat/ChatMessage.dart';
 import 'package:passenger/views/chat/previewAttachment.dart';
 import 'package:passenger/views/onboarding.dart';
 import 'package:passenger/views/user/myFeeds.dart';
+import 'package:passenger/widgets/JoinTrip.dart';
+import 'package:passenger/widgets/RideRequest.dart';
 
 @autoRouter
 class $Routes {
@@ -31,4 +33,6 @@ class $Routes {
   VinkDetails vinkDetails;
   CreateTrip createTrip;
   SearchRide searchRide;
+  RideRequest rideRequest;
+  JoinTrip joinTrip;
 }

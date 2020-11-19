@@ -18,6 +18,14 @@ import 'package:Vinkdriver/views/auth/profilePicture.dart';
 import 'package:Vinkdriver/views/chat/ChatHistory.dart';
 import 'package:Vinkdriver/views/chat/ChatMessage.dart';
 import 'package:Vinkdriver/views/chat/previewAttachment.dart';
+import 'package:Vinkdriver/views/PokeUserOnTrip.dart';
+import 'package:Vinkdriver/views/DriverFeed.dart';
+import 'package:Vinkdriver/views/VinkDetails.dart';
+import 'package:Vinkdriver/widget/negotiatePrice.dart';
+import 'package:Vinkdriver/views/SearchRide.dart';
+import 'package:Vinkdriver/views/CreateTrip.dart';
+import 'package:Vinkdriver/views/auth/carRegistration.dart';
+import 'package:Vinkdriver/views/user/myFeeds.dart';
 
 class Routes {
   static const onboardingSlider = '/';
@@ -29,6 +37,14 @@ class Routes {
   static const chatHistory = '/chat-history';
   static const chatMessage = '/chat-message';
   static const previewAttachment = '/preview-attachment';
+  static const pokeUserOnTrip = '/poke-user-on-trip';
+  static const driverFeed = '/driver-feed';
+  static const vinkDetails = '/vink-details';
+  static const negotiatePrice = '/negotiate-price';
+  static const searchRide = '/search-ride';
+  static const createTrip = '/create-trip';
+  static const carRegistration = '/car-registration';
+  static const myFeeds = '/my-feeds';
   static GlobalKey<NavigatorState> get navigatorKey =>
       getNavigatorKey<Routes>();
   static NavigatorState get navigator => navigatorKey.currentState;
@@ -93,6 +109,69 @@ class Routes {
               message: typedArgs.message),
           settings: settings,
         );
+      case Routes.pokeUserOnTrip:
+        if (hasInvalidArgs<String>(args)) {
+          return misTypedArgsRoute<String>(args);
+        }
+        final typedArgs = args as String;
+        return MaterialPageRoute(
+          builder: (_) => PokeUserOnTrip(userIdPoking: typedArgs),
+          settings: settings,
+        );
+      case Routes.driverFeed:
+        if (hasInvalidArgs<DriverFeedArguments>(args)) {
+          return misTypedArgsRoute<DriverFeedArguments>(args);
+        }
+        final typedArgs = args as DriverFeedArguments ?? DriverFeedArguments();
+        return MaterialPageRoute(
+          builder: (_) => DriverFeed(
+              feedData: typedArgs.feedData, feedId: typedArgs.feedId),
+          settings: settings,
+        );
+      case Routes.vinkDetails:
+        return MaterialPageRoute(
+          builder: (_) => VinkDetails(),
+          settings: settings,
+        );
+      case Routes.negotiatePrice:
+        if (hasInvalidArgs<NegotiatePriceArguments>(args)) {
+          return misTypedArgsRoute<NegotiatePriceArguments>(args);
+        }
+        final typedArgs =
+            args as NegotiatePriceArguments ?? NegotiatePriceArguments();
+        return MaterialPageRoute(
+          builder: (_) => NegotiatePrice(
+              rideId: typedArgs.rideId, feedData: typedArgs.feedData),
+          settings: settings,
+        );
+      case Routes.searchRide:
+        if (hasInvalidArgs<String>(args)) {
+          return misTypedArgsRoute<String>(args);
+        }
+        final typedArgs = args as String;
+        return MaterialPageRoute(
+          builder: (_) => SearchRide(typeOfRide: typedArgs),
+          settings: settings,
+        );
+      case Routes.createTrip:
+        if (hasInvalidArgs<String>(args)) {
+          return misTypedArgsRoute<String>(args);
+        }
+        final typedArgs = args as String;
+        return MaterialPageRoute(
+          builder: (_) => CreateTrip(feedType: typedArgs),
+          settings: settings,
+        );
+      case Routes.carRegistration:
+        return MaterialPageRoute(
+          builder: (_) => CarRegitration(),
+          settings: settings,
+        );
+      case Routes.myFeeds:
+        return MaterialPageRoute(
+          builder: (_) => MyFeeds(),
+          settings: settings,
+        );
       default:
         return unknownRoutePage(settings.name);
     }
@@ -110,4 +189,18 @@ class PreviewAttachmentArguments {
   final String message;
   PreviewAttachmentArguments(
       {@required this.userId, @required this.image, @required this.message});
+}
+
+//DriverFeed arguments holder class
+class DriverFeedArguments {
+  final Map<dynamic, dynamic> feedData;
+  final String feedId;
+  DriverFeedArguments({this.feedData, this.feedId});
+}
+
+//NegotiatePrice arguments holder class
+class NegotiatePriceArguments {
+  final String rideId;
+  final Map<dynamic, dynamic> feedData;
+  NegotiatePriceArguments({this.rideId, this.feedData});
 }

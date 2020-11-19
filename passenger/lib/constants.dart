@@ -20,3 +20,11 @@ class Constants {
   static const VINK_SHARE_TEXT =
       "Hey, I am using Vink Intercity, a Ride sharing app that helps driver make cash with their private cars on trips and passenger to save money and travel in comfort! You can also download it at ";
 }
+
+class TripConst {
+  static const RIDE_OFFER = 'rideOffer';
+  static const RIDE_REQUEST = 'rideRequest';
+  static const ACTIVE_TRIP = 'active';
+  static const ONCOMING_TRIP = 'oncoming';
+  static const COMPLETED_TRIP = 'completed';
+}

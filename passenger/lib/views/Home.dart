@@ -6,7 +6,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:passenger/models/Feeds.dart';
 import 'package:passenger/models/Helper.dart';
 import 'package:passenger/services/VinkFirebaseMessagingService.dart';
-import 'package:passenger/views/SearchRide.dart';
 import 'package:passenger/widgets/driverFeed.dart';
 import 'package:passenger/widgets/menu.dart';
 import 'package:passenger/routes/routes.gr.dart';
@@ -23,66 +22,12 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    final FirebaseMessaging _fcm = FirebaseMessaging();
-
-    currentUserIdAsFCMChannel = auth.currentUser.uid;
-    VinkFirebaseMessagingService.init(currentUserIdAsFCMChannel);
-    print("CHANNEL ID: $currentUserIdAsFCMChannel");
-
-    _fcm.configure(onMessage: (Map<String, dynamic> message) async {
-      var messageData = message['data'];
-      var notificationType = messageData['notificationType'];
-      print("onMessage Received. Data ${notificationType.toString()}");
-
-      if (notificationType == 'pokedToJoinTrip') {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            content: ListTile(
-                title: Text(
-                    "Poked to join a trip ${messageData['departurePoint']} To ${messageData['destinationPoint']}"),
-                subtitle: Text(
-                    "Time: ${messageData['departureDatetime']}. Fare - ${messageData['amount']}")),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text("No thanks"),
-              ),
-              FlatButton(
-                onPressed: () {
-                  _addPassengerToTrip(messageData);
-                },
-                child: Text("Accept"),
-              ),
-            ],
-          ),
-        );
-      }
-    }, onLaunch: (Map<String, dynamic> message) async {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: ListTile(
-            title: Text("Notification"),
-          ),
-        ),
-      );
-    }, onResume: (Map<String, dynamic> message) async {
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                  content: ListTile(
-                title: Text("Notification"),
-              )));
-    });
+    _firebaseCloudHandler();
   }
 
   @override
   Widget build(BuildContext context) {
     Feeds feeds = new Feeds();
-    var feedType = 'rideOffer';
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       drawer: Drawer(
@@ -127,63 +72,177 @@ class _HomeState extends State<Home> {
       ),
       backgroundColor: Color(0xFFFCF9F9),
       body: StreamBuilder(
-          stream: feeds.getAllFeeds(feedType),
+          stream: feeds.getAllFeeds(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (!snapshot.hasData) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
+              return loader();
             } else {
-              return Container(
-                child: Stack(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        child: ListView.builder(
-                          itemCount: snapshot.data.docs.length,
-                          itemBuilder: (
-                            context,
-                            index,
-                          ) {
-                            var feedData = snapshot.data.docs[index].data();
-                            var feedId = snapshot.data.docs[index].id;
+              if (snapshot.data.docs.length > 0) {
+                return Container(
+                  child: Stack(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          child: ListView.builder(
+                            itemCount: snapshot.data.docs.length,
+                            itemBuilder: (
+                              context,
+                              index,
+                            ) {
+                              var feedData = snapshot.data.docs[index].data();
+                              var feedId = snapshot.data.docs[index].id;
 
-                            return DriverFeed(
-                                feedData: feedData, feedId: feedId);
-                          },
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 20,
-                      right: 20,
-                      child: ButtonTheme(
-                        minWidth: 60.0,
-                        height: 60.0,
-                        child: RaisedButton(
-                          onPressed: () {
-                            Routes.navigator.pushNamed(Routes.createTrip,
-                                arguments: 'rideRequest');
-                          },
-                          child: Icon(
-                            FontAwesomeIcons.plus,
-                            size: 16.0,
-                            color: Color(0xFFFFFFFF),
-                          ),
-                          color: vinkRed,
-                          shape: OutlineInputBorder(
-                            borderSide: BorderSide(color: vinkRed),
-                            borderRadius: BorderRadius.circular(50),
+                              return DriverFeed(
+                                  feedData: feedData, feedId: feedId);
+                            },
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                      Positioned(
+                        bottom: 20,
+                        right: 20,
+                        child: ButtonTheme(
+                          minWidth: 60.0,
+                          height: 60.0,
+                          child: RaisedButton(
+                            onPressed: () {
+                              Routes.navigator.pushNamed(Routes.createTrip,
+                                  arguments: 'rideRequest');
+                            },
+                            child: Icon(
+                              FontAwesomeIcons.plus,
+                              size: 16.0,
+                              color: Color(0xFFFFFFFF),
+                            ),
+                            color: vinkRed,
+                            shape: OutlineInputBorder(
+                              borderSide: BorderSide(color: vinkRed),
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+              return Container(
+                child: Text('No feeds'),
               );
             }
           }),
+    );
+  }
+
+  _firebaseCloudHandler() {
+    final FirebaseMessaging _fcm = FirebaseMessaging();
+
+    currentUserIdAsFCMChannel = auth.currentUser.uid;
+    VinkFirebaseMessagingService.init(currentUserIdAsFCMChannel);
+    print("CHANNEL ID: $currentUserIdAsFCMChannel");
+
+    _fcm.configure(onMessage: (Map<String, dynamic> message) async {
+      var messageData = message['data'];
+      var notificationType = messageData['notificationType'];
+      print("onMessage Received. Data ${notificationType.toString()}");
+
+      if (notificationType == 'pokedToJoinTrip') {
+        _pokeHandler(messageData);
+      } else if (notificationType == 'rejectedToJoinTrip') {
+        _joingTripRequestDeclineHandler(messageData);
+      } else if (notificationType == 'acceptedToJoinTrip') {
+        _requestAcceptedHandler(messageData);
+      } else {}
+    }, onLaunch: (Map<String, dynamic> message) async {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: ListTile(
+            title: Text("Notification"),
+          ),
+        ),
+      );
+    }, onResume: (Map<String, dynamic> message) async {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                  content: ListTile(
+                title: Text("Notification"),
+              )));
+    });
+  }
+
+  _requestAcceptedHandler(messageData) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: ListTile(
+          title: Text(
+              "Accepted to joing Trip - ${messageData['departurePoint']} To ${messageData['destinationPoint']}"),
+        ),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("Procced to pay."),
+          ),
+          FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("Got It!"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _pokeHandler(messageData) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: ListTile(
+            title: Text(
+                "Poked to join a trip ${messageData['departurePoint']} To ${messageData['destinationPoint']}"),
+            subtitle: Text(
+                "Time: ${messageData['departureDatetime']}. Fare - ${messageData['amount']}")),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("No thanks"),
+          ),
+          FlatButton(
+            onPressed: () {
+              _addPassengerToTrip(messageData);
+            },
+            child: Text("Accept"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _joingTripRequestDeclineHandler(messageData) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: ListTile(
+          title: Text(
+              "Request Rejected - ${messageData['departurePoint']} To ${messageData['destinationPoint']}"),
+        ),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("Got It!"),
+          ),
+        ],
+      ),
     );
   }
 

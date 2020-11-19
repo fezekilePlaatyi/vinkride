@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:passenger/models/Feeds.dart';
 import 'package:passenger/models/User.dart';
-import 'package:passenger/utils/utilities.dart';
+import 'package:passenger/utils/utils.dart';
 import 'package:passenger/widgets/displayPassengerList.dart';
 
 class ViewingTrip extends StatefulWidget {
@@ -161,9 +161,9 @@ class _ViewingTripState extends State<ViewingTrip> {
                               Padding(
                                 padding: const EdgeInsets.only(
                                     left: 15.0, right: 15.0),
-                                child: FutureBuilder(
-                                    future: user.getUserById(
-                                        feedData['sender_uid'], 'drivers'),
+                                child: StreamBuilder(
+                                    stream:
+                                        user.getDriver(feedData['sender_uid']),
                                     builder: (BuildContext context,
                                         AsyncSnapshot<DocumentSnapshot>
                                             snapshot) {

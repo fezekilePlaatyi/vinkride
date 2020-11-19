@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:Vinkdriver/widget/negotiatePrice.dart';
 
 class DialogHelper {
+<<<<<<< HEAD
   static insertPrice(
           context, rideId, userIdPoking, amountWillingToPay, feedData) =>
       showDialog(
@@ -18,4 +19,11 @@ class DialogHelper {
 
   // static passengers(context) =>
   //     showDialog(context: context, builder: (context) => RidingWith());
+=======
+  static insertPrice(context, rideId, feedData) => showDialog(
+      context: context,
+      builder: (_) {
+        return NegotiatePrice(rideId: rideId, feedData: feedData);
+      });
+>>>>>>> conflictResolve
 }
