@@ -16,12 +16,6 @@ const makeHash = (data) => {
   return hash
 }
 
-/*
-"CancelUrl":"https://us-central1-vink8-za.cloudfunctions.net/payment/paymentCancelation",					
-"ErrorUrl":"https://us-central1-vink8-za.cloudfunctions.net/payment/paymentError",
-"SuccessUrl":"https://us-central1-vink8-za.cloudfunctions.net/payment/paymentSuccess",
-*/
-
 module.exports = {  
   paymentCheckout: (res, req) => {
     return new Promise((resolve) => {
@@ -33,14 +27,17 @@ module.exports = {
           "TransactionReference":"TestApi",
           "BankReference":"TestApi",
           "Customer":"Test Customer",
-          "NotifyUrl":"https://us-central1-vink8-za.cloudfunctions.net/payment/paymentNotifications",
+          "CancelUrl":"https://us-central1-vink8-za.cloudfunctions.net/payment/paymentCancelation",					
+          "ErrorUrl":"https://us-central1-vink8-za.cloudfunctions.net/payment/paymentError",
+          "SuccessUrl":"https://us-central1-vink8-za.cloudfunctions.net/payment/paymentSuccess",
           "IsTest":"false",
       }
       let stringToHash = makeHash(postData)
       postData['HashCheck'] = stringToHash
 
       var urlPath ='/PostPaymentRequest'
-      var url = 'stagingapi.ozow.com'
+      var url = 'api.ozow.com'
+
       var options = {
           host: url,
           path: urlPath,
@@ -61,6 +58,6 @@ module.exports = {
       })
       postRequest.write(JSON.stringify(postData))
       postRequest.end()
-    })
-  },
+    }) 
+  }
 }
