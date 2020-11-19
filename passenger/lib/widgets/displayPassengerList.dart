@@ -44,38 +44,47 @@ class DisplayPassengerListState extends State<DisplayPassengerList> {
                             );
                           } else {
                             var userDetails = snapshot.data.data();
-                            return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(children: [
-                                    Text(
-                                      '${userDetails['name']}',
-                                      style: TextStyle(
-                                        color: Color(0xFF1B1B1B),
-                                        fontFamily: 'Roboto',
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    )
-                                  ]),
-                                  Column(children: [
-                                    Center(
-                                      child: FlatButton(
-                                        onPressed: () {
-                                          Utils.launchURL(
-                                              "https://www.google.com/maps/dir//${feedPassengerData['pick_up_point']}");
-                                        },
-                                        padding: EdgeInsets.all(10.0),
-                                        child: Column(
-                                          children: <Widget>[
-                                            Icon(Icons.directions_car_rounded),
-                                          ],
+
+                            if (userDetails != null) {
+                              return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(children: [
+                                      Text(
+                                        '${userDetails['name']}',
+                                        style: TextStyle(
+                                          color: Color(0xFF1B1B1B),
+                                          fontFamily: 'Roboto',
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
                                         ),
-                                      ),
-                                    )
-                                  ])
-                                ]);
+                                      )
+                                    ]),
+                                    Column(children: [
+                                      Center(
+                                        child: FlatButton(
+                                          onPressed: () {
+                                            Utils.launchURL(
+                                                "https://www.google.com/maps/dir//${feedPassengerData['pick_up_point']}");
+                                          },
+                                          padding: EdgeInsets.all(10.0),
+                                          child: Column(
+                                            children: <Widget>[
+                                              Icon(
+                                                  Icons.directions_car_rounded),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    ])
+                                  ]);
+                            } else {
+                              return Container(
+                                height: 0,
+                                width: 0,
+                              );
+                            }
                           }
                         });
                   });
