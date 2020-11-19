@@ -1,3 +1,4 @@
+import 'package:Vinkdriver/helper/Helper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -43,13 +44,13 @@ class _VinkDetailsState extends State<VinkDetails> {
           stream: vink.getCompanyDetails(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            var companyInfo = snapshot.data.docs.first.data();
             if (!snapshot.hasData) {
               return Container(
                 width: 0,
                 height: 0,
               );
             } else {
+              var companyInfo = snapshot.data.docs.first.data();
               if (companyInfo != null) {
                 return Container(
                   padding: const EdgeInsets.all(8.0),
@@ -91,6 +92,7 @@ class _VinkDetailsState extends State<VinkDetails> {
                             minWidth: 50.0,
                             height: 50.0,
                             child: RaisedButton(
+                              color: vinkRed,
                               onPressed: () => {},
                               child: Icon(
                                 FontAwesomeIcons.facebookF,
@@ -108,6 +110,7 @@ class _VinkDetailsState extends State<VinkDetails> {
                             minWidth: 50.0,
                             height: 50.0,
                             child: RaisedButton(
+                              color: vinkRed,
                               onPressed: () => {},
                               child: Icon(
                                 FontAwesomeIcons.twitter,
@@ -125,6 +128,7 @@ class _VinkDetailsState extends State<VinkDetails> {
                             minWidth: 50.0,
                             height: 50.0,
                             child: RaisedButton(
+                              color: vinkRed,
                               onPressed: () => {},
                               child: Icon(
                                 FontAwesomeIcons.instagram,
