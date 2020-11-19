@@ -7,7 +7,8 @@ app.set("views", __dirname + "/views")
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + '/public'))
 var Payment = require("./Payment")
-const PORT = 8000
+
+const PORT = process.env.PORT || 8080
 
 app.get('/paymentCheckout', (req, res) => {
     paymentCheckout(req, res)
