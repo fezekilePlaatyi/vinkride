@@ -30,17 +30,10 @@ class _RideRequestState extends State<RideRequest> {
         child: Column(
           children: [
             Container(
-<<<<<<< HEAD
-              child: FutureBuilder(
-                  future:
-                      user.getUserById(feedData['sender_uid'], 'passengers'),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-=======
               child: StreamBuilder(
                   stream: user.getPassenger(feedData['sender_uid']),
                   builder: (BuildContext context,
                       AsyncSnapshot<DocumentSnapshot> snapshot) {
->>>>>>> conflictResolve
                     if (!snapshot.hasData) {
                       return Container(
                         child: Center(
@@ -48,26 +41,6 @@ class _RideRequestState extends State<RideRequest> {
                         ),
                       );
                     } else {
-<<<<<<< HEAD
-                      var userDetails = snapshot.data.data();
-
-                      return ListTile(
-                        leading: CircleAvatar(
-                          radius: 25.0,
-                          child: ClipOval(
-                            child: SizedBox(
-                              height: 80.0,
-                              width: 80.0,
-                              child: userDetails.containsKey('profile_pic')
-                                  ? Image.network(
-                                      userDetails['profile_pic'].toString(),
-                                      fit: BoxFit.fill,
-                                    )
-                                  : Image.network(
-                                      defaultPic,
-                                      fit: BoxFit.fill,
-                                    ),
-=======
                       if (snapshot.data.exists) {
                         var userDetails = snapshot.data.data();
                         return ListTile(
@@ -86,7 +59,6 @@ class _RideRequestState extends State<RideRequest> {
                                   fit: BoxFit.cover,
                                 ),
                               ),
->>>>>>> conflictResolve
                             ),
                           ),
                           title: Column(
@@ -264,8 +236,8 @@ class _RideRequestState extends State<RideRequest> {
                           context,
                           MaterialPageRoute(
                               builder: (_) => PokeUserOnTrip(
-                                  userIdPoking: feedData['sender_uid'],
-                                  amountWillingToPay: feedData['trip_fare'])));
+                                    userIdPoking: feedData['sender_uid'],
+                                  )));
                     },
                     color: Color(0xFF1B1B1B),
                     padding:

@@ -1,11 +1,12 @@
 import 'package:Vinkdriver/constants.dart';
+import 'package:Vinkdriver/utils/Utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Feeds {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final feedsRef = FirebaseFirestore.instance.collection("vink_feeds");
   final userRef = FirebaseFirestore.instance.collection("users");
-  final currentUserId = FirebaseAuth.instance.currentUser.uid;
+  final currentUserId = Utils.AUTH_USER.uid;
 
   addFeed(Map<String, dynamic> feedData) {
     return feedsRef

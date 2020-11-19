@@ -10,15 +10,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 class NegotiatePrice extends StatefulWidget {
-<<<<<<< HEAD
-  final rideId, userId, amountWillingToPay, feedData;
-  NegotiatePrice(
-      {this.rideId, this.userId, this.amountWillingToPay, this.feedData});
-=======
   final String rideId;
   final Map feedData;
   const NegotiatePrice({this.rideId, this.feedData});
->>>>>>> conflictResolve
   @override
   _NegotiatePriceState createState() => _NegotiatePriceState();
 }
@@ -28,12 +22,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   var amountAdjust = false;
   var rideId;
-<<<<<<< HEAD
-  var amountWillingToPay;
-  var feedDataPokedTo;
-=======
   var feedData;
->>>>>>> conflictResolve
 
   @override
   void initState() {
@@ -50,12 +39,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
   Widget build(BuildContext context) {
     setState(() {
       rideId = widget.rideId;
-<<<<<<< HEAD
-      amountWillingToPay = widget.amountWillingToPay;
-      feedDataPokedTo = widget.feedData;
-=======
       feedData = widget.feedData;
->>>>>>> conflictResolve
     });
 
     return Dialog(
@@ -87,11 +71,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
               ),
             ),
             SizedBox(height: 20.0),
-<<<<<<< HEAD
-            Text("They willing to R$amountWillingToPay"),
-=======
             Text("Willing to pay -  R${feedData['trip_fare']}"),
->>>>>>> conflictResolve
             amountAdjust
                 ? TextFormField(
                     decoration: formDecor("Enter units in ZARs"),
@@ -133,23 +113,12 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
                   onPressed: () {
                     _loader(true);
 
-<<<<<<< HEAD
-                    String currentUserId = auth.currentUser.uid;
-                    var amountAdjustment =
-                        amountAdjustEditingController.text != ""
-                            ? amountAdjustEditingController.text
-                            : amountWillingToPay;
-
-                    _savePokeToDatabase(
-                        userIdPoking, currentUserId, rideId, amountAdjustment);
-=======
                     var amountAdjustment =
                         amountAdjustEditingController.text != ""
                             ? amountAdjustEditingController.text
                             : feedData['trip_fare'];
 
                     _saveRequestToDatabase(amountAdjustment);
->>>>>>> conflictResolve
                   },
                   child: Text('Submit'),
                   textColor: Colors.white,
@@ -178,17 +147,10 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
       'amount': amountAdjustment,
       'notification_type': 'pokedToJoinTrip',
       'trip_id': rideId,
-<<<<<<< HEAD
-      'departurePoint': feedDataPokedTo['departure_point'],
-      'destinationPoint': feedDataPokedTo['destination_point'],
-      'departureDatetime': DateFormat('dd-MM-yy kk:mm')
-          .format(feedDataPokedTo['departure_datetime'].toDate())
-=======
       'departurePoint': feedData['departure_point'],
       'destinationPoint': feedData['destination_point'],
       'departureDatetime': DateFormat('dd-MM-yy kk:mm')
           .format(feedData['departure_datetime'].toDate())
->>>>>>> conflictResolve
     };
 
     notifications
@@ -213,17 +175,10 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
       'notificationType': 'pokedToJoinTrip',
       'amount': amountAdjustment,
       'trip_id': rideId,
-<<<<<<< HEAD
-      'departurePoint': feedDataPokedTo['departure_point'],
-      'destinationPoint': feedDataPokedTo['destination_point'],
-      'departureDatetime': DateFormat('dd-MM-yy kk:mm')
-          .format(feedDataPokedTo['departure_datetime'].toDate())
-=======
       'departurePoint': feedData['departure_point'],
       'destinationPoint': feedData['destination_point'],
       'departureDatetime': DateFormat('dd-MM-yy kk:mm')
           .format(feedData['departure_datetime'].toDate())
->>>>>>> conflictResolve
     };
 
     print('Owner ${feedData['sender_uid']} Current $currentUserId');
