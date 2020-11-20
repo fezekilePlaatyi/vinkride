@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -9,6 +11,8 @@ import 'package:passenger/services/VinkFirebaseMessagingService.dart';
 import 'package:passenger/widgets/driverFeed.dart';
 import 'package:passenger/widgets/menu.dart';
 import 'package:passenger/routes/routes.gr.dart';
+import 'package:passenger/models/Payment.dart';
+import 'package:passenger/views/Payment.dart' as View;
 
 class Home extends StatefulWidget {
   @override
@@ -174,6 +178,7 @@ class _HomeState extends State<Home> {
   }
 
   _requestAcceptedHandler(messageData) {
+    print(messageData);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -184,7 +189,34 @@ class _HomeState extends State<Home> {
         actions: <Widget>[
           FlatButton(
             onPressed: () {
-              Navigator.pop(context);
+              Map<String, dynamic> paymentCheckoutData = {
+                "TransactionReference": "Vink Trip Payment",
+                "BankReference": "Vink Trip Payment",
+                "Customer": "Test Customer",
+                "Optional1": auth.currentUser.uid,
+                "Amount": messageData['amount'],
+                "Optional2": messageData['trip_id'],
+              };
+
+              print(paymentCheckoutData);
+              // return;
+
+              Payment payment = new Payment();
+              payment.prepareCheckout(paymentCheckoutData).then((data) {
+                print(data);
+                Map<dynamic, dynamic> paymentCheckoutResponse =
+                    json.decode(data);
+
+                if (paymentCheckoutResponse.containsKey("url")) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => View.Payment(
+                              paymentUrl: paymentCheckoutResponse['url'])));
+                } else {
+                  print(paymentCheckoutResponse['error']);
+                }
+              });
             },
             child: Text("Procced to pay."),
           ),

@@ -16,23 +16,66 @@ const makeHash = (data) => {
   return hash
 }
 
+const appendPaymentPostData = (data, postData) => {
+  for (const [key, value] of Object.entries(data)) {
+    let appendKey = key    
+    postData[appendKey] = value
+  }
+
+  
+  console.log("START")
+  console.log(data)
+
+  for (var k in data){
+    if (target.hasOwnProperty(k)) {
+      postData[k] = data[k]
+    }
+  }
+
+  console.log("FINAL")
+  console.log(postData)
+  return postData
+}
+
 module.exports = {  
   paymentCheckout: (res, req) => {
     return new Promise((resolve) => {
+    
+      /*
+var obj = {key1: "value1", key2: "value2"};
+Object.assign(obj, {key3: "value3"});
+
+  console.log(res.body)
+
+ "TransactionReference": "Vink Trip Payment",
+                "BankReference": "Vink Trip Payment",
+                "Customer": "Test Customer",
+                "Optional1": auth.currentUser.uid,
+                "Amount": messageData['amount'],
+                "Optional2": messageData['trip_id'],
+
+
+      */
+    //  "TransactionReference": "Vink Trip Payment",
+    //  "BankReference": "Vink Trip Payment",
+    //  "Customer": "Test Customer",
+    //  "Optional1": auth.currentUser.uid,
+    //  "Amount": messageData['amount'],
+    //  "Optional2": messageData['trip_id'],
+
       var postData = {
           "SiteCode": SITE_CODE,
           "CountryCode":"ZA",
           "CurrencyCode":"ZAR",
-          "Amount":"0.01",
-          "TransactionReference":"TestApi",
-          "BankReference":"TestApi",
-          "Customer":"Test Customer",
           "CancelUrl":"https://us-central1-vink8-za.cloudfunctions.net/payment/paymentCancelation",					
           "ErrorUrl":"https://us-central1-vink8-za.cloudfunctions.net/payment/paymentError",
           "SuccessUrl":"https://us-central1-vink8-za.cloudfunctions.net/payment/paymentSuccess",
           "IsTest":"false",
       }
-      let stringToHash = makeHash(postData)
+
+      var updatedPostData = appendPaymentPostData(res.body, postData)
+      
+      let stringToHash = makeHash(updatedPostData)
       postData['HashCheck'] = stringToHash
 
       var urlPath ='/PostPaymentRequest'

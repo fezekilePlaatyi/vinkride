@@ -8,9 +8,9 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + '/public'))
 var Payment = require("./Payment")
 
-const PORT = process.env.PORT || 8080
+const PORT = 7000
 
-app.get('/paymentCheckout', (req, res) => {
+app.post('/paymentCheckout', (req, res) => {
     paymentCheckout(req, res)
 })
 
@@ -61,9 +61,9 @@ app.listen(PORT, () => {
 const paymentCheckout = async (req, res) => {
     const result = await Payment.paymentCheckout(req, res)
     result.errorMessage == null ?
-        res.redirect(jsonRes.url)
+        res.send({"url": jsonRes.url})
         :
-        res.send({"Error": jsonRes})
+        res.send({"error": jsonRes})
 }
 
-exports.payment = functions.https.onRequest(app)
+exports.app = functions.https.onRequest(app)

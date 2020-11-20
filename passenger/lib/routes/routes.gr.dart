@@ -186,6 +186,11 @@ class PreviewAttachmentArguments {
       {@required this.userId, @required this.image, @required this.message});
 }
 
+class PaymentArguments {
+  final Map<dynamic, dynamic> tripData;
+  PaymentArguments(this.tripData);
+}
+
 //RideRequest arguments holder class
 class RideRequestArguments {
   final Map<dynamic, dynamic> feedData;
