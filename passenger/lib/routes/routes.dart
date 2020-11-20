@@ -4,6 +4,7 @@ import 'package:passenger/views/Home.dart';
 import 'package:passenger/views/SearchRide.dart';
 import 'package:passenger/views/ViewingTrip.dart';
 import 'package:passenger/views/VinkDetails.dart';
+import 'package:passenger/views/auth/forgot_password.dart';
 import 'package:passenger/views/auth/passengerForm.dart';
 import 'package:passenger/views/auth/login.dart';
 import 'package:passenger/views/auth/profilePicture.dart';
@@ -35,4 +36,5 @@ class $Routes {
   SearchRide searchRide;
   RideRequest rideRequest;
   JoinTrip joinTrip;
+  ForgotPassword forgotPassword;
 }

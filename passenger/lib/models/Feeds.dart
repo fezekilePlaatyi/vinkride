@@ -117,7 +117,7 @@ class Feeds {
     return feedsRef
         .orderBy("date_updated", descending: true)
         .where("sender_uid", isEqualTo: userId.trim())
-        .where("feed_type", isEqualTo: 'interests')
+        .where("feed_type", isEqualTo: TripConst.INTERESTS)
         .snapshots();
   }
 
@@ -126,7 +126,6 @@ class Feeds {
         .orderBy("date_updated", descending: true)
         .where("sender_uid", isEqualTo: userId.trim())
         .where("feed_status", isEqualTo: status.trim())
-        .where("feed_type", isEqualTo: TripConst.RIDE_OFFER)
         .snapshots();
   }
 
@@ -140,7 +139,7 @@ class Feeds {
         .orderBy("date_updated", descending: true)
         .where("departure_point", isEqualTo: departure.trim())
         .where("destination_point", isEqualTo: destination.trim())
-        .where("feed_type", isEqualTo: "rideOffer")
+        .where("feed_type", isEqualTo: TripConst.RIDE_OFFER)
         .snapshots();
   }
 

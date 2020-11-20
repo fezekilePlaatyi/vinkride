@@ -25,6 +25,7 @@ import 'package:passenger/views/CreateTrip.dart';
 import 'package:passenger/views/SearchRide.dart';
 import 'package:passenger/widgets/RideRequest.dart';
 import 'package:passenger/widgets/JoinTrip.dart';
+import 'package:passenger/views/auth/forgot_password.dart';
 
 class Routes {
   static const onboardingSlider = '/';
@@ -43,6 +44,7 @@ class Routes {
   static const searchRide = '/search-ride';
   static const rideRequest = '/ride-request';
   static const joinTrip = '/join-trip';
+  static const forgotPassword = '/forgot-password';
   static GlobalKey<NavigatorState> get navigatorKey =>
       getNavigatorKey<Routes>();
   static NavigatorState get navigator => navigatorKey.currentState;
@@ -165,6 +167,11 @@ class Routes {
               driverId: typedArgs.driverId,
               tripData: typedArgs.tripData,
               paymentToken: typedArgs.paymentToken),
+          settings: settings,
+        );
+      case Routes.forgotPassword:
+        return MaterialPageRoute(
+          builder: (_) => ForgotPassword(),
           settings: settings,
         );
       default:

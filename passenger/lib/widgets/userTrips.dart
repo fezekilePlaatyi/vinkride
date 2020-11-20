@@ -126,9 +126,10 @@ class UserTripsState extends State<UserTrips> {
                                                     ),
                                                     tooltip: 'End trip.',
                                                     onPressed: () {
-                                                      feeds
-                                                          .updateFeedStatusById(
-                                                              feedId, 'closed');
+                                                      feeds.updateFeedStatusById(
+                                                          feedId,
+                                                          TripConst
+                                                              .COMPLETED_TRIP);
                                                     },
                                                   )
                                                 : Text(''),
@@ -160,6 +161,7 @@ class UserTripsState extends State<UserTrips> {
                   ));
             }
           }
+          return Container();
         });
   }
 
