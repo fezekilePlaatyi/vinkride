@@ -167,24 +167,19 @@ class _LoginPageState extends State<LoginPage> {
                               FadeAnimation(
                                 1.6,
                                 FlatButton(
-                                  child: GestureDetector(
-                                    // onTap: () => Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (_) => ForgotPassword(),
-                                    //   ),
-                                    // ),
-                                    child: Text(
-                                      'Forgot Password?',
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontFamily: 'roboto',
-                                      ),
-                                      textAlign: TextAlign.right,
+                                  child: Text(
+                                    'Forgot Password?',
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontFamily: 'roboto',
                                     ),
+                                    textAlign: TextAlign.right,
                                   ),
                                   textColor: vinkRed,
-                                  onPressed: () => {},
+                                  onPressed: () {
+                                    Routes.navigator
+                                        .pushNamed(Routes.forgotPassword);
+                                  },
                                 ),
                               ),
                             ],
