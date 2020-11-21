@@ -17,6 +17,7 @@ var https = require("https");
 var SITE_CODE = process.env.SITE_CODE;
 var PRIVATE_KEY = process.env.PRIVATE_KEY;
 var API_KEY = process.env.API_KEY;
+var VINK_TRIP_BANK_REFERENCE = process.env.VINK_TRIP_BANK_REFERENCE;
 
 var makeHash = function makeHash(data) {
   var stringToHash = "";
@@ -78,10 +79,10 @@ module.exports = {
     return new Promise(function (resolve) {
       var _req$body = req.body,
           TransactionReference = _req$body.TransactionReference,
-          BankReference = _req$body.BankReference,
           Customer = _req$body.Customer,
           Optional1 = _req$body.Optional1,
           Optional2 = _req$body.Optional2,
+          Optional3 = _req$body.Optional3,
           Amount = _req$body.Amount;
       var postData = {
         "SiteCode": SITE_CODE,
@@ -89,8 +90,11 @@ module.exports = {
         "CurrencyCode": "ZAR",
         "Amount": Amount,
         "TransactionReference": TransactionReference,
-        "BankReference": BankReference,
-        "Customer": "Test Customer",
+        "BankReference": VINK_TRIP_BANK_REFERENCE,
+        "Optional1": Optional1,
+        "Optional2": Optional2,
+        "Optional3": Optional3,
+        "Customer": Customer,
         "CancelUrl": "https://us-central1-vink8-za.cloudfunctions.net/payment/paymentCancelation",
         "ErrorUrl": "https://us-central1-vink8-za.cloudfunctions.net/payment/paymentError",
         "SuccessUrl": "https://us-central1-vink8-za.cloudfunctions.net/payment/paymentSuccess",

@@ -72,8 +72,6 @@ module.exports = {
         Optional1, 
         Optional2, 
         Optional3,
-        Optional4,
-        Optional5,
         Amount} 
       = req.body
 
@@ -87,8 +85,6 @@ module.exports = {
         "Optional1":Optional1,
         "Optional2":Optional2,
         "Optional3":Optional3,
-        "Optional4":Optional4,
-        "Optional5":Optional5,
         "Customer":Customer,
         "CancelUrl":"https://us-central1-vink8-za.cloudfunctions.net/payment/paymentCancelation",					
         "ErrorUrl":"https://us-central1-vink8-za.cloudfunctions.net/payment/paymentError",

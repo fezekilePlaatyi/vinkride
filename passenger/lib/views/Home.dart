@@ -15,6 +15,7 @@ import 'package:passenger/widgets/driverFeed.dart';
 import 'package:passenger/widgets/menu.dart';
 import 'package:passenger/routes/routes.gr.dart';
 import 'package:passenger/models/Payment.dart';
+import 'package:passenger/models/User.dart' as VinkUser;
 import 'package:passenger/views/Payment.dart' as View;
 
 class Home extends StatefulWidget {
@@ -30,6 +31,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     _firebaseCloudHandler();
+    currentUserId = auth.currentUser.uid;
   }
 
   @override
@@ -57,8 +59,7 @@ class _HomeState extends State<Home> {
         actions: [
           IconButton(
             onPressed: () {
-              // Routes.navigator.pushNamed(Routes.searchRide);
-              _prepareToGoToPayment("messageData");
+              Routes.navigator.pushNamed(Routes.searchRide);
             },
             icon: Icon(
               Icons.search,
@@ -154,7 +155,6 @@ class _HomeState extends State<Home> {
   _firebaseCloudHandler() {
     final FirebaseMessaging _fcm = FirebaseMessaging();
 
-    currentUserId = auth.currentUser.uid;
     VinkFirebaseMessagingService.init(currentUserId);
     print("Channel ID: $currentUserId");
 
@@ -219,48 +219,41 @@ class _HomeState extends State<Home> {
   _prepareToGoToPayment(messageData) {
     var isLoading = true;
     DialogHelper.loadingDialogWithMessage(context, isLoading, "Loading");
+    VinkUser.User user = new VinkUser.User();
 
-    /*
-    var messageData = {
-          'driverId': driverId,
-          'passengerId': currentUserId,
-          'notificationType': TripConst.TRIP_JOIN_REQUEST,
-          'amount': amountAdjustment,
-          'trip_id': rideId,
-          'departurePoint': feedData['departure_point'],
-          'destinationPoint': feedData['destination_point'],
-          'departureDatetime': DateFormat('dd-MM-yy kk:mm')
-              .format(feedData['departure_datetime'].toDate())
-        };
-    */
-    var transactionReference = DateTime.now().millisecondsSinceEpoch;
-    var customer = "Vink -";
-    // var customer = "Vink - ${messageData['passengerId']}";
+    user.getUserForCheck().then((user) {
+      var transactionReference = DateTime.now().millisecondsSinceEpoch;
+      var customer = "V - ${user['name']}";
 
-    Map<String, String> paymentCheckoutData = {
-      "TransactionReference": transactionReference.toString(),
-      "BankReference": "Hello Worldd",
-      "Customer": customer,
-      "Optional1": "test",
-      "Amount": "0.09",
-      "Optional2": "test"
-    };
+      Map<String, String> paymentCheckoutData = {
+        "TransactionReference": transactionReference.toString(),
+        "Customer": customer,
+        "Amount":
+            double.parse(messageData['amount']).toStringAsFixed(2).toString(),
+        "Optional1": messageData['trip_id'].toString(),
+        "Optional2": messageData['passengerId'].toString(),
+        "Optional3": messageData['driverId'].toString(),
+      };
 
-    Payment payment = new Payment();
-    payment.prepareCheckout(paymentCheckoutData).then((data) {
-      print(data);
-      Map<dynamic, dynamic> paymentCheckoutResponse = json.decode(data);
+      Payment payment = new Payment();
+      payment.prepareCheckout(paymentCheckoutData).then((data) {
+        print(data);
+        Map<dynamic, dynamic> paymentCheckoutResponse = json.decode(data);
 
-      if (paymentCheckoutResponse.containsKey("url")) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    View.Payment(paymentUrl: paymentCheckoutResponse['url'])));
-      } else {
-        print(paymentCheckoutResponse['error']);
-        _displayResponse(paymentCheckoutResponse['error'].toString());
-      }
+        if (paymentCheckoutResponse.containsKey("url")) {
+          Navigator.pop(context);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => View.Payment(
+                      paymentUrl: paymentCheckoutResponse['url'])));
+        } else {
+          print(paymentCheckoutResponse['error']);
+          _displayResponse(paymentCheckoutResponse['error'].toString());
+        }
+      });
+    }).catchError((onError) {
+      _displayResponse("Error getting your details.");
     });
   }
 

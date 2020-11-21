@@ -73,6 +73,16 @@ class _PaymentState extends State<Payment> {
                         print("Successfuly paid");
                         print(params);
 
+                        var transactionReference =
+                            params['TransactionReference'];
+                        var amount = params['Amount'];
+                        var tripId = params['Optional1'];
+                        var passengerId = params['Optional2'];
+                        var driverId = params['Optional3'];
+
+                        _addPassengerToTrip(tripId, driverId, passengerId,
+                            transactionReference, amount);
+
                         // _addPassengerToTrip(tripId, driverId)
 
                         return NavigationDecision.prevent;
@@ -88,10 +98,11 @@ class _PaymentState extends State<Payment> {
                       } else if (request.url
                           .startsWith('$baseURL/payment/paymentCancelation')) {
                         var uri = Uri.dataFromString(request.toString());
-                        Map<String, String> params = uri.queryParameters;
+                        Map<String, dynamic> params = uri.queryParameters;
 
                         print("Cancelled Payment");
-                        print(params);
+                        print(params['SiteCode']);
+                        _loader("You cancelled the payment.");
 
                         return NavigationDecision.prevent;
                       }
@@ -124,7 +135,33 @@ class _PaymentState extends State<Payment> {
         });
   }
 
-  _addPassengerToTrip(tripId, driverId) {
+  _loader(message) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => AlertDialog(
+        content: ListTile(
+            subtitle: Container(
+                child: Text(
+          message,
+          style: TextStyle(
+              color: Colors.black87, fontSize: 15, fontWeight: FontWeight.w600),
+        ))),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            child: Text("Go home!"),
+          )
+        ],
+      ),
+    );
+  }
+
+  _addPassengerToTrip(
+      tripId, driverId, passengerId, transactionReference, amount) {
     Feeds feed = new Feeds();
 
     var isLoading = true;
@@ -133,10 +170,12 @@ class _PaymentState extends State<Payment> {
     Map<String, dynamic> newPassangerData = {
       'date_joined': FieldValue.serverTimestamp(),
       'payment_status': PaymentConst.STATUS_PAID,
+      'amount_paid': amount,
+      'transactionReference': transactionReference,
     };
 
     feed
-        .addPassengerToFeedTrip(tripId, currentUserId, newPassangerData)
+        .addPassengerToFeedTrip(tripId, passengerId, newPassangerData)
         .then((value) {
       _addNotificationToDb(tripId, driverId);
     });
