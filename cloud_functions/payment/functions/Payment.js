@@ -4,6 +4,7 @@ const https = require("https")
 const SITE_CODE = process.env.SITE_CODE
 const PRIVATE_KEY = process.env.PRIVATE_KEY
 const API_KEY = process.env.API_KEY
+const VINK_TRIP_BANK_REFERENCE = process.env.VINK_TRIP_BANK_REFERENCE
 
 const makeHash = (data) => {
   let stringToHash = ""
@@ -67,10 +68,12 @@ module.exports = {
 
       let {
         TransactionReference, 
-        BankReference, 
         Customer, 
         Optional1, 
         Optional2, 
+        Optional3,
+        Optional4,
+        Optional5,
         Amount} 
       = req.body
 
@@ -80,8 +83,13 @@ module.exports = {
         "CurrencyCode":"ZAR",
         "Amount":Amount,
         "TransactionReference":TransactionReference,
-        "BankReference":BankReference,
-        "Customer":"Test Customer",
+        "BankReference":VINK_TRIP_BANK_REFERENCE,
+        "Optional1":Optional1,
+        "Optional2":Optional2,
+        "Optional3":Optional3,
+        "Optional4":Optional4,
+        "Optional5":Optional5,
+        "Customer":Customer,
         "CancelUrl":"https://us-central1-vink8-za.cloudfunctions.net/payment/paymentCancelation",					
         "ErrorUrl":"https://us-central1-vink8-za.cloudfunctions.net/payment/paymentError",
         "SuccessUrl":"https://us-central1-vink8-za.cloudfunctions.net/payment/paymentSuccess",
