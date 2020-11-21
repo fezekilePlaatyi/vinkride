@@ -74,27 +74,12 @@ app.listen(PORT, function () {
 });
 
 var paymentCheckout = function paymentCheckout(req, res) {
-  var result;
-  return regeneratorRuntime.async(function paymentCheckout$(_context) {
-    while (1) {
-      switch (_context.prev = _context.next) {
-        case 0:
-          _context.next = 2;
-          return regeneratorRuntime.awrap(Payment.paymentCheckout(req, res));
-
-        case 2:
-          result = _context.sent;
-          result.errorMessage == null ? res.send({
-            "url": jsonRes.url
-          }) : res.send({
-            "error": jsonRes
-          });
-
-        case 4:
-        case "end":
-          return _context.stop();
-      }
-    }
+  Payment.paymentCheckout(req, res).then(function (result) {
+    result.errorMessage == null ? res.send({
+      "url": jsonRes.url
+    }) : res.send({
+      "error": jsonRes
+    });
   });
 };
 

@@ -127,12 +127,8 @@ class Routes {
           settings: settings,
         );
       case Routes.createTrip:
-        if (hasInvalidArgs<String>(args, isRequired: true)) {
-          return misTypedArgsRoute<String>(args);
-        }
-        final typedArgs = args as String;
         return MaterialPageRoute(
-          builder: (_) => CreateTrip(feedType: typedArgs),
+          builder: (_) => CreateTrip(),
           settings: settings,
         );
       case Routes.searchRide:

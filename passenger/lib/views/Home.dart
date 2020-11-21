@@ -54,7 +54,33 @@ class _HomeState extends State<Home> {
         actions: [
           IconButton(
             onPressed: () {
-              Routes.navigator.pushNamed(Routes.searchRide);
+              // Routes.navigator.pushNamed(Routes.searchRide);
+
+              Map<String, String> paymentCheckoutData = {
+                "TransactionReference": "Hello World",
+                "BankReference": "Hello Worldd",
+                "Customer": "Test ustomer",
+                "Optional1": "tesr",
+                "Amount": "0.09",
+                "Optional2": "test"
+              };
+
+              Payment payment = new Payment();
+              payment.prepareCheckout(paymentCheckoutData).then((data) {
+                print(data);
+                Map<dynamic, dynamic> paymentCheckoutResponse =
+                    json.decode(data);
+
+                if (paymentCheckoutResponse.containsKey("url")) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => View.Payment(
+                              paymentUrl: paymentCheckoutResponse['url'])));
+                } else {
+                  print(paymentCheckoutResponse['error']);
+                }
+              });
             },
             icon: Icon(
               Icons.search,
@@ -111,8 +137,7 @@ class _HomeState extends State<Home> {
                           height: 60.0,
                           child: RaisedButton(
                             onPressed: () {
-                              Routes.navigator.pushNamed(Routes.createTrip,
-                                  arguments: 'rideRequest');
+                              Routes.navigator.pushNamed(Routes.createTrip);
                             },
                             child: Icon(
                               FontAwesomeIcons.plus,
@@ -188,36 +213,7 @@ class _HomeState extends State<Home> {
         ),
         actions: <Widget>[
           FlatButton(
-            onPressed: () {
-              Map<String, dynamic> paymentCheckoutData = {
-                "TransactionReference": "Vink Trip Payment",
-                "BankReference": "Vink Trip Payment",
-                "Customer": "Test Customer",
-                "Optional1": auth.currentUser.uid,
-                "Amount": messageData['amount'],
-                "Optional2": messageData['trip_id'],
-              };
-
-              print(paymentCheckoutData);
-              // return;
-
-              Payment payment = new Payment();
-              payment.prepareCheckout(paymentCheckoutData).then((data) {
-                print(data);
-                Map<dynamic, dynamic> paymentCheckoutResponse =
-                    json.decode(data);
-
-                if (paymentCheckoutResponse.containsKey("url")) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => View.Payment(
-                              paymentUrl: paymentCheckoutResponse['url'])));
-                } else {
-                  print(paymentCheckoutResponse['error']);
-                }
-              });
-            },
+            onPressed: () {},
             child: Text("Procced to pay."),
           ),
           FlatButton(

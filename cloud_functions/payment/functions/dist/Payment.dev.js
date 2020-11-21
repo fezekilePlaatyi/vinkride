@@ -36,60 +36,67 @@ var makeHash = function makeHash(data) {
 };
 
 var appendPaymentPostData = function appendPaymentPostData(data, postData) {
-  for (var _i2 = 0, _Object$entries2 = Object.entries(data); _i2 < _Object$entries2.length; _i2++) {
-    var _Object$entries2$_i = _slicedToArray(_Object$entries2[_i2], 2),
-        key = _Object$entries2$_i[0],
-        value = _Object$entries2$_i[1];
-
-    var appendKey = key;
-    postData[appendKey] = value;
-  }
-
-  console.log("START");
-  console.log(data);
-
   for (var k in data) {
-    if (target.hasOwnProperty(k)) {
+    if (data.hasOwnProperty(k)) {
       postData[k] = data[k];
     }
   }
 
-  console.log("FINAL");
   console.log(postData);
   return postData;
 };
 
+var addToObject = function addToObject(obj, key, value, index) {
+  // Create a temp object and index variable
+  var temp = {};
+  var i = 0; // Loop through the original object
+
+  for (var prop in obj) {
+    if (obj.hasOwnProperty(prop)) {
+      // If the indexes match, add the new item
+      if (i === index && key && value) {
+        temp[key] = value;
+      } // Add the current item in the loop to the temp obj
+
+
+      temp[prop] = obj[prop]; // Increase the count
+
+      i++;
+    }
+  } // If no index, add to the end
+
+
+  if (!index && key && value) {
+    temp[key] = value;
+  }
+
+  return temp;
+};
+
 module.exports = {
-  paymentCheckout: function paymentCheckout(res, req) {
+  paymentCheckout: function paymentCheckout(req, res) {
     return new Promise(function (resolve) {
-      /*
-      var obj = {key1: "value1", key2: "value2"};
-      Object.assign(obj, {key3: "value3"});
-      console.log(res.body)
-      "TransactionReference": "Vink Trip Payment",
-                "BankReference": "Vink Trip Payment",
-                "Customer": "Test Customer",
-                "Optional1": auth.currentUser.uid,
-                "Amount": messageData['amount'],
-                "Optional2": messageData['trip_id'],
-          */
-      //  "TransactionReference": "Vink Trip Payment",
-      //  "BankReference": "Vink Trip Payment",
-      //  "Customer": "Test Customer",
-      //  "Optional1": auth.currentUser.uid,
-      //  "Amount": messageData['amount'],
-      //  "Optional2": messageData['trip_id'],
+      var _req$body = req.body,
+          TransactionReference = _req$body.TransactionReference,
+          BankReference = _req$body.BankReference,
+          Customer = _req$body.Customer,
+          Optional1 = _req$body.Optional1,
+          Optional2 = _req$body.Optional2,
+          Amount = _req$body.Amount;
       var postData = {
         "SiteCode": SITE_CODE,
         "CountryCode": "ZA",
         "CurrencyCode": "ZAR",
+        "Amount": Amount,
+        "TransactionReference": TransactionReference,
+        "BankReference": BankReference,
+        "Customer": "Test Customer",
         "CancelUrl": "https://us-central1-vink8-za.cloudfunctions.net/payment/paymentCancelation",
         "ErrorUrl": "https://us-central1-vink8-za.cloudfunctions.net/payment/paymentError",
         "SuccessUrl": "https://us-central1-vink8-za.cloudfunctions.net/payment/paymentSuccess",
         "IsTest": "false"
       };
-      var updatedPostData = appendPaymentPostData(res.body, postData);
-      var stringToHash = makeHash(updatedPostData);
+      var stringToHash = makeHash(postData);
       postData['HashCheck'] = stringToHash;
       var urlPath = '/PostPaymentRequest';
       var url = 'api.ozow.com';

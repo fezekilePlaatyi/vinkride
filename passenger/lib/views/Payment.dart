@@ -20,8 +20,9 @@ class _PaymentState extends State<Payment> {
   Widget build(BuildContext context) {
     var paymentUrl = widget.paymentUrl;
 
-    var title = "Payment - Amout : ";
+    var title = "Trip Payment";
     var selectedUrl = paymentUrl;
+    var baseURL = Constants.PAYMENT_SERVER_ADDRESS;
 
     return Scaffold(
         appBar: AppBar(
@@ -44,35 +45,35 @@ class _PaymentState extends State<Payment> {
                       _toasterJavascriptChannel(context),
                     ].toSet(),
                     navigationDelegate: (NavigationRequest request) {
-                      if (request.url.startsWith(
-                          'https://us-central1-vink8-za.cloudfunctions.net/app/')) {
-                        print("Blocked to navigate $request");
-
+                      if (request.url
+                          .startsWith('$baseURL/payment/paymentSuccess')) {
                         var uri = Uri.dataFromString(request.toString());
                         Map<String, String> params = uri.queryParameters;
-                        var paymentStatus = params['payment_status'];
 
-                        print("Payment Status: $paymentStatus");
-                        List url = paymentStatus.split(',');
-                        print('Payment status after spliting: ${url[0]}');
+                        print("Successfuly paid");
+                        print(params);
 
-                        // Map<dynamic, dynamic> messageObject = {
-                        //   'feedData': feedData,
-                        //   'message': url[0] == 'success'
-                        //       ? 'Successfuly deducted the trip fare. Thank you!'
-                        //       : 'An error occured while doing deduction on card: ${url[0]}'
-                        // };
+                        return NavigationDecision.prevent;
+                      } else if (request.url
+                          .startsWith('$baseURL/payment/paymentError')) {
+                        var uri = Uri.dataFromString(request.toString());
+                        Map<String, String> params = uri.queryParameters;
 
-                        print("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+                        print("Error Payment");
+                        print(params);
 
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (_) => DisplaySuccessMessages(
-                        //             messageObject: messageObject)));
+                        return NavigationDecision.prevent;
+                      } else if (request.url
+                          .startsWith('$baseURL/payment/paymentCancelation')) {
+                        var uri = Uri.dataFromString(request.toString());
+                        Map<String, String> params = uri.queryParameters;
+
+                        print("Cancelled Payment");
+                        print(params);
 
                         return NavigationDecision.prevent;
                       }
+
                       print('allowing navigation to $request');
                       return NavigationDecision.navigate;
                     },

@@ -26,20 +26,25 @@ class Feeds {
         .doc(passengerId.trim());
 
     await firestore.runTransaction((transaction) async {
-      DocumentSnapshot txSnapshot = await transaction.get(documentReference);
+      DocumentSnapshot tripSnapshot = await transaction.get(documentReference);
+
       DocumentSnapshot userOnTripSnapshot =
           await transaction.get(userOnTripDocumentReference);
 
-      if (!txSnapshot.exists) {
+      if (!tripSnapshot.exists) {
         throw Exception("Document does not exist!");
       }
 
       int updatedVehicleSeatsNumber =
-          int.parse(txSnapshot.data()['vehicle_seats_number']);
+          int.parse(tripSnapshot.data()['vehicle_seats_number']);
 
       if (!userOnTripSnapshot.exists) {
         print("User not existing on Users Already on trip");
-        updatedVehicleSeatsNumber = updatedVehicleSeatsNumber - 1;
+
+        if (updatedVehicleSeatsNumber >= 1)
+          updatedVehicleSeatsNumber = updatedVehicleSeatsNumber - 1;
+        else
+          updatedVehicleSeatsNumber = 0;
       }
 
       transaction.update(documentReference,

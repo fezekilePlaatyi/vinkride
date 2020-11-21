@@ -58,12 +58,15 @@ app.listen(PORT, () => {
     console.log(`Server started at port - ${PORT}`)
 })
 
-const paymentCheckout = async (req, res) => {
-    const result = await Payment.paymentCheckout(req, res)
-    result.errorMessage == null ?
-        res.send({"url": jsonRes.url})
-        :
-        res.send({"error": jsonRes})
+const paymentCheckout = (req, res) => {
+
+    Payment.paymentCheckout(req, res).then(result=>{
+  
+        result.errorMessage == null ?
+            res.send({"url": jsonRes.url})
+            :
+            res.send({"error": jsonRes})
+    })
 }
 
 exports.app = functions.https.onRequest(app)
