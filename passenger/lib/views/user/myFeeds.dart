@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:passenger/constants.dart';
+import 'package:passenger/models/Helper.dart';
 import 'package:passenger/routes/routes.gr.dart';
 import 'package:passenger/widgets/userTrips.dart';
 
@@ -47,6 +48,9 @@ class MyFeedsState extends State<MyFeeds> {
               initialIndex: 0,
               length: 3,
               child: TabBar(
+                  indicatorColor: vinkBlack,
+                  labelColor: vinkBlack,
+                  unselectedLabelColor: vinkLightGrey,
                   onTap: (value) {
                     switch (value) {
                       case 0:

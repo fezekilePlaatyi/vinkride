@@ -6,6 +6,7 @@ import 'package:Vinkdriver/views/PokeUserOnTrip.dart';
 import 'package:Vinkdriver/views/SearchRide.dart';
 import 'package:Vinkdriver/views/VinkDetails.dart';
 import 'package:Vinkdriver/views/auth/carRegistration.dart';
+import 'package:Vinkdriver/views/auth/forgot_password.dart';
 import 'package:Vinkdriver/views/chat/ChatHistory.dart';
 import 'package:Vinkdriver/views/chat/ChatMessage.dart';
 import 'package:Vinkdriver/views/chat/previewAttachment.dart';
@@ -39,4 +40,5 @@ class $Routes {
   CreateTrip createTrip;
   CarRegitration carRegistration;
   MyFeeds myFeeds;
+  ForgotPassword forgotPassword;
 }

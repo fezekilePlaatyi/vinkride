@@ -26,6 +26,7 @@ import 'package:Vinkdriver/views/SearchRide.dart';
 import 'package:Vinkdriver/views/CreateTrip.dart';
 import 'package:Vinkdriver/views/auth/carRegistration.dart';
 import 'package:Vinkdriver/views/user/myFeeds.dart';
+import 'package:Vinkdriver/views/auth/forgot_password.dart';
 
 class Routes {
   static const onboardingSlider = '/';
@@ -45,6 +46,7 @@ class Routes {
   static const createTrip = '/create-trip';
   static const carRegistration = '/car-registration';
   static const myFeeds = '/my-feeds';
+  static const forgotPassword = '/forgot-password';
   static GlobalKey<NavigatorState> get navigatorKey =>
       getNavigatorKey<Routes>();
   static NavigatorState get navigator => navigatorKey.currentState;
@@ -170,6 +172,11 @@ class Routes {
       case Routes.myFeeds:
         return MaterialPageRoute(
           builder: (_) => MyFeeds(),
+          settings: settings,
+        );
+      case Routes.forgotPassword:
+        return MaterialPageRoute(
+          builder: (_) => ForgotPassword(),
           settings: settings,
         );
       default:

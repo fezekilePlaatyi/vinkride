@@ -124,6 +124,28 @@ class User {
     }
   }
 
+  Future<bool> resetPassword(String email) async {
+    try {
+      return await Utils.AUTH
+          .sendPasswordResetEmail(email: email)
+          .then((value) async {
+        successFloatingFlushbar('Reset link is sent to your email');
+        return true;
+      });
+    } catch (e) {
+      String error = '';
+      switch (e.code) {
+        case "user-not-found":
+          error = 'No user found for that email.';
+          break;
+        default:
+          error = 'Something went wrong, Please try again!';
+      }
+      errorFloatingFlushbar(error);
+      return false;
+    }
+  }
+
   signOut() async {
     try {
       await Utils.AUTH.signOut().then((value) {
