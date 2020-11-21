@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:passenger/constants.dart';
 import 'package:passenger/routes/routes.gr.dart';
 
@@ -18,45 +17,59 @@ class Feeds {
 
   addPassengerToFeedTrip(String feedId, String passengerId,
       Map<String, dynamic> newPassangerData) async {
-    DocumentReference documentReference = feedsRef.doc(feedId.trim());
+    /*
+      TO: Do - This function needs to be break down into pieces
+      it does a couple of things and which include checking if 
+      trip is not full updating number of remaining seats,
+      and finaly adds user to trip.
+    */
+    DocumentReference tripDocumentRef = feedsRef.doc(feedId.trim());
 
-    DocumentReference userOnTripDocumentReference = feedsRef
+    DocumentReference userOnTripDocRef = feedsRef
         .doc(feedId.trim())
         .collection('users_joined_trip')
         .doc(passengerId.trim());
 
-    await firestore.runTransaction((transaction) async {
-      DocumentSnapshot tripSnapshot = await transaction.get(documentReference);
+    DocumentSnapshot tripSnapshot = await tripDocumentRef.get();
 
-      DocumentSnapshot userOnTripSnapshot =
-          await transaction.get(userOnTripDocumentReference);
+    if (!tripSnapshot.exists) {
+      return TripConst.TRIP_NOT_EXISTING_CODE;
+    } else {
+      var userOnTripResults = userOnTripDocRef.get();
 
-      if (!tripSnapshot.exists) {
-        throw Exception("Document does not exist!");
-      }
+      userOnTripResults.then((userOnTripSnapshot) {
+        if (!userOnTripSnapshot.exists) {
+          int updatedVehicleSeatsNumber =
+              tripSnapshot.data()['vehicle_seats_number'];
+          print("About to be added");
+          if (updatedVehicleSeatsNumber >= 1) {
+            updatedVehicleSeatsNumber = updatedVehicleSeatsNumber - 1;
 
-      int updatedVehicleSeatsNumber =
-          int.parse(tripSnapshot.data()['vehicle_seats_number']);
-
-      if (!userOnTripSnapshot.exists) {
-        print("User not existing on Users Already on trip");
-
-        if (updatedVehicleSeatsNumber >= 1)
-          updatedVehicleSeatsNumber = updatedVehicleSeatsNumber - 1;
-        else
-          updatedVehicleSeatsNumber = 0;
-      }
-
-      transaction.update(documentReference,
-          {'vehicle_seats_number': updatedVehicleSeatsNumber.toString()});
-    });
-
-    return feedsRef
-        .doc(feedId.trim())
-        .collection('users_joined_trip')
-        .doc(passengerId.trim())
-        .set(newPassangerData)
-        .then((value) => value);
+            tripDocumentRef.update({
+              'vehicle_seats_number': updatedVehicleSeatsNumber
+            }).then((value) {
+              print("updated number of seats");
+              return feedsRef
+                  .doc(feedId.trim())
+                  .collection('users_joined_trip')
+                  .doc(passengerId.trim())
+                  .set(newPassangerData)
+                  .then((value) => value)
+                  .catchError((err) => err);
+            });
+          } else {
+            print("Trip is full");
+            return TripConst.TRIP_IS_FULL_CODE;
+          }
+        } else {
+          print("User existing");
+          return TripConst.USER_EXISTING_ON_TRIP_CODE;
+        }
+      }).then((response) {
+        print("Response to send to view $response");
+        return response;
+      });
+    }
   }
 
   joinTrip(feedId, feedData, context) {
@@ -86,9 +99,14 @@ class Feeds {
 
   Stream<QuerySnapshot> getAllFeeds() {
     return feedsRef
-        .orderBy("date_updated", descending: true)
         .where("feed_type", isEqualTo: TripConst.RIDE_OFFER)
-        .where('feed_status', isEqualTo: TripConst.ONCOMING_TRIP)
+        .where("feed_status", isEqualTo: TripConst.ONCOMING_TRIP)
+        .where("vehicle_seats_number", isGreaterThan: 0)
+        /*
+          We need a solution for this, finding a way to
+          orderBy date while fetching number of seats greater than zero
+          .orderBy("date_updated", descending: true)  
+        */
         .snapshots();
   }
 

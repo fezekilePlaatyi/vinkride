@@ -12,8 +12,6 @@ import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 
 class CreateTrip extends StatefulWidget {
-  final String feedType;
-  const CreateTrip({this.feedType});
   @override
   _CreateTripPageState createState() => _CreateTripPageState();
 }
@@ -24,7 +22,6 @@ class _CreateTripPageState extends State<CreateTrip> {
   DateTime pickedDate;
   TimeOfDay time = TimeOfDay.now();
   bool isLoading = false;
-  String theFeedType;
 
   final departureEditingController = TextEditingController();
   final destinationEditingController = TextEditingController();
@@ -52,8 +49,6 @@ class _CreateTripPageState extends State<CreateTrip> {
 
   @override
   Widget build(BuildContext context) {
-    theFeedType = widget.feedType;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFFFCF9F9),
@@ -68,7 +63,7 @@ class _CreateTripPageState extends State<CreateTrip> {
         ),
         centerTitle: true,
         title: Text(
-          'Add ${theFeedType == 'rideOffer' ? 'Ride Offer' : 'Inter-Interest'} ',
+          'Add Ride Offer',
           style: TextStyle(
             color: Color(0xFF1B1B1B),
             fontFamily: 'Roboto',
@@ -83,14 +78,14 @@ class _CreateTripPageState extends State<CreateTrip> {
           child: new Form(
             key: _key,
             autovalidateMode: AutovalidateMode.always,
-            child: FormUI(theFeedType),
+            child: FormUI(),
           ),
         ),
       ),
     );
   }
 
-  Widget FormUI(String theFeedType) {
+  Widget FormUI() {
     return new Column(
       children: <Widget>[
         new TextFormField(
@@ -154,26 +149,23 @@ class _CreateTripPageState extends State<CreateTrip> {
               LengthLimitingTextInputFormatter(5),
               FilteringTextInputFormatter.digitsOnly
             ],
-            decoration: formDecor(
-                '${theFeedType == 'rideOffer' ? 'Trip fare' : 'How much you will to pay'}'),
+            decoration: formDecor('Trip fare'),
             validator: validateTripAmount,
           ),
         ),
-        theFeedType != 'riderOffer'
-            ? ListTile(
-                leading: const Icon(Icons.format_list_numbered_rtl,
-                    color: Color(0xFFCC1718)),
-                title: new TextFormField(
-                  controller: vehicleNumberOfSeatsEditingController,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(2),
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  decoration: formDecor('Number Of Seats'),
-                  validator: validateNumberOfSeats,
-                ))
-            : '',
+        ListTile(
+            leading: const Icon(Icons.format_list_numbered_rtl,
+                color: Color(0xFFCC1718)),
+            title: new TextFormField(
+              controller: vehicleNumberOfSeatsEditingController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(2),
+                FilteringTextInputFormatter.digitsOnly
+              ],
+              decoration: formDecor('Number Of Seats'),
+              validator: validateNumberOfSeats,
+            )),
         ListTile(
           title: Text(
               "${pickedDate.day} - ${pickedDate.month} - ${pickedDate.year}"),
@@ -187,17 +179,6 @@ class _CreateTripPageState extends State<CreateTrip> {
           trailing: Icon(Icons.keyboard_arrow_down),
           onTap: _pickTime,
         ),
-        theFeedType != 'riderOffer'
-            ? ListTile(
-                leading:
-                    const Icon(Icons.directions_car, color: Color(0xFFCC1718)),
-                title: new TextFormField(
-                  controller: vehicleDescriptionEditingController,
-                  autocorrect: true,
-                  decoration: formDecor('Describe your vehicle'),
-                  validator: validateAlphaNumeric,
-                ))
-            : '',
         new SizedBox(height: 15.0),
         Container(
             alignment: Alignment.center,
@@ -278,8 +259,6 @@ class _CreateTripPageState extends State<CreateTrip> {
       // No any error in validation
       final FirebaseAuth auth = FirebaseAuth.instance;
       final currentUserId = auth.currentUser.uid;
-      var feedType = "rideOffer";
-      theFeedType = feedType;
 
       Feeds feed = new Feeds();
 
@@ -289,33 +268,20 @@ class _CreateTripPageState extends State<CreateTrip> {
       var departingDateTime = DateTime(pickedDate.year, pickedDate.month,
           pickedDate.day, time.hour, time.minute);
 
-      Map<String, dynamic> newFeedData = feedType == TripConst.RIDE_OFFER
-          ? {
-              'date_created': FieldValue.serverTimestamp(),
-              'date_updated': FieldValue.serverTimestamp(),
-              'departure_datetime': departingDateTime,
-              'departure_point': departureEditingController.text,
-              'destination_point': destinationEditingController.text,
-              'feed_status': TripConst.ONCOMING_TRIP,
-              'feed_type': feedType,
-              'vehicle_seats_number':
-                  vehicleNumberOfSeatsEditingController.text,
-              'vehicle_description': vehicleDescriptionEditingController.text,
-              'sender_uid': currentUserId,
-              'is_alarm_sent': 'false',
-              'trip_fare': tripFareEditingController.text,
-            }
-          : {
-              'date_created': FieldValue.serverTimestamp(),
-              'date_updated': FieldValue.serverTimestamp(),
-              'departure_datetime': departingDateTime,
-              'departure_point': departureEditingController.text,
-              'destination_point': destinationEditingController.text,
-              'feed_status': TripConst.ONCOMING_TRIP,
-              'feed_type': feedType,
-              'sender_uid': currentUserId,
-              'trip_fare': tripFareEditingController.text,
-            };
+      Map<String, dynamic> newFeedData = {
+        'date_created': FieldValue.serverTimestamp(),
+        'date_updated': FieldValue.serverTimestamp(),
+        'departure_datetime': departingDateTime,
+        'departure_point': departureEditingController.text,
+        'destination_point': destinationEditingController.text,
+        'feed_status': TripConst.ONCOMING_TRIP,
+        'feed_type': TripConst.RIDE_OFFER,
+        'vehicle_seats_number':
+            int.parse(vehicleNumberOfSeatsEditingController.text),
+        'sender_uid': currentUserId,
+        'is_alarm_sent': 'false',
+        'trip_fare': tripFareEditingController.text,
+      };
 
       try {
         feed.addFeed(newFeedData).then((results) {
@@ -351,8 +317,7 @@ class _CreateTripPageState extends State<CreateTrip> {
                     child: CircularProgressIndicator(),
                   ),
                 )
-              : Text(
-                  'Successfuly added ${theFeedType == 'a offer' ? 'Trip' : 'an Inter-Interest'}'),
+              : Text('Successfuly added a offer'),
         ),
         actions: <Widget>[
           isLoading

@@ -27,4 +27,5 @@ class TripConst {
   static const ACTIVE_TRIP = 'active';
   static const ONCOMING_TRIP = 'oncoming';
   static const COMPLETED_TRIP = 'completed';
+  static const TRIP_JOIN_REQUEST = 'requestToJoingTrip';
 }

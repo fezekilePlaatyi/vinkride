@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:passenger/models/Feeds.dart';
 import 'package:passenger/models/Helper.dart';
 import 'package:passenger/models/User.dart';
-import 'package:passenger/utils/utils.dart';
 
 class DisplayPassengerList extends StatefulWidget {
   final String tripId;
@@ -61,23 +60,6 @@ class DisplayPassengerListState extends State<DisplayPassengerList> {
                                         ),
                                       )
                                     ]),
-                                    Column(children: [
-                                      Center(
-                                        child: FlatButton(
-                                          onPressed: () {
-                                            Utils.launchURL(
-                                                "https://www.google.com/maps/dir//${feedPassengerData['pick_up_point']}");
-                                          },
-                                          padding: EdgeInsets.all(10.0),
-                                          child: Column(
-                                            children: <Widget>[
-                                              Icon(
-                                                  Icons.directions_car_rounded),
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                    ])
                                   ]);
                             } else {
                               return Container(

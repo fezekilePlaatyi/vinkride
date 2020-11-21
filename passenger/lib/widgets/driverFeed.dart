@@ -57,7 +57,6 @@ class DriverFeedState extends State<DriverFeed> {
               } else {
                 if (snapshot.data.exists) {
                   var userDetails = snapshot.data.data();
-                  print('Testing $userDetails');
                   return GestureDetector(
                     onTap: () {
                       Routes.navigator

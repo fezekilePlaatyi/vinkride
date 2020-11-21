@@ -42,7 +42,7 @@ class Feeds {
       }
 
       transaction.update(documentReference,
-          {'vehicle_seats_number': updatedVehicleSeatsNumber.toString()});
+          {'vehicle_seats_number': updatedVehicleSeatsNumber});
     });
 
     return feedsRef

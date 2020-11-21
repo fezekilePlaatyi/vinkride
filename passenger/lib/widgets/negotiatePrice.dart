@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:passenger/constants.dart';
 import 'package:passenger/models/Helper.dart';
 import 'package:passenger/models/Notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -135,14 +136,15 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
   _saveRequestToDatabase(amountAdjustment) {
     Notifications notifications = new Notifications();
     String currentUserId = auth.currentUser.uid;
+    var driverId = feedData['sender_uid'];
 
     Map<String, dynamic> notificationDataToDB = {
       'date_created': FieldValue.serverTimestamp(),
-      'to_user': feedData['sender_uid'],
+      'to_user': driverId,
       'from_user': currentUserId,
       'is_seen': false,
       'amount': amountAdjustment,
-      'notification_type': 'requestToJoingTrip',
+      'notification_type': TripConst.TRIP_JOIN_REQUEST,
       'trip_id': rideId,
       'departurePoint': feedData['departure_point'],
       'destinationPoint': feedData['destination_point'],
@@ -151,15 +153,15 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
     };
 
     notifications
-        .addNewNotification(notificationDataToDB, feedData['sender_uid'])
+        .addNewNotification(notificationDataToDB, driverId)
         .then((value) {
-      _sendNotification(currentUserId, amountAdjustment);
+      _sendNotification(currentUserId, driverId, amountAdjustment);
       Navigator.of(context).pop();
       _loader(false);
     });
   }
 
-  _sendNotification(currentUserId, amountAdjustment) {
+  _sendNotification(currentUserId, driverId, amountAdjustment) {
     var notificationData = {
       'title': "New Notification",
       'body':
@@ -168,8 +170,9 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
     };
 
     var messageData = {
+      'driverId': driverId,
       'passengerId': currentUserId,
-      'notificationType': 'requestToJoingTrip',
+      'notificationType': TripConst.TRIP_JOIN_REQUEST,
       'amount': amountAdjustment,
       'trip_id': rideId,
       'departurePoint': feedData['departure_point'],

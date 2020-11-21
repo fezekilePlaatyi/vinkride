@@ -1,7 +1,13 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:passenger/constants.dart';
+import 'package:passenger/helpers/dialogHelper.dart';
+import 'package:passenger/models/Feeds.dart';
+import 'package:passenger/models/Notifications.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:passenger/services/VinkFirebaseMessagingService.dart';
 
 class Payment extends StatefulWidget {
   var paymentUrl;
@@ -11,22 +17,36 @@ class Payment extends StatefulWidget {
 }
 
 class _PaymentState extends State<Payment> {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String currentUserId;
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
 
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    var paymentUrl = widget.paymentUrl;
-
-    var title = "Trip Payment";
-    var selectedUrl = paymentUrl;
+    var selectedUrl = widget.paymentUrl;
     var baseURL = Constants.PAYMENT_SERVER_ADDRESS;
+    currentUserId = auth.currentUser.uid;
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(title),
+          backgroundColor: Color(0xFFFCF9F9),
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          title: Text(
+            "Trip Payment",
+            style: TextStyle(
+              color: Color(0xFF1B1B1B),
+              fontFamily: 'Roboto',
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
         body: Stack(
           children: [
@@ -52,6 +72,8 @@ class _PaymentState extends State<Payment> {
 
                         print("Successfuly paid");
                         print(params);
+
+                        // _addPassengerToTrip(tripId, driverId)
 
                         return NavigationDecision.prevent;
                       } else if (request.url
@@ -100,5 +122,67 @@ class _PaymentState extends State<Payment> {
             SnackBar(content: Text(message.message)),
           );
         });
+  }
+
+  _addPassengerToTrip(tripId, driverId) {
+    Feeds feed = new Feeds();
+
+    var isLoading = true;
+    DialogHelper.loadingDialogWithMessage(context, isLoading, "Loading");
+
+    Map<String, dynamic> newPassangerData = {
+      'date_joined': FieldValue.serverTimestamp(),
+      'payment_status': PaymentConst.STATUS_PAID,
+    };
+
+    feed
+        .addPassengerToFeedTrip(tripId, currentUserId, newPassangerData)
+        .then((value) {
+      _addNotificationToDb(tripId, driverId);
+    });
+  }
+
+  _addNotificationToDb(tripId, driverId) async {
+    Notifications notifications = new Notifications();
+    Map<String, dynamic> notificationDataToDB = {
+      'date_created': FieldValue.serverTimestamp(),
+      'to_user': currentUserId,
+      'is_seen': false,
+      'notification_type': NotificationsConst.PASSENGER_JOINED_TRIP,
+      'from_user': currentUserId,
+      'trip_id': tripId,
+    };
+
+    notifications
+        .addNewNotification(notificationDataToDB, driverId)
+        .then((value) {
+      _notifyUser(tripId, driverId, currentUserId);
+    });
+  }
+
+  _notifyUser(tripId, driverId, currentUserId) {
+    var notificationData = {
+      'title': "New Notification",
+      'body': "A Passenger has Joined your Trip, click here for more details.",
+      'notificationType': NotificationsConst.PASSENGER_JOINED_TRIP
+    };
+
+    var messageData = {
+      'passengerId': currentUserId,
+      'tripId': tripId,
+      'notificationType': NotificationsConst.PASSENGER_JOINED_TRIP
+    };
+
+    VinkFirebaseMessagingService()
+        .buildAndReturnFcmMessageBody(notificationData, messageData, driverId)
+        .then((data) {
+      setState(() {
+        var isLoading = false;
+        Navigator.of(context).pop();
+
+        DialogHelper.loadingDialogWithMessage(context, isLoading,
+            'Successfuly joined trip and made done trip fare charges!');
+      });
+    });
   }
 }
