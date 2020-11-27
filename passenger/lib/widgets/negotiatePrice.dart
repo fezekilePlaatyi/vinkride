@@ -1,30 +1,22 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-import 'package:passenger/models/helper.dart';
-=======
-import 'package:intl/intl.dart';
-import 'package:passenger/constants.dart';
 import 'package:passenger/models/Helper.dart';
->>>>>>> e91d8ff5c72664de2fd156a9f5d138b030764aef
 import 'package:passenger/models/Notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:passenger/services/VinkFirebaseMessagingService.dart';
+import 'package:passenger/utils/Utils.dart';
 
 class NegotiatePrice extends StatefulWidget {
-  final String rideId;
-  final Map feedData;
-  const NegotiatePrice({this.rideId, this.feedData});
+  final rideId, feedData;
+  NegotiatePrice({this.rideId, this.feedData});
   @override
   _NegotiatePriceState createState() => _NegotiatePriceState();
 }
 
 class _NegotiatePriceState extends State<NegotiatePrice> {
   final amountAdjustEditingController = TextEditingController();
-  final FirebaseAuth auth = FirebaseAuth.instance;
   var amountAdjust = false;
-  var rideId;
   var feedData;
+  var rideId;
 
   @override
   void initState() {
@@ -65,7 +57,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "About To Request Trip.",
+              "About To Poke User.",
               style: TextStyle(
                 fontSize: 20.0,
                 fontFamily: 'roboto',
@@ -73,12 +65,10 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
               ),
             ),
             SizedBox(height: 20.0),
-            Text("Trip Fare -  R${feedData['trip_fare']}"),
             amountAdjust
                 ? TextFormField(
                     decoration: formDecor("Enter units in ZARs"),
                     controller: amountAdjustEditingController,
-                    keyboardType: TextInputType.number,
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.black,
@@ -86,7 +76,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
                   )
                 : FlatButton(
                     child: Text(
-                      "Negotiate price?",
+                      "Adjust money?",
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -113,14 +103,14 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
                 SizedBox(width: 10.0),
                 RaisedButton(
                   onPressed: () {
+                    // ;
+                    // isLoading = true;
                     _loader(true);
 
-                    var amountAdjustment =
-                        amountAdjustEditingController.text != ""
-                            ? amountAdjustEditingController.text
-                            : feedData['trip_fare'];
-
-                    _saveRequestToDatabase(amountAdjustment);
+                    String currentUserId = Utils.AUTH_USER.uid;
+                    var amountAdjustment = amountAdjustEditingController.text;
+                    _savePokeToDatabase(
+                        currentUserId, rideId, amountAdjustment);
                   },
                   child: Text('Submit'),
                   textColor: Colors.white,
@@ -137,55 +127,46 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
         ),
       );
 
-  _saveRequestToDatabase(amountAdjustment) {
+  _savePokeToDatabase(
+      String currentUserId, String rideId, String amountAdjustment) {
     Notifications notifications = new Notifications();
-    String currentUserId = auth.currentUser.uid;
-    var driverId = feedData['sender_uid'];
 
     Map<String, dynamic> notificationDataToDB = {
       'date_created': FieldValue.serverTimestamp(),
-      'to_user': driverId,
+      'to_user': feedData['sender_uid'],
       'from_user': currentUserId,
       'is_seen': false,
       'amount': amountAdjustment,
-      'notification_type': TripConst.TRIP_JOIN_REQUEST,
-      'trip_id': rideId,
-      'departurePoint': feedData['departure_point'],
-      'destinationPoint': feedData['destination_point'],
-      'departureDatetime': DateFormat('dd-MM-yy kk:mm')
-          .format(feedData['departure_datetime'].toDate())
+      'notification_type': 'pokedToJoinTrip',
+      'trip_id': rideId
     };
 
+    print(notificationDataToDB);
+
     notifications
-        .addNewNotification(notificationDataToDB, driverId)
+        .addNewNotification(notificationDataToDB, feedData['sender_uid'])
         .then((value) {
-      _sendNotification(currentUserId, driverId, amountAdjustment);
+      _sendNotification(currentUserId, rideId, amountAdjustment);
       Navigator.of(context).pop();
       _loader(false);
     });
   }
 
-  _sendNotification(currentUserId, driverId, amountAdjustment) {
+  _sendNotification(
+      String currentUserId, String rideId, String amountAdjustment) {
     var notificationData = {
       'title': "New Notification",
       'body':
-          "A Passenger requested to join your Trip, click here for more details.",
-      'notificationType': 'requestToJoingTrip'
+          "A Driver has poked you to avaliable Trip, click here for more details.",
+      'notificationType': 'pokedToJoinTrip'
     };
 
     var messageData = {
-      'driverId': driverId,
-      'passengerId': currentUserId,
-      'notificationType': TripConst.TRIP_JOIN_REQUEST,
+      'driverId': currentUserId,
+      'notificationType': 'pokedToJoinTrip',
       'amount': amountAdjustment,
-      'trip_id': rideId,
-      'departurePoint': feedData['departure_point'],
-      'destinationPoint': feedData['destination_point'],
-      'departureDatetime': DateFormat('dd-MM-yy kk:mm')
-          .format(feedData['departure_datetime'].toDate())
+      'trip_id': rideId
     };
-
-    print('Owner ${feedData['sender_uid']} Current $currentUserId');
 
     VinkFirebaseMessagingService()
         .buildAndReturnFcmMessageBody(
@@ -198,7 +179,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
       context: context,
       builder: (context) => AlertDialog(
         content: ListTile(
-          title: isLoading
+          subtitle: isLoading
               ? Container(
                   height: 100.0,
                   width: 80.0,
@@ -206,10 +187,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
                     child: CircularProgressIndicator(),
                   ),
                 )
-              : Text("Request sent!"),
-          subtitle: isLoading
-              ? Container(height: 0)
-              : Text("Please wait for trip owner's response."),
+              : Text("Poked successfuly!"),
         ),
         actions: <Widget>[
           isLoading

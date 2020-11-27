@@ -164,8 +164,7 @@ class _HomeState extends State<Home> {
   }
 
   _DriverHome(String feedType) {
-    return Container(
-        child: Stack(children: [
+    return Stack(children: [
       StreamBuilder(
           stream: feeds.getAllFeeds(feedType),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -175,28 +174,18 @@ class _HomeState extends State<Home> {
               );
             } else {
               if (snapshot.data.docs.length > 0) {
-                return Container(
-                  child: Stack(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          child: ListView.builder(
-                            itemCount: snapshot.data.docs.length,
-                            itemBuilder: (
-                              context,
-                              index,
-                            ) {
-                              var feedData = snapshot.data.docs[index].data();
-                              var feedId = snapshot.data.docs[index].id;
-                              // return Text("Feed data $feedata");
-                              return RideRequest(
-                                  feedData: feedData, feedId: feedId);
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                return ListView.builder(
+                  itemCount: snapshot.data.docs.length,
+                  itemBuilder: (
+                    context,
+                    index,
+                  ) {
+                    var feedData = snapshot.data.docs[index].data();
+                    var feedId = snapshot.data.docs[index].id;
+                    // return Text("Feed data $feedata");
+                    return RideRequest(
+                        feedData: feedData, feedId: feedId);
+                  },
                 );
               } else {
                 return Container(
@@ -205,7 +194,7 @@ class _HomeState extends State<Home> {
                       "No request!",
                       style:
                           TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-                    ));
+                    ),);
               }
             }
           }),
@@ -233,6 +222,6 @@ class _HomeState extends State<Home> {
           ),
         ),
       ),
-    ]));
+    ]);
   }
 }

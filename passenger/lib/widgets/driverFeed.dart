@@ -43,8 +43,6 @@ class DriverFeedState extends State<DriverFeed> {
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
         border: Border.all(color: Color(0xF5F5F5)),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
         child: StreamBuilder(
             stream: user.getDriver(feedData['sender_uid']),
             builder: (BuildContext context,
@@ -134,20 +132,18 @@ class DriverFeedState extends State<DriverFeed> {
                                           Radius.circular(50),
                                         ),
                                       ),
-                                      child: Expanded(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              '${feedData['vehicle_seats_number']} seats empty',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12.0,
-                                              ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '${feedData['vehicle_seats_number']} seats empty',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12.0,
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
@@ -163,7 +159,7 @@ class DriverFeedState extends State<DriverFeed> {
                 }
                 return Container();
               }
-            }),
+            }
       ),
     );
   }

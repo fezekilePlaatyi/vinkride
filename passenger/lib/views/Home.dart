@@ -52,7 +52,7 @@ class _HomeState extends State<Home> {
           style: TextStyle(
             color: Color(0xFF1B1B1B),
             fontFamily: 'Roboto',
-            fontSize: 28,
+            fontSize: 22,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -80,8 +80,7 @@ class _HomeState extends State<Home> {
         ],
       ),
       backgroundColor: Color(0xFFFCF9F9),
-      body: Container(
-          child: Stack(children: [
+      body: Stack(children: [
         StreamBuilder(
             stream: feeds.getAllFeeds(),
             builder:
@@ -90,28 +89,18 @@ class _HomeState extends State<Home> {
                 return loader();
               } else {
                 if (snapshot.data.docs.length > 0) {
-                  return Container(
-                    child: Stack(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            child: ListView.builder(
-                              itemCount: snapshot.data.docs.length,
-                              itemBuilder: (
-                                context,
-                                index,
-                              ) {
-                                var feedData = snapshot.data.docs[index].data();
-                                var feedId = snapshot.data.docs[index].id;
+                  return ListView.builder(
+                    itemCount: snapshot.data.docs.length,
+                    itemBuilder: (
+                      context,
+                      index,
+                    ) {
+                      var feedData = snapshot.data.docs[index].data();
+                      var feedId = snapshot.data.docs[index].id;
 
-                                return DriverFeed(
-                                    feedData: feedData, feedId: feedId);
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                      return DriverFeed(
+                          feedData: feedData, feedId: feedId);
+                    },
                   );
                 }
                 return Container(
@@ -148,7 +137,7 @@ class _HomeState extends State<Home> {
             ),
           ),
         )
-      ])),
+      ],),
     );
   }
 
