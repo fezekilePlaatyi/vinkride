@@ -89,8 +89,11 @@ class User {
     return Utils.PASSENGER_COLLECTION.doc(Utils.AUTH_USER.uid).snapshots();
   }
 
-  Future<DocumentSnapshot> getUserById(String id) async {
-    return FirebaseFirestore.instance.collection("users").doc(id.trim()).get();
+  Future<DocumentSnapshot> getUserById(String userId, String userType) async {
+    return FirebaseFirestore.instance
+        .collection(userType.trim())
+        .doc(userId.trim())
+        .get();
   }
 
   Future<Map> getUserForCheck() async {
@@ -118,6 +121,28 @@ class User {
       return null;
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<bool> resetPassword(String email) async {
+    try {
+      return await Utils.AUTH
+          .sendPasswordResetEmail(email: email)
+          .then((value) async {
+        successFloatingFlushbar('Reset link is sent to your email');
+        return true;
+      });
+    } catch (e) {
+      String error = '';
+      switch (e.code) {
+        case "user-not-found":
+          error = 'No user found for that email.';
+          break;
+        default:
+          error = 'Something went wrong, Please try again!';
+      }
+      errorFloatingFlushbar(error);
+      return false;
     }
   }
 

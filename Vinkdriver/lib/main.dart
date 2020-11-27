@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:Vinkdriver/routes/routes.gr.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+ runApp(MyApp());
+
+}
 
 class MyApp extends StatelessWidget {
   @override

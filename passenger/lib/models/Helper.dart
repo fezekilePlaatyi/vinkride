@@ -364,3 +364,11 @@ bool isValidUrl(String url) {
   RegExp regex = new RegExp(pattern);
   return !regex.hasMatch(url) ? false : true;
 }
+
+Widget loader() {
+  return Container(
+    child: CircularProgressIndicator(
+      valueColor: new AlwaysStoppedAnimation<Color>(vinkRed),
+    ),
+  );
+}

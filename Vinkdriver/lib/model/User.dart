@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Vinkdriver/model/Helper.dart';
 import 'package:Vinkdriver/routes/routes.gr.dart';
@@ -39,7 +38,7 @@ class User {
           'email': email,
           'created_at': Utils.NOW,
           'is_user_approved': false,
-          'registration_progress': 40
+          'registration_progress': 30
         });
         await Utils.AUTH_USER.sendEmailVerification();
       }).catchError((err) {
@@ -60,7 +59,7 @@ class User {
         'phone_number': phone_number,
         'address': address,
         'licence_copy': licence_copy,
-        'registration_progress': 80
+        'registration_progress': 60
       }).catchError((err) {
         errorFloatingFlushbar(err.message);
         return false;
@@ -78,7 +77,8 @@ class User {
       await Utils.DRIVER_COLLECTION.doc(Utils.AUTH_USER.uid).update({
         'car_name': carName,
         'car_model': carModel,
-        'car_registration_number': carRegistrationNumber
+        'car_registration_number': carRegistrationNumber,
+        'registration_progress': 90,
       });
       return true;
     } catch (e) {
@@ -104,8 +104,11 @@ class User {
     return Utils.DRIVER_COLLECTION.doc(Utils.AUTH_USER.uid).snapshots();
   }
 
-  Future<DocumentSnapshot> getUserById(String id) async {
-    return FirebaseFirestore.instance.collection("users").doc(id.trim()).get();
+  Future<DocumentSnapshot> getUserById(String userId, String userType) async {
+    return FirebaseFirestore.instance
+        .collection(userType.trim())
+        .doc(userId.trim())
+        .get();
   }
 
   Future<Map> getUserForCheck() async {
@@ -133,6 +136,28 @@ class User {
       return null;
     } catch (e) {
       print(e);
+    }
+  }
+
+    Future<bool> resetPassword(String email) async {
+    try {
+      return await Utils.AUTH
+          .sendPasswordResetEmail(email: email)
+          .then((value) async {
+        successFloatingFlushbar('Reset link is sent to your email');
+        return true;
+      });
+    } catch (e) {
+      String error = '';
+      switch (e.code) {
+        case "user-not-found":
+          error = 'No user found for that email.';
+          break;
+        default:
+          error = 'Something went wrong, Please try again!';
+      }
+      errorFloatingFlushbar(error);
+      return false;
     }
   }
 

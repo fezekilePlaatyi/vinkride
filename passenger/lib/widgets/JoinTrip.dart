@@ -8,11 +8,15 @@ import 'package:passenger/services/VinkFirebaseMessagingService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class JoinTrip extends StatefulWidget {
-  final tripId;
-  final driverId;
-  final tripData;
-  final paymentToken;
-  JoinTrip({this.tripId, this.driverId, this.tripData, this.paymentToken});
+  final String tripId;
+  final String driverId;
+  final Map tripData;
+  final String paymentToken;
+  const JoinTrip(
+      {@required this.tripId,
+      @required this.driverId,
+      @required this.tripData,
+      this.paymentToken});
   @override
   JoinTripState createState() => JoinTripState();
 }
@@ -241,110 +245,11 @@ class JoinTripState extends State<JoinTrip> {
                       borderRadius: BorderRadius.circular(50),
                     ),
                     padding: const EdgeInsets.all(15),
-                    onPressed: () {
-                      // String passengerId = currentUserId;
-                      // isLoading = true;
-                      // _loader();
-
-                      // Payment payment = new Payment();
-                      // Map<String, dynamic> paymentData = {
-                      //   'userPaymentRegistrationToken': paymentToken,
-                      //   'serviceOverallPrice': tripData['trip_fare']
-                      // };
-
-                      // payment.makeRecurringPayment(paymentData).then((results) {
-                      //   print('Payment results : $results');
-                      // });
-
-                      // //prepare new passenger data
-                      // Map<String, dynamic> newPassangerData = {
-                      //   'date_requested': FieldValue.serverTimestamp(),
-                      //   'status': 'active',
-                      // };
-
-                      // feed
-                      //     .addPassengerToFeedTrip(
-                      //         tripId, passengerId, newPassangerData)
-                      //     .then((value) {
-                      //   print("onFinishing adding passnger to trip $value");
-
-                      //   //prepare and send notification
-                      //   var notificationData = {
-                      //     'title': "New Notification",
-                      //     'body':
-                      //         "A Passenger has Joined your Trip, click here for more details.",
-                      //     'notificationType': 'passengerJoinedTrip'
-                      //   };
-
-                      //   var messageData = {
-                      //     'passengerId': passengerId,
-                      //     'tripId': tripId,
-                      //     'notificationType': 'passengerJoinedTrip'
-                      //   };
-
-                      //   Map<String, dynamic> notificationDataToDB = {
-                      //     'date_created': FieldValue.serverTimestamp(),
-                      //     'to_user': driverId,
-                      //     'is_seen': false,
-                      //     'notification_type': 'passengerJoinedTrip',
-                      //     'from_user': currentUserId,
-                      //     'trip_id': tripId,
-                      //   };
-
-                      //   notifications
-                      //       .addNewNotification(notificationDataToDB, driverId)
-                      //       .then((value) {
-                      //     VinkFirebaseMessagingService()
-                      //         .buildAndReturnFcmMessageBody(
-                      //             notificationData, messageData, driverId)
-                      //         .then((data) => {
-                      //               VinkFirebaseMessagingService()
-                      //                   .sendFcmMessage(data)
-                      //             });
-
-                      //     setState(() {
-                      //       isLoading = false;
-                      //       Navigator.of(context).pop();
-                      //       _loader();
-                      //     });
-                      // });
-                      // });
-                    }),
+                    onPressed: () {}),
               ),
             )
           ],
         ),
-      ),
-    );
-  }
-
-  _loader() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        content: ListTile(
-          subtitle: isLoading
-              ? Container(
-                  height: 50.0,
-                  width: 50.0,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              : Text(
-                  'Successfuly joined trip and made done trip fare charges!'),
-        ),
-        actions: <Widget>[
-          isLoading
-              ? SizedBox.shrink()
-              : FlatButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  },
-                  child: Text("Got it!"),
-                )
-        ],
       ),
     );
   }

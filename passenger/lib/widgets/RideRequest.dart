@@ -3,9 +3,9 @@ import 'package:passenger/helpers/Helper.dart';
 import 'package:passenger/models/User.dart' as VinkUser;
 
 class RideRequest extends StatefulWidget {
-  final feedData;
-  final feedId;
-  RideRequest({this.feedData, this.feedId});
+  final Map feedData;
+  final String feedId;
+  const RideRequest({@required this.feedData, @required this.feedId});
   @override
   _RideRequestState createState() => _RideRequestState();
 }
@@ -29,7 +29,7 @@ class _RideRequestState extends State<RideRequest> {
           children: [
             Container(
               child: FutureBuilder(
-                  future: user.getUserById(feedData['sender_uid']),
+                  future: user.getUserById(feedData['sender_uid'], 'passengers'),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (!snapshot.hasData) {
                       return Container(

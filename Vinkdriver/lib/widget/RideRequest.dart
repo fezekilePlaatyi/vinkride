@@ -1,7 +1,8 @@
 import 'package:Vinkdriver/views/PokeUserOnTrip.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:Vinkdriver/helper/Helper.dart';
-import 'package:Vinkdriver/model/User.dart' as VinkUser;
+import 'package:Vinkdriver/model/User.dart';
 
 class RideRequest extends StatefulWidget {
   final feedData;
@@ -15,7 +16,7 @@ class _RideRequestState extends State<RideRequest> {
   @override
   Widget build(BuildContext context) {
     var feedData = widget.feedData;
-    VinkUser.User user = new VinkUser.User();
+    User user = new User();
 
     return GestureDetector(
       onTap: () => {},
@@ -29,9 +30,10 @@ class _RideRequestState extends State<RideRequest> {
         child: Column(
           children: [
             Container(
-              child: FutureBuilder(
-                  future: user.getUserById(feedData['sender_uid']),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+              child: StreamBuilder(
+                  stream: user.getPassenger(feedData['sender_uid']),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<DocumentSnapshot> snapshot) {
                     if (!snapshot.hasData) {
                       return Container(
                         child: Center(
@@ -39,46 +41,51 @@ class _RideRequestState extends State<RideRequest> {
                         ),
                       );
                     } else {
-                      var userDetails = snapshot.data.data();
-                      return ListTile(
-                        leading: CircleAvatar(
-                          radius: 25.0,
-                          child: ClipOval(
-                            child: SizedBox(
-                              height: 80.0,
-                              width: 80.0,
-                              child: Image.network(
-                                userDetails['profile_pic'],
-                                height: 80,
-                                width: 80,
-                                fit: BoxFit.cover,
+                      if (snapshot.data.exists) {
+                        var userDetails = snapshot.data.data();
+                        return ListTile(
+                          leading: CircleAvatar(
+                            radius: 25.0,
+                            child: ClipOval(
+                              child: SizedBox(
+                                height: 80.0,
+                                width: 80.0,
+                                child: Image.network(
+                                  userDetails.containsKey('profile_pic')
+                                      ? userDetails['profile_pic']
+                                      : defaultPic,
+                                  height: 80,
+                                  width: 80,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${userDetails['name']}',
-                              style: TextStyle(
-                                color: Color(0xFF1B1B1B),
-                                fontFamily: 'Roboto',
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
+                          title: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${userDetails['name']}',
+                                style: TextStyle(
+                                  color: Color(0xFF1B1B1B),
+                                  fontFamily: 'Roboto',
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            Text(
-                              'Passenger',
-                              style: TextStyle(
-                                color: Color(0xFF9E9E9E),
-                                fontFamily: 'Roboto',
-                                fontSize: 18,
+                              Text(
+                                'Passenger',
+                                style: TextStyle(
+                                  color: Color(0xFF9E9E9E),
+                                  fontFamily: 'Roboto',
+                                  fontSize: 18,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      );
+                            ],
+                          ),
+                        );
+                      }
+                      return Container();
                     }
                   }),
             ),
@@ -229,7 +236,8 @@ class _RideRequestState extends State<RideRequest> {
                           context,
                           MaterialPageRoute(
                               builder: (_) => PokeUserOnTrip(
-                                  userIdPoking: feedData['sender_uid'])));
+                                    userIdPoking: feedData['sender_uid'],
+                                  )));
                     },
                     color: Color(0xFF1B1B1B),
                     padding:

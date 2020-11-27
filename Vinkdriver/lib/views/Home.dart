@@ -1,8 +1,12 @@
+import 'package:Vinkdriver/constants.dart';
 import 'package:Vinkdriver/model/Feeds.dart';
+import 'package:Vinkdriver/services/VinkFirebaseMessagingService.dart';
 import 'package:Vinkdriver/views/CreateTrip.dart';
 import 'package:Vinkdriver/views/SearchRide.dart';
 import 'package:Vinkdriver/widget/Menu.dart';
 import 'package:Vinkdriver/widget/RideRequest.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:Vinkdriver/model/Helper.dart';
@@ -14,8 +18,72 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Feeds feeds = new Feeds();
-  var feedType = 'rideRequest';
+  var feedType = TripConst.RIDE_REQUEST;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String currentUserIdAsFCMChannel;
+
+  @override
+  void initState() {
+    super.initState();
+    final FirebaseMessaging _fcm = FirebaseMessaging();
+
+    currentUserIdAsFCMChannel = auth.currentUser.uid;
+    VinkFirebaseMessagingService.init(currentUserIdAsFCMChannel);
+    print("Channel Id: $currentUserIdAsFCMChannel");
+
+    _fcm.configure(onMessage: (Map<String, dynamic> message) async {
+      var messageData = message['data'];
+      var notificationType = messageData['notificationType'];
+      print("onMessage Received. Data $messageData");
+
+      if (notificationType == TripConst.TRIP_JOIN_REQUEST) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: ListTile(
+                title: Text(
+                    "Trip Join Request ${messageData['departurePoint']} To ${messageData['destinationPoint']}"),
+                subtitle: Text(
+                    "Time: ${messageData['departureDatetime']}. Amount To Pay - ${messageData['amount']}")),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  _sendRejectMessageToPassenger(messageData);
+                  Navigator.pop(context);
+                },
+                child: Text("Reject"),
+              ),
+              FlatButton(
+                onPressed: () {
+                  _sendAcceptedMessageToPassenger(messageData);
+                  Navigator.pop(context);
+                },
+                child: Text("Accept"),
+              ),
+            ],
+          ),
+        );
+      }
+    }, onLaunch: (Map<String, dynamic> message) async {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: ListTile(
+            title: Text("Notification"),
+          ),
+        ),
+      );
+    }, onResume: (Map<String, dynamic> message) async {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                  content: ListTile(
+                title: Text("Notification"),
+              )));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +133,37 @@ class _HomeState extends State<Home> {
         body: _DriverHome(feedType));
   }
 
+  _sendRejectMessageToPassenger(messageData) {
+    var notificationData = {
+      'title': "New Notification",
+      'body':
+          "Your request to joing join Trip rejected, click here for more details.",
+      'notificationType': 'rejectedToJoinTrip'
+    };
+    var passengerId = messageData['passengerId'];
+    messageData['notificationType'] = 'rejectedToJoinTrip';
+    _deliverNotification(notificationData, messageData, passengerId);
+  }
+
+  _sendAcceptedMessageToPassenger(messageData) {
+    var notificationData = {
+      'title': "New Notification",
+      'body': "Your request to joing join Trip accepted, continue to pay.",
+      'notificationType': 'acceptedToJoinTrip'
+    };
+    var passengerId = messageData['passengerId'];
+    messageData['notificationType'] = 'acceptedToJoinTrip';
+    _deliverNotification(notificationData, messageData, passengerId);
+  }
+
+  _deliverNotification(notificationData, messageData, passengerId) {
+    VinkFirebaseMessagingService()
+        .buildAndReturnFcmMessageBody(
+            notificationData, messageData, passengerId)
+        .then((data) => {VinkFirebaseMessagingService().sendFcmMessage(data)});
+  }
+
   _DriverHome(String feedType) {
-    
     return Container(
         child: Stack(children: [
       StreamBuilder(
@@ -91,6 +188,7 @@ class _HomeState extends State<Home> {
                             ) {
                               var feedData = snapshot.data.docs[index].data();
                               var feedId = snapshot.data.docs[index].id;
+                              // return Text("Feed data $feedata");
                               return RideRequest(
                                   feedData: feedData, feedId: feedId);
                             },
@@ -120,9 +218,7 @@ class _HomeState extends State<Home> {
           child: RaisedButton(
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => CreateTrip(feedType: "rideOffer")));
+                  context, MaterialPageRoute(builder: (_) => CreateTrip()));
             },
             child: Icon(
               FontAwesomeIcons.plus,

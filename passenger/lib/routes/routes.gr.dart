@@ -23,6 +23,9 @@ import 'package:passenger/views/user/myFeeds.dart';
 import 'package:passenger/views/VinkDetails.dart';
 import 'package:passenger/views/CreateTrip.dart';
 import 'package:passenger/views/SearchRide.dart';
+import 'package:passenger/widgets/RideRequest.dart';
+import 'package:passenger/widgets/JoinTrip.dart';
+import 'package:passenger/views/auth/forgot_password.dart';
 
 class Routes {
   static const onboardingSlider = '/';
@@ -39,6 +42,9 @@ class Routes {
   static const vinkDetails = '/vink-details';
   static const createTrip = '/create-trip';
   static const searchRide = '/search-ride';
+  static const rideRequest = '/ride-request';
+  static const joinTrip = '/join-trip';
+  static const forgotPassword = '/forgot-password';
   static GlobalKey<NavigatorState> get navigatorKey =>
       getNavigatorKey<Routes>();
   static NavigatorState get navigator => navigatorKey.currentState;
@@ -123,12 +129,8 @@ class Routes {
           settings: settings,
         );
       case Routes.createTrip:
-        if (hasInvalidArgs<String>(args)) {
-          return misTypedArgsRoute<String>(args);
-        }
-        final typedArgs = args as String;
         return MaterialPageRoute(
-          builder: (_) => CreateTrip(feedType: typedArgs),
+          builder: (_) => CreateTrip(),
           settings: settings,
         );
       case Routes.searchRide:
@@ -138,6 +140,34 @@ class Routes {
         final typedArgs = args as String;
         return MaterialPageRoute(
           builder: (_) => SearchRide(typeOfRide: typedArgs),
+          settings: settings,
+        );
+      case Routes.rideRequest:
+        if (hasInvalidArgs<RideRequestArguments>(args, isRequired: true)) {
+          return misTypedArgsRoute<RideRequestArguments>(args);
+        }
+        final typedArgs = args as RideRequestArguments;
+        return MaterialPageRoute(
+          builder: (_) => RideRequest(
+              feedData: typedArgs.feedData, feedId: typedArgs.feedId),
+          settings: settings,
+        );
+      case Routes.joinTrip:
+        if (hasInvalidArgs<JoinTripArguments>(args, isRequired: true)) {
+          return misTypedArgsRoute<JoinTripArguments>(args);
+        }
+        final typedArgs = args as JoinTripArguments;
+        return MaterialPageRoute(
+          builder: (_) => JoinTrip(
+              tripId: typedArgs.tripId,
+              driverId: typedArgs.driverId,
+              tripData: typedArgs.tripData,
+              paymentToken: typedArgs.paymentToken),
+          settings: settings,
+        );
+      case Routes.forgotPassword:
+        return MaterialPageRoute(
+          builder: (_) => ForgotPassword(),
           settings: settings,
         );
       default:
@@ -157,4 +187,29 @@ class PreviewAttachmentArguments {
   final String message;
   PreviewAttachmentArguments(
       {@required this.userId, @required this.image, @required this.message});
+}
+
+class PaymentArguments {
+  final Map<dynamic, dynamic> tripData;
+  PaymentArguments(this.tripData);
+}
+
+//RideRequest arguments holder class
+class RideRequestArguments {
+  final Map<dynamic, dynamic> feedData;
+  final String feedId;
+  RideRequestArguments({@required this.feedData, @required this.feedId});
+}
+
+//JoinTrip arguments holder class
+class JoinTripArguments {
+  final String tripId;
+  final String driverId;
+  final Map<dynamic, dynamic> tripData;
+  final String paymentToken;
+  JoinTripArguments(
+      {@required this.tripId,
+      @required this.driverId,
+      @required this.tripData,
+      this.paymentToken});
 }

@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:passenger/helpers/dialogHelper.dart';
 import 'package:passenger/models/Helper.dart';
 import 'package:passenger/models/Trip.dart';
 import 'package:passenger/models/User.dart' as VinkUser;
+import 'package:passenger/routes/routes.gr.dart';
 import 'package:passenger/views/ViewingTrip.dart';
 
 class DriverFeed extends StatefulWidget {
@@ -43,8 +45,8 @@ class DriverFeedState extends State<DriverFeed> {
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: FutureBuilder(
-            future: user.getUserById(feedData['sender_uid']),
+        child: StreamBuilder(
+            stream: user.getDriver(feedData['sender_uid']),
             builder: (BuildContext context,
                 AsyncSnapshot<DocumentSnapshot> snapshot) {
               if (!snapshot.hasData) {
@@ -53,162 +55,113 @@ class DriverFeedState extends State<DriverFeed> {
                   width: 0,
                 );
               } else {
-                var userDetails = snapshot.data.data();
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ViewingTrip(tripId: feedId),
-                      ),
-                    );
-                  },
-                  child: Column(
-                    children: [
-                      driverDetails(userDetails),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                        child: Column(
-                          children: [
-                            fromPoint(),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            destinationPoint(),
-                            SizedBox(height: 20),
-                            departureDate(),
-                          ],
+                if (snapshot.data.exists) {
+                  var userDetails = snapshot.data.data();
+                  return GestureDetector(
+                    onTap: () {
+                      Routes.navigator
+                          .pushNamed(Routes.viewingTrip, arguments: feedId);
+                    },
+                    child: Column(
+                      children: [
+                        driverDetails(userDetails),
+                        SizedBox(
+                          height: 20,
                         ),
-                      ),
-                      SizedBox(height: 20),
-                      const Divider(
-                        color: Color(0xFFF5F5F5),
-                        height: 0,
-                        thickness: 2,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
-                      SizedBox(height: 10),
-                      Container(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              child: Stack(
-                                children: <Widget>[
-                                  FutureBuilder(
-                                      future: user
-                                          .getUserById(feedData['sender_uid']),
-                                      builder: (BuildContext context,
-                                          AsyncSnapshot<DocumentSnapshot>
-                                              snapshot) {
-                                        if (!snapshot.hasData) {
-                                          return Container(
-                                            height: 0,
-                                            width: 0,
-                                          );
-                                        } else {
-                                          var userDetails =
-                                              snapshot.data.data();
-                                          return Container(
-                                            margin:
-                                                const EdgeInsets.only(left: 0),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: Color(0xFFF2F2F2),
-                                              ),
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(50),
-                                              ),
-                                            ),
-                                            child: CircleAvatar(
-                                              backgroundColor: Colors.white24,
-                                              child: ClipOval(
-                                                child: SizedBox(
-                                                  height: 50.0,
-                                                  width: 50.0,
-                                                  child: Image.network(
-                                                    userDetails.containsKey(
-                                                                "profile_pic") &&
-                                                            userDetails[
-                                                                    'profile_pic'] !=
-                                                                null
-                                                        ? userDetails[
-                                                            'profile_pic']
-                                                        : defaultPic,
-                                                    fit: BoxFit.fill,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                      }),
-                                  Container(
-                                    margin: const EdgeInsets.only(left: 20),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Color(0xFFF2F2F2),
+                        Container(
+                          padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                          child: Column(
+                            children: [
+                              fromPoint(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              destinationPoint(),
+                              SizedBox(height: 20),
+                              departureDate(),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        const Divider(
+                          color: Color(0xFFF5F5F5),
+                          height: 0,
+                          thickness: 2,
+                          indent: 10,
+                          endIndent: 10,
+                        ),
+                        SizedBox(height: 10),
+                        Container(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                child: Stack(
+                                  children: <Widget>[
+                                    Container(
+                                      margin: const EdgeInsets.only(left: 20),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Color(0xFFF2F2F2),
+                                        ),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(50),
+                                        ),
                                       ),
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(50),
-                                      ),
-                                    ),
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.white,
-                                      child: ClipOval(
-                                        child: SizedBox(
-                                          height: 50.0,
-                                          width: 50.0,
-                                          child: Image.network(
-                                            defaultPic,
-                                            fit: BoxFit.fill,
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        child: ClipOval(
+                                          child: SizedBox(
+                                            height: 50.0,
+                                            width: 50.0,
+                                            child: Image.network(
+                                              defaultPic,
+                                              fit: BoxFit.fill,
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.only(left: 40),
-                                    height: 40,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10.0, vertical: 5.0),
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(50),
+                                    Container(
+                                      margin: const EdgeInsets.only(left: 40),
+                                      height: 40,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10.0, vertical: 5.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(50),
+                                        ),
                                       ),
-                                    ),
-                                    child: Expanded(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            '${feedData['vehicle_seats_number']} seats empty',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12.0,
+                                      child: Expanded(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              '${feedData['vehicle_seats_number']} seats empty',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12.0,
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            joinTripButton(),
-                          ],
+                              joinTripButton(feedData),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
+                      ],
+                    ),
+                  );
+                }
+                return Container();
               }
             }),
       ),
@@ -224,12 +177,15 @@ class DriverFeedState extends State<DriverFeed> {
           child: SizedBox(
             height: 80.0,
             width: 80.0,
-            child: Image.network(
-              userDetails['profile_pic'],
-              height: 80,
-              width: 80,
-              fit: BoxFit.cover,
-            ),
+            child: userDetails.containsKey('profile_pic')
+                ? Image.network(
+                    userDetails['profile_pic'].toString(),
+                    fit: BoxFit.fill,
+                  )
+                : Image.network(
+                    defaultPic,
+                    fit: BoxFit.fill,
+                  ),
           ),
         ),
       ),
@@ -358,9 +314,12 @@ class DriverFeedState extends State<DriverFeed> {
     );
   }
 
-  Widget joinTripButton() {
+  Widget joinTripButton(feedData) {
     return RaisedButton(
-      onPressed: () => trip.joinTrip(feedId, feedData, context),
+      onPressed: () {
+        var userIdRequesting = currentUserId;
+        DialogHelper.insertPrice(context, feedId, feedData);
+      },
       color: Color(0xFF1B1B1B),
       padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
       child: Text(
@@ -376,6 +335,35 @@ class DriverFeedState extends State<DriverFeed> {
       ),
     );
   }
+
+  // _JoinTripRequest() {
+  //   _sendNotification(String currentUserId, String rideId, String userIdPoking,
+  //       String amountAdjustment) {
+  //     var notificationData = {
+  //       'title': "New Notification",
+  //       'body':
+  //           "A Passenger requested to join your Trip, click here for more details.",
+  //       'notificationType': 'requestToJoinTrip'
+  //     };
+
+  //     var messageData = {
+  //       'passengerId': currentUserId,
+  //       'notificationType': 'requestToJoinTrip',
+  //       'amount': amountAdjustment,
+  //       'trip_id': rideId,
+  //       'departurePoint': feedDataPokedTo['departure_point'],
+  //       'destinationPoint': feedDataPokedTo['destination_point'],
+  //       'departureDatetime': DateFormat('dd-MM-yy kk:mm')
+  //           .format(feedDataPokedTo['departure_datetime'].toDate())
+  //     };
+
+  //     VinkFirebaseMessagingService()
+  //         .buildAndReturnFcmMessageBody(
+  //             notificationData, messageData, userIdPoking)
+  //         .then(
+  //             (data) => {VinkFirebaseMessagingService().sendFcmMessage(data)});
+  //   }
+  // }
 
   TextStyle labelStyle() {
     return TextStyle(

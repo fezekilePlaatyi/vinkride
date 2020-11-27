@@ -6,9 +6,9 @@ import 'package:Vinkdriver/helper/Helper.dart';
 import 'package:Vinkdriver/model/User.dart' as VinkUser;
 
 class DriverFeed extends StatefulWidget {
-  var feedData;
-  var feedId;
-  DriverFeed({this.feedData, this.feedId});
+  final Map feedData;
+  final String feedId;
+  const DriverFeed({this.feedData, this.feedId});
   @override
   _DriverFeedState createState() => _DriverFeedState();
 }
@@ -42,7 +42,7 @@ class _DriverFeedState extends State<DriverFeed> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FutureBuilder(
-            future: user.getUserById(feedData['sender_uid']),
+            future: user.getUserById(feedData['sender_uid'], 'drivers'),
             builder: (BuildContext context,
                 AsyncSnapshot<DocumentSnapshot> snapshot) {
               if (!snapshot.hasData) {
@@ -99,8 +99,8 @@ class _DriverFeedState extends State<DriverFeed> {
                               child: Stack(
                                 children: <Widget>[
                                   FutureBuilder(
-                                      future: user
-                                          .getUserById(feedData['sender_uid']),
+                                      future: user.getUserById(
+                                          feedData['sender_uid'], 'passenger'),
                                       builder: (BuildContext context,
                                           AsyncSnapshot<DocumentSnapshot>
                                               snapshot) {
@@ -213,7 +213,9 @@ class _DriverFeedState extends State<DriverFeed> {
             height: 80.0,
             width: 80.0,
             child: Image.network(
-              userDetails['profile_pic'],
+              userDetails.containsKey('profile_pic')
+                  ? userDetails['profile_pic']
+                  : defaultPic,
               height: 80,
               width: 80,
               fit: BoxFit.cover,
@@ -348,7 +350,9 @@ class _DriverFeedState extends State<DriverFeed> {
 
   Widget joinTripButton() {
     return RaisedButton(
-      onPressed: () => trip.joinTrip(feedId, feedData, context),
+      onPressed: () {
+        print("Joining");
+      },
       color: Color(0xFF1B1B1B),
       padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
       child: Text(

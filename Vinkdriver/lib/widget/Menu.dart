@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:Vinkdriver/Constants.dart';
-import 'package:Vinkdriver/helper/Helper.dart';
-import 'package:Vinkdriver/model/ShareToOtherPlatforms.dart';
-import 'package:Vinkdriver/model/User.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'package:Vinkdriver/model/DynamicLinks.dart';
+import 'package:Vinkdriver/model/Helper.dart';
+import 'package:Vinkdriver/model/User.dart';
+import 'package:Vinkdriver/routes/routes.gr.dart';
+// import 'package:Vinkdriver/model/ShareToOtherPlatforms.dart';
+// import 'package:Vinkdriver/services/DeviceLocation.dart';
 
 class SideMenu extends StatefulWidget {
   SideMenu();
@@ -13,7 +15,7 @@ class SideMenu extends StatefulWidget {
 }
 
 class _SideMenuState extends State<SideMenu> {
-  var _userInfo = new User();
+  User _user = new User();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,7 +28,7 @@ class _SideMenuState extends State<SideMenu> {
 
   _drawerHeader() {
     return StreamBuilder(
-      stream: _userInfo.loadCurrentUser(),
+      stream: _user.loadCurrentUser(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasData) {
@@ -38,6 +40,7 @@ class _SideMenuState extends State<SideMenu> {
               children: [
                 CircleAvatar(
                   radius: 35,
+                  backgroundColor: Colors.white,
                   child: ClipOval(
                     child: SizedBox(
                       height: 100,
@@ -63,7 +66,7 @@ class _SideMenuState extends State<SideMenu> {
                       fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  user["isDriver"] as bool ? 'Driver' : 'Passenger',
+                  'Driver',
                   style: TextStyle(
                     fontSize: 16.0,
                     color: Color(0xFFF2F2F2),
@@ -112,15 +115,6 @@ class _SideMenuState extends State<SideMenu> {
             'Notifications',
             style: TextStyle(color: Color(0xFF1B1B1B)),
           ),
-          onTap: () {
-            // Navigator.of(context).pop();
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (_) => NotificationsDisplay(),
-            //   ),
-            // );
-          },
         ),
         ListTile(
           leading: Icon(
@@ -132,13 +126,7 @@ class _SideMenuState extends State<SideMenu> {
             style: TextStyle(color: Color(0xFF1B1B1B)),
           ),
           onTap: () {
-            // Navigator.of(context).pop();
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (_) => ChatHistory(),
-            //   ),
-            // );
+            Routes.navigator.popAndPushNamed(Routes.chatHistory);
           },
         ),
         ListTile(
@@ -151,13 +139,7 @@ class _SideMenuState extends State<SideMenu> {
             color: Color(0xFFCC1719),
           ),
           onTap: () {
-            // Navigator.of(context).pop();
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (_) => MyFeeds(),
-            //   ),
-            // );
+            Routes.navigator.popAndPushNamed(Routes.myFeeds);
           },
         ),
         ListTile(
@@ -166,18 +148,9 @@ class _SideMenuState extends State<SideMenu> {
             style: TextStyle(color: Color(0xFF1B1B1B)),
           ),
           leading: Icon(
-            FontAwesomeIcons.creditCard,
+            FontAwesomeIcons.userAlt,
             color: Color(0xFFCC1719),
           ),
-          onTap: () {
-            // Navigator.of(context).pop();
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (_) => Profile(),
-            //   ),
-            // );
-          },
         ),
         ListTile(
           leading: Icon(
@@ -190,10 +163,10 @@ class _SideMenuState extends State<SideMenu> {
           ),
           onTap: () {
             Navigator.of(context).pop();
-            Share share = new Share(context);
-            share.shareText(
-                '${Constants.VINK_SHARE_TEXT} https://play.google.com/store?gl=ZA',
-                '');
+            // Share share = new Share(context);
+            // share.shareText(
+            //     '${Constants.VINK_SHARE_TEXT} https://play.google.com/store?gl=ZA',
+            //     '');
           },
         ),
         ListTile(
@@ -202,17 +175,11 @@ class _SideMenuState extends State<SideMenu> {
             style: TextStyle(color: Color(0xFF1B1B1B)),
           ),
           leading: Icon(
-            FontAwesomeIcons.userAlt,
+            FontAwesomeIcons.phoneAlt,
             color: Color(0xFFCC1719),
           ),
           onTap: () {
-            // Navigator.of(context).pop();
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (_) => VinkDetails(),
-            //   ),
-            // );
+            Routes.navigator.popAndPushNamed(Routes.vinkDetails);
           },
         ),
         ListTile(
@@ -225,7 +192,7 @@ class _SideMenuState extends State<SideMenu> {
             color: Color(0xFFCC1719),
           ),
           onTap: () {
-            _userInfo.signOut();
+            _user.signOut();
           },
         ),
       ],

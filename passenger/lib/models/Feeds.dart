@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:passenger/constants.dart';
+import 'package:passenger/routes/routes.gr.dart';
 
 class Feeds {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -16,40 +17,70 @@ class Feeds {
 
   addPassengerToFeedTrip(String feedId, String passengerId,
       Map<String, dynamic> newPassangerData) async {
-    DocumentReference documentReference = feedsRef.doc(feedId.trim());
+    /*
+      TO: Do - This function needs to be break down into pieces
+      it does a couple of things and which include checking if 
+      trip is not full updating number of remaining seats,
+      and finaly adds user to trip.
+    */
+    DocumentReference tripDocumentRef = feedsRef.doc(feedId.trim());
 
-    DocumentReference userOnTripDocumentReference = feedsRef
+    DocumentReference userOnTripDocRef = feedsRef
         .doc(feedId.trim())
         .collection('users_joined_trip')
         .doc(passengerId.trim());
 
-    await firestore.runTransaction((transaction) async {
-      DocumentSnapshot txSnapshot = await transaction.get(documentReference);
-      DocumentSnapshot userOnTripSnapshot =
-      await transaction.get(userOnTripDocumentReference);
+    DocumentSnapshot tripSnapshot = await tripDocumentRef.get();
 
-      if (!txSnapshot.exists) {
-        throw Exception("Document does not exist!");
-      }
+    if (!tripSnapshot.exists) {
+      return TripConst.TRIP_NOT_EXISTING_CODE;
+    } else {
+      var userOnTripResults = userOnTripDocRef.get();
 
-      int updatedVehicleSeatsNumber =
-      int.parse(txSnapshot.data()['vehicle_seats_number']);
+      userOnTripResults.then((userOnTripSnapshot) {
+        if (!userOnTripSnapshot.exists) {
+          int updatedVehicleSeatsNumber =
+              tripSnapshot.data()['vehicle_seats_number'];
+          print("About to be added");
+          if (updatedVehicleSeatsNumber >= 1) {
+            updatedVehicleSeatsNumber = updatedVehicleSeatsNumber - 1;
 
-      if (!userOnTripSnapshot.exists) {
-        print("User not existing on Users Already on trip");
-        updatedVehicleSeatsNumber = updatedVehicleSeatsNumber - 1;
-      }
+            tripDocumentRef.update({
+              'vehicle_seats_number': updatedVehicleSeatsNumber
+            }).then((value) {
+              print("updated number of seats");
+              return feedsRef
+                  .doc(feedId.trim())
+                  .collection('users_joined_trip')
+                  .doc(passengerId.trim())
+                  .set(newPassangerData)
+                  .then((value) => value)
+                  .catchError((err) => err);
+            });
+          } else {
+            print("Trip is full");
+            return TripConst.TRIP_IS_FULL_CODE;
+          }
+        } else {
+          print("User existing");
+          return TripConst.USER_EXISTING_ON_TRIP_CODE;
+        }
+      }).then((response) {
+        print("Response to send to view $response");
+        return response;
+      });
+    }
+  }
 
-      transaction.update(documentReference,
-          {'vehicle_seats_number': updatedVehicleSeatsNumber.toString()});
-    });
-
-    return feedsRef
-        .doc(feedId.trim())
-        .collection('users_joined_trip')
-        .doc(passengerId.trim())
-        .set(newPassangerData)
-        .then((value) => value);
+  joinTrip(feedId, feedData, context) {
+    Routes.navigator.pushNamed(
+      Routes.joinTrip,
+      arguments: JoinTripArguments(
+        tripData: feedData,
+        tripId: feedId,
+        driverId: feedData['sender_uid'],
+      ),
+    );
   }
 
   updatePassangerPaymentStatus(
@@ -66,10 +97,16 @@ class Feeds {
         .update(passangerPaymentUpdateData);
   }
 
-  Stream<QuerySnapshot> getAllFeeds(String feedType) {
+  Stream<QuerySnapshot> getAllFeeds() {
     return feedsRef
-        .orderBy("date_updated", descending: true)
-        .where("feed_type", isEqualTo: feedType)
+        .where("feed_type", isEqualTo: TripConst.RIDE_OFFER)
+        .where("feed_status", isEqualTo: TripConst.ONCOMING_TRIP)
+        .where("vehicle_seats_number", isGreaterThan: 0)
+        /*
+          We need a solution for this, finding a way to
+          orderBy date while fetching number of seats greater than zero
+          .orderBy("date_updated", descending: true)  
+        */
         .snapshots();
   }
 
@@ -103,7 +140,7 @@ class Feeds {
     return feedsRef
         .orderBy("date_updated", descending: true)
         .where("sender_uid", isEqualTo: userId.trim())
-        .where("feed_type", isEqualTo: 'interests')
+        .where("feed_type", isEqualTo: TripConst.INTERESTS)
         .snapshots();
   }
 
@@ -112,7 +149,6 @@ class Feeds {
         .orderBy("date_updated", descending: true)
         .where("sender_uid", isEqualTo: userId.trim())
         .where("feed_status", isEqualTo: status.trim())
-        .where("feed_type", isEqualTo: 'offer')
         .snapshots();
   }
 
@@ -126,7 +162,7 @@ class Feeds {
         .orderBy("date_updated", descending: true)
         .where("departure_point", isEqualTo: departure.trim())
         .where("destination_point", isEqualTo: destination.trim())
-        .where("feed_type", isEqualTo: "rideOffer")
+        .where("feed_type", isEqualTo: TripConst.RIDE_OFFER)
         .snapshots();
   }
 

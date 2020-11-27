@@ -7,9 +7,10 @@ app.set("views", __dirname + "/views")
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(__dirname + '/public'))
 var Payment = require("./Payment")
-const PORT = 8000
 
-app.get('/paymentCheckout', (req, res) => {
+const PORT = 7000
+
+app.post('/paymentCheckout', (req, res) => {
     paymentCheckout(req, res)
 })
 
@@ -57,12 +58,15 @@ app.listen(PORT, () => {
     console.log(`Server started at port - ${PORT}`)
 })
 
-const paymentCheckout = async (req, res) => {
-    const result = await Payment.paymentCheckout(req, res)
-    result.errorMessage == null ?
-        res.redirect(jsonRes.url)
-        :
-        res.send({"Error": jsonRes})
+const paymentCheckout = (req, res) => {
+
+    Payment.paymentCheckout(req, res).then(result=>{
+  
+        result.errorMessage == null ?
+            res.send({"url": jsonRes.url})
+            :
+            res.send({"error": jsonRes})
+    })
 }
 
-exports.payment = functions.https.onRequest(app)
+exports.app = functions.https.onRequest(app)

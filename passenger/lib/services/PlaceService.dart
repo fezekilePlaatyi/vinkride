@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:passenger/constants.dart';
 import 'package:http/http.dart';
+import 'dart:io' show Platform;
 
 class Place {
   String streetNumber;
@@ -40,9 +41,15 @@ class PlaceApiProvider {
 
   final sessionToken;
 
-  final apiKey = Constants.GMAPS_API_KEY;
+  var apiKey;
 
   Future<List<Suggestion>> fetchSuggestions(String input, String lang) async {
+    if (Platform.isAndroid) {
+      apiKey = Constants.GMAPS_API_KEY_ANDROID;
+    } else if (Platform.isIOS) {
+      apiKey = Constants.GMAPS_API_KEY_IOS;
+    }
+
     final request =
         'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=$apiKey&sessiontoken=$sessionToken';
     print(request);

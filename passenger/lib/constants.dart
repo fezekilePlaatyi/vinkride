@@ -1,5 +1,7 @@
 class Constants {
-  static const GMAPS_API_KEY = 'AIzaSyAYI_WMsyJw3RqMcqv939GBFHy8HHPPNl4';
+  static const GMAPS_API_KEY_ANDROID =
+      'AIzaSyDllEaUio-wy0QxBhf2gzoAOD6LnyvmOR0';
+  static const GMAPS_API_KEY_IOS = 'AIzaSyCl-2Fl9lNWrKy1TPY7KVL-I3Tg9iu2558';
 
   static const FCM_SERVER_TOKEN =
       'AAAAfYh_87E:APA91bExovcGf1hqDDszhtZbIsiHDouiKeciBFfeYnFU4721uuzy_nwXFlyX5IZoxDuIHP7OG9tpy7bpQJOa4Rdg6_bRNd4iWuGY9LDlZMfYVziTKARL0tZ900dzP2cbr3gU3buk4K6_';
@@ -19,4 +21,25 @@ class Constants {
 
   static const VINK_SHARE_TEXT =
       "Hey, I am using Vink Intercity, a Ride sharing app that helps driver make cash with their private cars on trips and passenger to save money and travel in comfort! You can also download it at ";
+}
+
+class TripConst {
+  static const RIDE_OFFER = 'rideOffer';
+  static const RIDE_REQUEST = 'rideRequest';
+  static const ACTIVE_TRIP = 'active';
+  static const ONCOMING_TRIP = 'oncoming';
+  static const COMPLETED_TRIP = 'completed';
+  static const INTERESTS = 'interests';
+  static const TRIP_IS_FULL_CODE = "V_510";
+  static const USER_EXISTING_ON_TRIP_CODE = "V_511";
+  static const TRIP_NOT_EXISTING_CODE = "V_512";
+  static const TRIP_JOIN_REQUEST = 'requestToJoingTrip';
+}
+
+class NotificationsConst {
+  static const PASSENGER_JOINED_TRIP = 'passengerJoinedTrip';
+}
+
+class PaymentConst {
+  static const STATUS_PAID = 'paid';
 }

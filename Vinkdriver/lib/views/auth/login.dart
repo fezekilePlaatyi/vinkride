@@ -35,12 +35,17 @@ class _LoginPageState extends State<LoginPage> {
           await _user.getUserForCheck().then((doc) {
             if (doc != null) {
               switch (doc['registration_progress'] as int) {
-                case 40:
+                case 30:
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     Routes.navigator.pushNamed(Routes.driverForm);
                   });
                   break;
-                case 80:
+                case 60:
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Routes.navigator.pushNamed(Routes.carRegistration);
+                  });
+                  break;
+                case 90:
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     Routes.navigator.pushNamed(Routes.profilePicture);
                   });
@@ -162,24 +167,19 @@ class _LoginPageState extends State<LoginPage> {
                               FadeAnimation(
                                 1.6,
                                 FlatButton(
-                                  child: GestureDetector(
-                                    // onTap: () => Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (_) => ForgotPassword(),
-                                    //   ),
-                                    // ),
-                                    child: Text(
-                                      'Forgot Password?',
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontFamily: 'roboto',
-                                      ),
-                                      textAlign: TextAlign.right,
+                                  child: Text(
+                                    'Forgot Password?',
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontFamily: 'roboto',
                                     ),
+                                    textAlign: TextAlign.right,
                                   ),
                                   textColor: vinkRed,
-                                  onPressed: () => {},
+                                  onPressed: () {
+                                    Routes.navigator
+                                        .pushNamed(Routes.forgotPassword);
+                                  },
                                 ),
                               ),
                             ],
@@ -264,12 +264,17 @@ class _LoginPageState extends State<LoginPage> {
                 final doc = snap.data.data();
                 if (doc != null) {
                   switch (doc['registration_progress'] as int) {
-                    case 40:
+                    case 30:
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         Routes.navigator.pushNamed(Routes.driverForm);
                       });
                       break;
-                    case 80:
+                    case 60:
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        Routes.navigator.pushNamed(Routes.carRegistration);
+                      });
+                      break;
+                    case 90:
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         Routes.navigator.pushNamed(Routes.profilePicture);
                       });
