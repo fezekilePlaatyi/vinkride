@@ -294,7 +294,7 @@ PODS:
     - Firebase/Messaging (~> 6.33.0)
     - firebase_core
     - Flutter
-  - firebase_storage (4.0.1):
+  - firebase_storage (5.0.1):
     - Firebase/CoreOnly (~> 6.33.0)
     - Firebase/Storage (~> 6.33.0)
     - firebase_core
@@ -440,9 +440,11 @@ PODS:
     - Flutter
   - shared_preferences (0.0.1):
     - Flutter
-  - sqflite (0.0.2):
+  - social_share (0.0.1):
     - Flutter
-    - FMDB (>= 2.7.5)
+  - sqflite (0.0.1):
+    - Flutter
+    - FMDB (~> 2.7.2)
   - SwiftyGif (5.3.0)
   - Toast (4.0.0)
   - TOCropViewController (2.5.5)
@@ -473,6 +475,7 @@ DEPENDENCIES:
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - share (from `.symlinks/plugins/share/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - social_share (from `.symlinks/plugins/social_share/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
@@ -552,6 +555,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/share/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
+  social_share:
+    :path: ".symlinks/plugins/social_share/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
   url_launcher:
@@ -572,7 +577,7 @@ SPEC CHECKSUMS:
   firebase_core: 350ba329d1641211bc6183a3236893cafdacfea7
   firebase_database: bd51dc26c060f6e27a1326bc8c1ba283cd63c987
   firebase_messaging: 0aea2cd5885b65e19ede58ee3507f485c992cc75
-  firebase_storage: 7ab602a75a80cab746f4f31c98a4927f9f376e92
+  firebase_storage: d5cf595245e1770ef7081b026f603771bf5dd547
   FirebaseAuth: c92d49ada7948d1a23466e3db17bc4c2039dddc3
   FirebaseCore: d889d9e12535b7f36ac8bfbf1713a0836a3012cd
   FirebaseCoreDiagnostics: 770ac5958e1372ce67959ae4b4f31d8e127c3ac1
@@ -607,7 +612,8 @@ SPEC CHECKSUMS:
   SDWebImage: b69257f4ab14e9b6a2ef53e910fdf914d8f757c1
   share: 0b2c3e82132f5888bccca3351c504d0003b3b410
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
-  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
+  social_share: 702a5e3842addd22db515aa9e1e00a4b80a0296d
+  sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
   SwiftyGif: e466e86c660d343357ab944a819a101c4127cb40
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   TOCropViewController: da59f531f8ac8a94ef6d6c0fc34009350f9e8bfe
