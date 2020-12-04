@@ -38,80 +38,85 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: isLoading
-            ? Container(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              )
-            : Container(
-                color: Colors.white,
-                padding: const EdgeInsets.all(15),
-                width: double.infinity,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      FadeAnimation(
-                        1,
-                        Image.asset(
-                          'assets/images/logo.png',
-                          height: 90,
+    EdgeInsets devicePadding = MediaQuery.of(context).viewPadding;
+    return Padding(
+      padding: devicePadding,
+      child: Scaffold(
+          body: isLoading
+              ? Container(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.all(15),
+                  width: double.infinity,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        FadeAnimation(
+                          1,
+                          Image.asset(
+                            'assets/images/logo.png',
+                            height: 90,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Form(
-                        key: formKey,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            FadeAnimation(
-                              1.4,
-                              TextFormField(
-                                validator: (val) {
-                                  return isValidEmail(val)
-                                      ? null
-                                      : "Enter a correct email";
-                                },
-                                onSaved: (input) => email = input,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black,
-                                ),
-                                decoration: formDecor("Email Address"),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            FadeAnimation(
-                              1.7,
-                              RaisedButton(
-                                color: Colors.black87,
-                                child: Text(
-                                  'Reset password',
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Form(
+                          key: formKey,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              FadeAnimation(
+                                1.4,
+                                TextFormField(
+                                  validator: (val) {
+                                    return isValidEmail(val)
+                                        ? null
+                                        : "Enter a correct email";
+                                  },
+                                  onSaved: (input) => email = input,
                                   style: TextStyle(
-                                    fontSize: 18,
-                                    letterSpacing: 1,
+                                    fontSize: 16,
+                                    color: Colors.black,
                                   ),
+                                  decoration: formDecor("Email Address"),
                                 ),
-                                textColor: Colors.white,
-                                shape: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.black12),
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                padding: const EdgeInsets.all(15),
-                                onPressed: () => sendResetEmail(),
                               ),
-                            ),
-                          ],
+                              SizedBox(
+                                height: 20,
+                              ),
+                              FadeAnimation(
+                                1.7,
+                                RaisedButton(
+                                  color: Colors.black87,
+                                  child: Text(
+                                    'Reset password',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      letterSpacing: 1,
+                                    ),
+                                  ),
+                                  textColor: Colors.white,
+                                  shape: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.black12),
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  padding: const EdgeInsets.all(15),
+                                  onPressed: () => sendResetEmail(),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ]),
-              ));
+                      ]),
+                )),
+    );
   }
 }

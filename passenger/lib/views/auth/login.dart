@@ -84,166 +84,170 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _loginForm() {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: isLoading
-          ? Container(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            )
-          : Center(
-              child: Form(
-                key: _formKey,
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    Container(
-                      color: Colors.white,
-                      padding: const EdgeInsets.all(15),
-                      width: double.infinity,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          FadeAnimation(
-                            1,
-                            Image.asset(
-                              'assets/images/logo.png',
-                              height: 90,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          FadeAnimation(
-                            1.2,
-                            TextFormField(
-                              onSaved: (input) => _email = input,
-                              validator: (input) {
-                                return input.isEmpty
-                                    ? "Email address is required"
-                                    : null;
-                              },
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black,
+    EdgeInsets devicePadding = MediaQuery.of(context).viewPadding;
+    return Padding(
+      padding: devicePadding,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: isLoading
+            ? Container(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : Center(
+                child: Form(
+                  key: _formKey,
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      Container(
+                        color: Colors.white,
+                        padding: const EdgeInsets.all(15),
+                        width: double.infinity,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            FadeAnimation(
+                              1,
+                              Image.asset(
+                                'assets/images/logo.png',
+                                height: 90,
                               ),
-                              decoration: formDecor("Email Address"),
                             ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          FadeAnimation(
-                            1.4,
-                            TextFormField(
-                              onSaved: (input) => _password = input,
-                              validator: (input) {
-                                return input.length < 1
-                                    ? "Password is required"
-                                    : null;
-                              },
-                              obscureText: true,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black,
-                              ),
-                              decoration: formDecor("Password"),
+                            SizedBox(
+                              height: 20,
                             ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              FadeAnimation(
-                                1.6,
-                                FlatButton(
-                                  child: Text(
-                                    'Forgot Password?',
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontFamily: 'roboto',
-                                    ),
-                                    textAlign: TextAlign.right,
-                                  ),
-                                  textColor: vinkRed,
-                                  onPressed: () {
-                                    Routes.navigator
-                                        .pushNamed(Routes.forgotPassword);
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          FadeAnimation(
-                            1.8,
-                            RaisedButton(
-                              color: Colors.black87,
-                              child: Text(
-                                'Login',
+                            FadeAnimation(
+                              1.2,
+                              TextFormField(
+                                onSaved: (input) => _email = input,
+                                validator: (input) {
+                                  return input.isEmpty
+                                      ? "Email address is required"
+                                      : null;
+                                },
                                 style: TextStyle(
-                                  fontSize: 18,
-                                  letterSpacing: 1,
+                                  fontSize: 16,
+                                  color: Colors.black,
                                 ),
+                                decoration: formDecor("Email Address"),
                               ),
-                              textColor: Colors.white,
-                              shape: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black12),
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              padding: const EdgeInsets.all(15),
-                              onPressed: () => {_login()},
                             ),
-                          ),
-                          SizedBox(
-                            height: 30,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              FadeAnimation(
-                                2,
-                                Text(
-                                  "Don't have an account?",
-                                  style: TextStyle(
-                                    color: vinkBlack,
-                                    fontFamily: 'roboto',
-                                    fontSize: 16.0,
+                            SizedBox(
+                              height: 10,
+                            ),
+                            FadeAnimation(
+                              1.4,
+                              TextFormField(
+                                onSaved: (input) => _password = input,
+                                validator: (input) {
+                                  return input.length < 1
+                                      ? "Password is required"
+                                      : null;
+                                },
+                                obscureText: true,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                ),
+                                decoration: formDecor("Password"),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                FadeAnimation(
+                                  1.6,
+                                  FlatButton(
+                                    child: Text(
+                                      'Forgot Password?',
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontFamily: 'roboto',
+                                      ),
+                                      textAlign: TextAlign.right,
+                                    ),
+                                    textColor: vinkRed,
+                                    onPressed: () {
+                                      Routes.navigator
+                                          .pushNamed(Routes.forgotPassword);
+                                    },
                                   ),
                                 ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            FadeAnimation(
+                              1.8,
+                              RaisedButton(
+                                color: Colors.black87,
+                                child: Text(
+                                  'Login',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    letterSpacing: 1,
+                                  ),
+                                ),
+                                textColor: Colors.white,
+                                shape: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black12),
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                padding: const EdgeInsets.all(15),
+                                onPressed: () => {_login()},
                               ),
-                              SizedBox(width: 5.0),
-                              FadeAnimation(
-                                2.2,
-                                GestureDetector(
-                                  onTap: () {
-                                    Routes.navigator.pushNamed(Routes.signUp);
-                                  },
-                                  child: Text(
-                                    "Sign Up",
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                FadeAnimation(
+                                  2,
+                                  Text(
+                                    "Don't have an account?",
                                     style: TextStyle(
-                                      color: vinkRed,
+                                      color: vinkBlack,
                                       fontFamily: 'roboto',
                                       fontSize: 16.0,
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                                SizedBox(width: 5.0),
+                                FadeAnimation(
+                                  2.2,
+                                  GestureDetector(
+                                    onTap: () {
+                                      Routes.navigator.pushNamed(Routes.signUp);
+                                    },
+                                    child: Text(
+                                      "Sign Up",
+                                      style: TextStyle(
+                                        color: vinkRed,
+                                        fontFamily: 'roboto',
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
+      ),
     );
   }
 

@@ -70,123 +70,127 @@ class _ImageCaptureState extends State<ProfilePicture> {
   @override
   Widget build(BuildContext context) {
     var title = 'Profile Picture';
-    return Scaffold(
-      backgroundColor: Color(0xFFFFFFFF),
-      appBar: AppBar(
-        backgroundColor: Color(0xFFFCF9F9),
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Text(
-          title,
-          style: TextStyle(
-            color: Color(0xFF1B1B1B),
-            fontFamily: 'Roboto',
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
+    EdgeInsets devicePadding = MediaQuery.of(context).viewPadding;
+    return Padding(
+      padding: devicePadding,
+      child: Scaffold(
+        backgroundColor: Color(0xFFFFFFFF),
+        appBar: AppBar(
+          backgroundColor: Color(0xFFFCF9F9),
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          title: Text(
+            title,
+            style: TextStyle(
+              color: Color(0xFF1B1B1B),
+              fontFamily: 'Roboto',
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Color(0xFFFCF9F9),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.photo_camera,
-                size: 30,
-                color: Color(0xFFCC1718),
+        bottomNavigationBar: BottomAppBar(
+          color: Color(0xFFFCF9F9),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.photo_camera,
+                  size: 30,
+                  color: Color(0xFFCC1718),
+                ),
+                onPressed: () => _pickImage(ImageSource.camera),
+                color: Colors.white,
               ),
-              onPressed: () => _pickImage(ImageSource.camera),
-              color: Colors.white,
-            ),
-            IconButton(
-              icon: Icon(
-                Icons.photo_library,
-                size: 30,
-                color: Color(0xFFCC1718),
+              IconButton(
+                icon: Icon(
+                  Icons.photo_library,
+                  size: 30,
+                  color: Color(0xFFCC1718),
+                ),
+                onPressed: () => _pickImage(ImageSource.gallery),
+                color: Colors.white,
               ),
-              onPressed: () => _pickImage(ImageSource.gallery),
-              color: Colors.white,
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      body: ListView(
-        children: <Widget>[
-          if (_imageFile == null) ...[
-            Container(
-              padding: EdgeInsets.all(32),
-              child: Column(
-                children: [
+        body: ListView(
+          children: <Widget>[
+            if (_imageFile == null) ...[
+              Container(
+                padding: EdgeInsets.all(32),
+                child: Column(
+                  children: [
+                    FadeAnimation(
+                      1,
+                      Image.network(
+                        defaultPic,
+                      ),
+                    ),
+                    SizedBox(height: 20.0),
+                    FadeAnimation(
+                      1.2,
+                      Text(
+                        'Upload Profile Picture',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Roboto',
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ] else if (_imageFile != null) ...[
+              Container(
+                padding: EdgeInsets.all(32),
+                child: Image.file(_imageFile),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
                   FadeAnimation(
-                    1,
-                    Image.network(
-                      defaultPic,
+                    1.4,
+                    FlatButton(
+                      color: Color(0xFF1B1B1B),
+                      child: Icon(
+                        Icons.crop,
+                        color: Colors.white,
+                      ),
+                      onPressed: _cropImage,
+                      shape: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
                     ),
                   ),
-                  SizedBox(height: 20.0),
                   FadeAnimation(
-                    1.2,
-                    Text(
-                      'Upload Profile Picture',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'Roboto',
+                    1.8,
+                    FlatButton(
+                      color: Color(0xFF1B1B1B),
+                      child: Icon(
+                        Icons.refresh,
+                        color: Colors.white,
+                      ),
+                      onPressed: _clear,
+                      shape: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50),
                       ),
                     ),
                   ),
                 ],
               ),
-            ),
-          ] else if (_imageFile != null) ...[
-            Container(
-              padding: EdgeInsets.all(32),
-              child: Image.file(_imageFile),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                FadeAnimation(
-                  1.4,
-                  FlatButton(
-                    color: Color(0xFF1B1B1B),
-                    child: Icon(
-                      Icons.crop,
-                      color: Colors.white,
-                    ),
-                    onPressed: _cropImage,
-                    shape: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                  ),
+              Padding(
+                padding: const EdgeInsets.all(32),
+                child: Uploader(
+                  file: _imageFile,
                 ),
-                FadeAnimation(
-                  1.8,
-                  FlatButton(
-                    color: Color(0xFF1B1B1B),
-                    child: Icon(
-                      Icons.refresh,
-                      color: Colors.white,
-                    ),
-                    onPressed: _clear,
-                    shape: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(32),
-              child: Uploader(
-                file: _imageFile,
               ),
-            ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
