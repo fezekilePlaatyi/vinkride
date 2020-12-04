@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route_annotations.dart';
 import 'package:passenger/views/CreateTrip.dart';
 import 'package:passenger/views/Home.dart';
+import 'package:passenger/views/Payment.dart';
 import 'package:passenger/views/SearchRide.dart';
 import 'package:passenger/views/ViewingTrip.dart';
 import 'package:passenger/views/VinkDetails.dart';
@@ -14,6 +15,7 @@ import 'package:passenger/views/chat/ChatMessage.dart';
 import 'package:passenger/views/chat/previewAttachment.dart';
 import 'package:passenger/views/onboarding.dart';
 import 'package:passenger/views/user/myFeeds.dart';
+import 'package:passenger/views/user/Profile.dart';
 import 'package:passenger/widgets/JoinTrip.dart';
 import 'package:passenger/widgets/RideRequest.dart';
 
@@ -37,4 +39,6 @@ class $Routes {
   RideRequest rideRequest;
   JoinTrip joinTrip;
   ForgotPassword forgotPassword;
+  Profile profile;
+  Payment payment;
 }

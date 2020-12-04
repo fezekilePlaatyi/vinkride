@@ -36,9 +36,9 @@ List<OnboardingModel> getSlides() {
 
   //List tile one
   onboardingModel.setImageAssetsPath("assets/images/find_car.png");
-  onboardingModel.setTitle("Find Ride");
+  onboardingModel.setTitle("Request or Find a Ride");
   onboardingModel.setDescription(
-      "The Frontend Developer is part of the technical team at the Innovation.");
+      "With Vink, your destination is at the palm of your hands. Just open the app and join the trip to same destination or enter where you want to go and a driver will help you get there safe and reliable.");
   slides.add(onboardingModel);
 
   onboardingModel = new OnboardingModel();
@@ -47,7 +47,7 @@ List<OnboardingModel> getSlides() {
   onboardingModel.setImageAssetsPath("assets/images/safe_trip.png");
   onboardingModel.setTitle("Trips Going Same Direction");
   onboardingModel.setDescription(
-      "Hub and is responsible to design and implements the frontend data analytics.");
+      "Ride with good people going your destination, no need to change routes or direction. Its better than the taxi and more convenient than the bus.");
   slides.add(onboardingModel);
 
   onboardingModel = new OnboardingModel();
@@ -56,7 +56,7 @@ List<OnboardingModel> getSlides() {
   onboardingModel.setImageAssetsPath("assets/images/my_location.png");
   onboardingModel.setTitle("Share Live Location");
   onboardingModel.setDescription(
-      "The Frontend deals with medium to advanced business issues that have medium.");
+      "As we pride ourselves with your safety, we went a step further. Vink allows you to  choose to share your live location with family or friends for added security");
   slides.add(onboardingModel);
 
   onboardingModel = new OnboardingModel();
@@ -65,7 +65,7 @@ List<OnboardingModel> getSlides() {
   onboardingModel.setImageAssetsPath("assets/images/security.png");
   onboardingModel.setTitle("Safe Ride Sharing");
   onboardingModel.setDescription(
-      "Knowledge of advanced analytics, statistics and machine learning methods is a plus .");
+      "Your safety is our big feature on Vink. We track all the cars that are on the road travelling with Vink. This information is only known by us and both the driver and the passenger.");
   slides.add(onboardingModel);
 
   onboardingModel = new OnboardingModel();

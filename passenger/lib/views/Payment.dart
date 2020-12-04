@@ -10,8 +10,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:passenger/services/VinkFirebaseMessagingService.dart';
 
 class Payment extends StatefulWidget {
-  var paymentUrl;
-  Payment({this.paymentUrl});
+  final String paymentUrl;
+  const Payment({@required this.paymentUrl});
   @override
   _PaymentState createState() => _PaymentState();
 }
