@@ -222,7 +222,10 @@ class _ViewingTripState extends State<ViewingTrip> {
                                                       ),
                                                     ),
                                                     Text(
-                                                      '${feedData['vehicle_description']}',
+                                                      feedData['vehicle_description'] !=
+                                                              null
+                                                          ? '${feedData['vehicle_description']}'
+                                                          : 'Not specified',
                                                       style: TextStyle(
                                                         color:
                                                             Color(0xFF1B1B1B),

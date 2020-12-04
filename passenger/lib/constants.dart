@@ -20,7 +20,7 @@ class Constants {
   static const VINK_USER_LOCATION_SUBJECT = "Hey, here's my location";
 
   static const VINK_SHARE_TEXT =
-      "Hey, I am using Vink Intercity, a Ride sharing app that helps driver make cash with their private cars on trips and passenger to save money and travel in comfort! You can also download it at ";
+      "Hey, I am using Vink Intercity, a Ride sharing app that helps driver make cash with their private cars on trips and passenger to save money and travel in comfort! You can also download it at: \n ANDROID: https://play.google.com/store/apps/details?id=com.vinkride.passenger \n IOS: https://play.google.com/store/apps/details?id=com.vinkride.passenger";
 }
 
 class TripConst {
@@ -42,4 +42,9 @@ class NotificationsConst {
 
 class PaymentConst {
   static const STATUS_PAID = 'paid';
+}
+
+class UserType {
+  static const DRIVER = 'driver';
+  static const PASSENGER = 'passenger';
 }

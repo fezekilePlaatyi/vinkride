@@ -26,6 +26,8 @@ import 'package:passenger/views/SearchRide.dart';
 import 'package:passenger/widgets/RideRequest.dart';
 import 'package:passenger/widgets/JoinTrip.dart';
 import 'package:passenger/views/auth/forgot_password.dart';
+import 'package:passenger/views/user/Profile.dart';
+import 'package:passenger/views/Payment.dart';
 
 class Routes {
   static const onboardingSlider = '/';
@@ -45,6 +47,8 @@ class Routes {
   static const rideRequest = '/ride-request';
   static const joinTrip = '/join-trip';
   static const forgotPassword = '/forgot-password';
+  static const profile = '/profile';
+  static const payment = '/payment';
   static GlobalKey<NavigatorState> get navigatorKey =>
       getNavigatorKey<Routes>();
   static NavigatorState get navigator => navigatorKey.currentState;
@@ -170,6 +174,25 @@ class Routes {
           builder: (_) => ForgotPassword(),
           settings: settings,
         );
+      case Routes.profile:
+        if (hasInvalidArgs<ProfileArguments>(args, isRequired: true)) {
+          return misTypedArgsRoute<ProfileArguments>(args);
+        }
+        final typedArgs = args as ProfileArguments;
+        return MaterialPageRoute(
+          builder: (_) =>
+              Profile(userId: typedArgs.userId, userType: typedArgs.userType),
+          settings: settings,
+        );
+      case Routes.payment:
+        if (hasInvalidArgs<String>(args, isRequired: true)) {
+          return misTypedArgsRoute<String>(args);
+        }
+        final typedArgs = args as String;
+        return MaterialPageRoute(
+          builder: (_) => Payment(paymentUrl: typedArgs),
+          settings: settings,
+        );
       default:
         return unknownRoutePage(settings.name);
     }
@@ -187,11 +210,6 @@ class PreviewAttachmentArguments {
   final String message;
   PreviewAttachmentArguments(
       {@required this.userId, @required this.image, @required this.message});
-}
-
-class PaymentArguments {
-  final Map<dynamic, dynamic> tripData;
-  PaymentArguments(this.tripData);
 }
 
 //RideRequest arguments holder class
@@ -212,4 +230,11 @@ class JoinTripArguments {
       @required this.driverId,
       @required this.tripData,
       this.paymentToken});
+}
+
+//Profile arguments holder class
+class ProfileArguments {
+  final String userId;
+  final String userType;
+  ProfileArguments({@required this.userId, @required this.userType});
 }

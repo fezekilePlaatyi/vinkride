@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:passenger/models/DynamicLinks.dart';
+import 'package:passenger/constants.dart';
 import 'package:passenger/models/Helper.dart';
 import 'package:passenger/models/User.dart';
 import 'package:passenger/routes/routes.gr.dart';
-// import 'package:passenger/model/ShareToOtherPlatforms.dart';
+import 'package:passenger/utils/Utils.dart';
+import 'package:passenger/models/ShareToOtherPlatforms.dart';
 // import 'package:passenger/model/User.dart';
 // import 'package:passenger/services/DeviceLocation.dart';
-import 'package:passenger/views/chat/ChatHistory.dart';
 // import 'package:passenger/views/myFeeds.dart';
 // import 'package:passenger/views/notificationsDisplay.dart';
 // import 'package:passenger/views/profile.dart';
@@ -158,6 +158,15 @@ class _SideMenuState extends State<SideMenu> {
             FontAwesomeIcons.userAlt,
             color: Color(0xFFCC1719),
           ),
+          onTap: () {
+            Routes.navigator.popAndPushNamed(
+              Routes.profile,
+              arguments: ProfileArguments(
+                userId: Utils.AUTH_USER.uid,
+                userType: UserType.PASSENGER,
+              ),
+            );
+          },
         ),
         ListTile(
           leading: Icon(
@@ -170,10 +179,8 @@ class _SideMenuState extends State<SideMenu> {
           ),
           onTap: () {
             Navigator.of(context).pop();
-            // Share share = new Share(context);
-            // share.shareText(
-            //     '${Constants.VINK_SHARE_TEXT} https://play.google.com/store?gl=ZA',
-            //     '');
+            Share share = new Share(context);
+            share.shareText(Constants.VINK_SHARE_TEXT, '');
           },
         ),
         ListTile(
