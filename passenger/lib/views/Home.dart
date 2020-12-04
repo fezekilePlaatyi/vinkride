@@ -38,106 +38,111 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     Feeds feeds = new Feeds();
     final _scaffoldKey = GlobalKey<ScaffoldState>();
-    return Scaffold(
-      drawer: Drawer(
-        child: SideMenu(),
-      ),
-      key: _scaffoldKey,
-      appBar: AppBar(
-        backgroundColor: Color(0xFFFCF9F9),
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Text(
-          'Active Trips',
-          style: TextStyle(
-            color: Color(0xFF1B1B1B),
-            fontFamily: 'Roboto',
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
+    EdgeInsets devicePadding = MediaQuery.of(context).viewPadding;
+    return Padding(
+      padding: devicePadding,
+      child: Scaffold(
+        drawer: Drawer(
+          child: SideMenu(),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Routes.navigator.pushNamed(Routes.searchRide);
-            },
-            icon: Icon(
-              Icons.search,
-              size: 25,
-              color: Color(0xFFCC1718),
+        key: _scaffoldKey,
+        appBar: AppBar(
+          backgroundColor: Color(0xFFFCF9F9),
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          title: Text(
+            'Active Trips',
+            style: TextStyle(
+              color: Color(0xFF1B1B1B),
+              fontFamily: 'Roboto',
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          IconButton(
-            onPressed: () {
-              _scaffoldKey.currentState.openDrawer();
-            },
-            icon: Icon(
-              Icons.menu,
-              size: 25,
-              color: Color(0xFFCC1718),
-            ),
-          ),
-        ],
-      ),
-      backgroundColor: Color(0xFFFCF9F9),
-      body: Stack(children: [
-        StreamBuilder(
-            stream: feeds.getAllFeeds(),
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (!snapshot.hasData) {
-                return loader();
-              } else {
-                if (snapshot.data.docs.length > 0) {
-                  return ListView.builder(
-                    itemCount: snapshot.data.docs.length,
-                    itemBuilder: (
-                      context,
-                      index,
-                    ) {
-                      var feedData = snapshot.data.docs[index].data();
-                      var feedId = snapshot.data.docs[index].id;
-
-                      return DriverFeed(
-                          feedData: feedData, feedId: feedId);
-                    },
-                  );
-                }
-                return Container(
-                    alignment: Alignment(.04, -0.9),
-                    child: Text(
-                      "No trips!",
-                      style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 25,
-                          fontWeight: FontWeight.w700),
-                    ));
-              }
-            }),
-        Positioned(
-          bottom: 20,
-          right: 20,
-          child: ButtonTheme(
-            minWidth: 60.0,
-            height: 60.0,
-            child: RaisedButton(
+          actions: [
+            IconButton(
               onPressed: () {
-                Routes.navigator.pushNamed(Routes.createTrip);
+                Routes.navigator.pushNamed(Routes.searchRide);
               },
-              child: Icon(
-                FontAwesomeIcons.plus,
-                size: 16.0,
-                color: Color(0xFFFFFFFF),
-              ),
-              color: vinkRed,
-              shape: OutlineInputBorder(
-                borderSide: BorderSide(color: vinkRed),
-                borderRadius: BorderRadius.circular(50),
+              icon: Icon(
+                Icons.search,
+                size: 25,
+                color: Color(0xFFCC1718),
               ),
             ),
-          ),
-        )
-      ],),
+            IconButton(
+              onPressed: () {
+                _scaffoldKey.currentState.openDrawer();
+              },
+              icon: Icon(
+                Icons.menu,
+                size: 25,
+                color: Color(0xFFCC1718),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: Color(0xFFFCF9F9),
+        body: Stack(
+          children: [
+            StreamBuilder(
+                stream: feeds.getAllFeeds(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) {
+                    return loader();
+                  } else {
+                    if (snapshot.data.docs.length > 0) {
+                      return ListView.builder(
+                        itemCount: snapshot.data.docs.length,
+                        itemBuilder: (
+                          context,
+                          index,
+                        ) {
+                          var feedData = snapshot.data.docs[index].data();
+                          var feedId = snapshot.data.docs[index].id;
+
+                          return DriverFeed(feedData: feedData, feedId: feedId);
+                        },
+                      );
+                    }
+                    return Container(
+                        alignment: Alignment(.04, -0.9),
+                        child: Text(
+                          "No trips!",
+                          style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 25,
+                              fontWeight: FontWeight.w700),
+                        ));
+                  }
+                }),
+            Positioned(
+              bottom: 20,
+              right: 20,
+              child: ButtonTheme(
+                minWidth: 60.0,
+                height: 60.0,
+                child: RaisedButton(
+                  onPressed: () {
+                    Routes.navigator.pushNamed(Routes.createTrip);
+                  },
+                  child: Icon(
+                    FontAwesomeIcons.plus,
+                    size: 16.0,
+                    color: Color(0xFFFFFFFF),
+                  ),
+                  color: vinkRed,
+                  shape: OutlineInputBorder(
+                    borderSide: BorderSide(color: vinkRed),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 
