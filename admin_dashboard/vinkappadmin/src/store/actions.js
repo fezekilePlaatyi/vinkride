@@ -70,7 +70,7 @@ export const getCategories = () => {
 
 export const getSkills = ({ commit }, payload) => {
   db.collection('vink_category').doc(payload).collection('category_skills').onSnapshot((doc) => {
-    commit('GET_SKILLS', doc.docs)
+    commit('GET_SKILLS', docs.docs)
   })
 }
 
