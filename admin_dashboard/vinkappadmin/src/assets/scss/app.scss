@@ -1,0 +1,278 @@
+
+// @import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+@font-face {
+    font-family: montserrat;
+    src: url('https://fonts.googleapis.com/css?family=Montserrat') format('truetype');
+}
+
+$fa-font-path: '~@fortawesome/fontawesome-free/webfonts';
+@import '~bootstrap/scss/bootstrap';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
+@import '~@fortawesome/fontawesome-free/scss/v4-shims.scss';
+@import '~@fortawesome/fontawesome-free/scss/brands.scss';
+@import '~@fortawesome/fontawesome-free/scss/regular.scss';
+@import '~@fortawesome/fontawesome-free/scss/solid.scss';
+/* login page */
+
+.loginbody{
+    margin: 0;
+    padding: 0;
+    background: url('../../assets/images/loginback.jpg');
+    background-size: cover;
+    background-position: center;
+    font-family: sans-serif;
+}
+  
+  .loginbox{
+    width: 320px;
+    height: 420px;
+    background: #000 !important;
+    color: #fff !important;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+    padding: 70px 30px;
+  }
+  
+  .avatar{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    position: absolute;
+    top: -50px;
+    left: calc(50% - 50px);
+  }
+  
+  .loginh1{
+    margin: 0;
+    padding: 0 0 20px;
+    text-align: center;
+    font-size: 22px;
+  }
+  
+  .loginbox p{
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+  }
+  
+  .loginbox input{
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .loginbox input[type="text"], input[type="password"]
+  {
+    border: none;
+    border-bottom: 1px solid #fff;
+    background: transparent;
+    outline: none;
+    height: 40px;
+    color: #fff;
+    font-size: 16px;
+  }
+  .loginbox input[type="submit"]
+  {
+    border: none;
+    outline: none;
+    height: 40px;
+    background: #fb2525;
+    color: #fff;
+    font-size: 18px;
+    border-radius: 20px;
+  }
+  .loginbox input[type="submit"]:hover
+  {
+    cursor: pointer;
+    background: #ffcccb;
+    color: #000;
+  }
+  .loginbox a{
+    text-decoration: none;
+    font-size: 12px;
+    line-height: 20px;
+    color: darkgrey;
+  }
+  
+  .loginbox a:hover
+  {
+    color: #ffc107;
+  }
+  
+  /* end of login*/
+  
+  
+  body {
+    font-family: 'montserrat';
+    font-weight: bold;
+    background-color: #eee;
+    
+  }
+  
+  /* navbar */
+  
+  .sidebar {
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, .9)), url("../../assets/images/img1.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    box-shadow: 5px 7px 25px #999;
+  }
+  
+  .bottom-border {
+    border-bottom: 1px groove #eee;
+  }
+  
+  .sidebar-link {
+    transition: all .4s;
+  }
+  
+  .sidebar-link:hover {
+    background-color: #444;
+    border-radius: 5px;
+  }
+  
+  .router-link-exact-active {
+    background-color: #f44336;
+    border-radius: 7px;
+    box-shadow: 2px 5px 10px #111;
+    transition: all .3s;
+  }
+  
+  .router-link-exact-active:hover {
+    background-color: #f66436;
+    border-radius: 7px;
+    box-shadow: 2px 5px 20px #111;
+    transform: translateY(-1px);
+  }
+  
+  .search-input {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    border-bottom: 2px solid #999;
+    transition: all .4s;
+  }
+  
+  .search-input:focus {
+    background: transparent;
+    box-shadow: none;
+    border-bottom: 2px solid #dc3545;
+  }
+  
+  .search-button {
+    border-radius: 50%;
+    padding: 10px 16px;
+    transition: all .4s;
+  }
+  
+  .search-button:hover {
+    background-color: #eee;
+    transform: translateY(-1px);
+  }
+  
+  .icon-parent {
+    position: relative;
+  }
+  
+  .icon-bullet::after {
+    content: "";
+    position: absolute;
+    top: 7px;
+    left: 15px;
+    height: 12px;
+    width: 12px;
+    background-color: #f44336;
+    border-radius: 50%;
+  }
+  
+  @media (max-width: 768px) {
+    .sidebar {
+      position: static;
+      height: auto;
+    }
+  
+    .top-navbar {
+      position: static;
+    }
+  }
+  /* end of navbar */
+  
+  /* cards */
+  .card-common {
+    box-shadow: 1px 2px 5px #999;
+    transition: all .4s;
+  }
+  
+  .card-common:hover {
+    box-shadow: 2px 3px 15px #999;
+    transform: translateY(-1px);
+  }
+  /* end of cards */
+  
+  /* task list */
+  .task-border {
+    border-left: 3px solid #f66436;
+  }
+  /* end of task list */
+
+  .setting-actions:hover .setting-actions-display {
+    display: block;
+  }
+
+  .setting-actions-display {
+    border-radius: 5px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: none;
+    background: #C33764;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #1d2571a2, #c33763a1);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #1d2571a4, #c33763a2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  }
+
+  .btn-add-blue {
+    border: none;
+    background: #C33764;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #1D2671, #C33764);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #1D2671, #C33764); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  }
+
+  .beautiful-gradient {
+    background: #C33764;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #1D2671, #C33764);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #1D2671, #C33764); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */  
+  }
+  .action-option {
+    margin: 12%;
+  }
+
+  .setting-actions-display div span i {
+    font-size: 20px;
+  }
+
+  .profile-pic {
+    width: 300px;
+    height: 300px;
+    border-radius: 200px;
+  }
+
+  .supporting-pics {
+    width: 200px;
+    height: 200px;
+  }
+
+  .modal-body textarea {
+    resize: none;
+    height: 250px;
+  }
