@@ -27,6 +27,7 @@ import 'package:Vinkdriver/views/CreateTrip.dart';
 import 'package:Vinkdriver/views/auth/carRegistration.dart';
 import 'package:Vinkdriver/views/user/myFeeds.dart';
 import 'package:Vinkdriver/views/auth/forgot_password.dart';
+import 'package:Vinkdriver/views/user/Profile.dart';
 
 class Routes {
   static const onboardingSlider = '/';
@@ -47,6 +48,7 @@ class Routes {
   static const carRegistration = '/car-registration';
   static const myFeeds = '/my-feeds';
   static const forgotPassword = '/forgot-password';
+  static const profile = '/profile';
   static GlobalKey<NavigatorState> get navigatorKey =>
       getNavigatorKey<Routes>();
   static NavigatorState get navigator => navigatorKey.currentState;
@@ -175,6 +177,16 @@ class Routes {
           builder: (_) => ForgotPassword(),
           settings: settings,
         );
+      case Routes.profile:
+        if (hasInvalidArgs<ProfileArguments>(args, isRequired: true)) {
+          return misTypedArgsRoute<ProfileArguments>(args);
+        }
+        final typedArgs = args as ProfileArguments;
+        return MaterialPageRoute(
+          builder: (_) =>
+              Profile(userId: typedArgs.userId, userType: typedArgs.userType),
+          settings: settings,
+        );
       default:
         return unknownRoutePage(settings.name);
     }
@@ -206,4 +218,11 @@ class NegotiatePriceArguments {
   final String rideId;
   final Map<dynamic, dynamic> feedData;
   NegotiatePriceArguments({this.rideId, this.feedData});
+}
+
+//Profile arguments holder class
+class ProfileArguments {
+  final String userId;
+  final String userType;
+  ProfileArguments({@required this.userId, @required this.userType});
 }

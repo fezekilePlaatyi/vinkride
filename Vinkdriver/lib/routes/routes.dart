@@ -10,6 +10,7 @@ import 'package:Vinkdriver/views/auth/forgot_password.dart';
 import 'package:Vinkdriver/views/chat/ChatHistory.dart';
 import 'package:Vinkdriver/views/chat/ChatMessage.dart';
 import 'package:Vinkdriver/views/chat/previewAttachment.dart';
+import 'package:Vinkdriver/views/user/Profile.dart';
 import 'package:Vinkdriver/views/user/myFeeds.dart';
 import 'package:Vinkdriver/widget/negotiatePrice.dart';
 import 'package:auto_route/auto_route_annotations.dart';
@@ -41,4 +42,5 @@ class $Routes {
   CarRegitration carRegistration;
   MyFeeds myFeeds;
   ForgotPassword forgotPassword;
+  Profile profile;
 }
