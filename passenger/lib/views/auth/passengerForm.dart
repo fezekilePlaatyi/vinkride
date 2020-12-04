@@ -139,6 +139,8 @@ class _PassengerFormState extends State<PassengerForm> {
                             validator: (input) {
                               if (input.isEmpty) {
                                 return 'Your address is important to us';
+                              } else if (!isValidAddress(input)) {
+                                return 'Invalid address';
                               }
                               return null;
                             },
