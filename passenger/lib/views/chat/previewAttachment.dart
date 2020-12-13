@@ -142,10 +142,10 @@ class _PreviewAttachmentState extends State<PreviewAttachment> {
   }
 
   _sendMessage() {
-    String message = _messageController.text;
-    if (message != null && message != '') {
+    String content = _messageController.text;
+    if (content != null && content != '') {
       _chat
-          .sendMessage(userId, message, attachment, mapCoordinates)
+          .sendMessage(userId, content, attachment, mapCoordinates)
           .then((value) {
         _messageController.text = '';
         Navigator.of(context).pop();
