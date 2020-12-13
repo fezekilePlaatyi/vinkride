@@ -7,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:Vinkdriver/model/helper.dart';
 import 'package:Vinkdriver/model/User.dart';
+import 'package:Vinkdriver/model/Notifications.dart';
+import 'package:Vinkdriver/services/VinkFirebaseMessagingService.dart';
 
 import '../constants.dart';
 
@@ -19,10 +21,15 @@ class SingleNotification extends StatefulWidget {
 }
 
 class SingleNotificationState extends State<SingleNotification> {
+  Notifications notifications = new Notifications();
+  var notificationId;
+
   @override
   Widget build(BuildContext context) {
     User user = new User();
     var notificationData = widget.notificationData;
+    notificationId = widget.notificationId;
+
     return FutureBuilder(
         future: user.getUserById(notificationData['from_user'], 'passengers'),
         builder:
@@ -114,8 +121,8 @@ class SingleNotificationState extends State<SingleNotification> {
           children: [
             FlatButton(
               onPressed: () {
-                print(notificationData);
-                // sendAcceptedMessageToPassenger(notificationData);
+                _sendAcceptedMessageToPassenger(notificationData);
+                notifications.deleteNotification(notificationId);
               },
               child: Icon(
                 Icons.check,
@@ -149,7 +156,8 @@ class SingleNotificationState extends State<SingleNotification> {
             SizedBox(width: 10.0),
             FlatButton(
               onPressed: () {
-                sendRejectMessageToPassenger(notificationData);
+                _sendRejectedMessageToPassenger(notificationData);
+                notifications.deleteNotification(notificationId);
               },
               child: Icon(
                 Icons.close,
@@ -164,6 +172,38 @@ class SingleNotificationState extends State<SingleNotification> {
         ),
       ],
     );
+  }
+
+  _sendAcceptedMessageToPassenger(messageData) {
+    var notificationData = {
+      'title': "New Notification",
+      'body': "Your request to joing join Trip accepted, continue to pay.",
+      'notificationType': TripConst.TRIP_JOIN_ACCEPTED
+    };
+    var passengerId = messageData['from_user'];
+    messageData['date_created'] = messageData['date_created'].toString();
+    messageData['notificationType'] = TripConst.TRIP_JOIN_ACCEPTED;
+    deliverNotification(notificationData, messageData, passengerId);
+  }
+
+  _sendRejectedMessageToPassenger(messageData) {
+    var notificationData = {
+      'title': "New Notification",
+      'body':
+          "Your request to joining Trip rejected, click here for more details.",
+      'notificationType': TripConst.TRIP_JOIN_REJECTED
+    };
+    var passengerId = messageData['from_user'];
+    messageData['notificationType'] = TripConst.TRIP_JOIN_REJECTED;
+    messageData['date_created'] = messageData['date_created'].toString();
+    _deliverNotification(notificationData, messageData, passengerId);
+  }
+
+  _deliverNotification(notificationData, messageData, passengerId) {
+    VinkFirebaseMessagingService()
+        .buildAndReturnFcmMessageBody(
+            notificationData, messageData, passengerId)
+        .then((data) => {VinkFirebaseMessagingService().sendFcmMessage(data)});
   }
 
   displayJoinedTripNotification(
