@@ -280,12 +280,12 @@ class _ChatMessageState extends State<ChatMessage> {
   }
 
   _sendMessage() {
-    String message = _messageController.text;
-    if ((message != null && message != '') ||
+    String content = _messageController.text;
+    if ((content != null && content != '') ||
         attachment != '' ||
         mapCoordinates.isNotEmpty) {
       _chat
-          .sendMessage(userId, message, attachment, mapCoordinates)
+          .sendMessage(userId, content, attachment, mapCoordinates)
           .then((value) {
         _messageController.text = '';
         attachment = '';
@@ -436,7 +436,7 @@ class _ChatMessageState extends State<ChatMessage> {
             ? SizedBox(height: 5.0)
             : SizedBox.shrink(),
         Text(
-          message['message'].toString(),
+          message['content'].toString(),
           style: _convoStyle(),
         ),
         SizedBox(width: 5.0),
