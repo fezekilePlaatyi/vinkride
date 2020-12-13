@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:Vinkdriver/views/Notifications.dart';
 import 'package:Vinkdriver/views/CreateTrip.dart';
 import 'package:Vinkdriver/views/DriverFeed.dart';
 import 'package:Vinkdriver/views/PokeUserOnTrip.dart';
@@ -43,4 +44,5 @@ class $Routes {
   MyFeeds myFeeds;
   ForgotPassword forgotPassword;
   Profile profile;
+  Notifications notifications;
 }

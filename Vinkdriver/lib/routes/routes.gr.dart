@@ -6,6 +6,7 @@
 
 import 'dart:io';
 
+import 'package:Vinkdriver/views/Notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:auto_route/router_utils.dart';
@@ -49,6 +50,7 @@ class Routes {
   static const myFeeds = '/my-feeds';
   static const forgotPassword = '/forgot-password';
   static const profile = '/profile';
+  static const notifications = '/notifications';
   static GlobalKey<NavigatorState> get navigatorKey =>
       getNavigatorKey<Routes>();
   static NavigatorState get navigator => navigatorKey.currentState;
@@ -91,6 +93,12 @@ class Routes {
           builder: (_) => ChatHistory(),
           settings: settings,
         );
+      case Routes.notifications:
+        return MaterialPageRoute(
+          builder: (_) => Notifications(),
+          settings: settings,
+        );
+
       case Routes.chatMessage:
         if (hasInvalidArgs<String>(args, isRequired: true)) {
           return misTypedArgsRoute<String>(args);
@@ -145,7 +153,9 @@ class Routes {
             args as NegotiatePriceArguments ?? NegotiatePriceArguments();
         return MaterialPageRoute(
           builder: (_) => NegotiatePrice(
-              rideId: typedArgs.rideId, feedData: typedArgs.feedData),
+              rideId: typedArgs.rideId,
+              feedData: typedArgs.feedData,
+              userIdPoking: typedArgs.userIdPoking),
           settings: settings,
         );
       case Routes.searchRide:
@@ -217,7 +227,8 @@ class DriverFeedArguments {
 class NegotiatePriceArguments {
   final String rideId;
   final Map<dynamic, dynamic> feedData;
-  NegotiatePriceArguments({this.rideId, this.feedData});
+  final String userIdPoking;
+  NegotiatePriceArguments({this.rideId, this.feedData, this.userIdPoking});
 }
 
 //Profile arguments holder class

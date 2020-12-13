@@ -95,6 +95,7 @@ class VinkFirebaseMessagingService {
   //send fcm message
   Future<Map<String, dynamic>> sendFcmMessage(Map body) async {
     print("onSendFcmMessage");
+    print(body);
     var mapInJsonString = json.encode(body);
     String serverToken = Constants.FCM_SERVER_TOKEN;
     final http.Response response = await http.post(

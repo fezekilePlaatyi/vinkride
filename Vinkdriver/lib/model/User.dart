@@ -139,7 +139,7 @@ class User {
     }
   }
 
-    Future<bool> resetPassword(String email) async {
+  Future<bool> resetPassword(String email) async {
     try {
       return await Utils.AUTH
           .sendPasswordResetEmail(email: email)

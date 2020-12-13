@@ -56,130 +56,144 @@ class _ProfileState extends State<Profile> {
                 : _user.getPassenger(userId),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
-                Map user = snapshot.data.data();
-                var userId = snapshot.data.id;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                      height: 200,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 45.0,
-                            child: ClipOval(
-                              child: SizedBox(
-                                height: 100.0,
-                                width: 100.0,
-                                child: user.containsKey('profile_pic')
-                                    ? Image.network(
-                                        user['profile_pic'].toString(),
-                                        fit: BoxFit.fill,
-                                      )
-                                    : Image.network(
-                                        defaultPic,
-                                        fit: BoxFit.fill,
-                                      ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 5.0),
-                          Text(
-                            '${user['name']}',
-                            style: TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF1B1B1B),
-                            ),
-                          ),
-                          Text(
-                            '${userType == UserType.DRIVER ? 'Toyota - Yaris' : 'Passenger'}',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Color(0xFFB3B3B3),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Container(
-                      height: 80,
-                      margin: const EdgeInsets.all(10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "0.0",
-                                        style: TextStyle(
-                                          color: Color(0xFF1B1B1B),
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.bold,
+                if (snapshot.data.data() != null) {
+                  Map user = snapshot.data.data();
+                  var userId = snapshot.data.id;
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        height: 200,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.white,
+                              radius: 45.0,
+                              child: ClipOval(
+                                child: SizedBox(
+                                  height: 100.0,
+                                  width: 100.0,
+                                  child: user.containsKey('profile_pic')
+                                      ? Image.network(
+                                          user['profile_pic'].toString(),
+                                          fit: BoxFit.fill,
+                                        )
+                                      : Image.network(
+                                          defaultPic,
+                                          fit: BoxFit.fill,
                                         ),
-                                      ),
-                                      SizedBox(width: 5.0),
-                                      Icon(
-                                        Icons.star,
-                                        size: 25,
-                                        color: Color(0xFFCC1718),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                              Text(
-                                'Rate',
-                                style: TextStyle(
-                                  color: Color(0xFFB3B3B3),
-                                  fontSize: 18,
                                 ),
                               ),
-                            ],
-                          ),
-                          StreamBuilder(
-                              stream: feeds.getFeedsByUserId(userId),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot snapshot) {
-                                if (!snapshot.hasData) {
-                                  return Center(
-                                    child: Text('An error occured.'),
-                                  );
-                                } else {
-                                  return Column(
-                                    children: [
-                                      Text(
-                                        '${snapshot.data.docs.length < 10 ? '0' : ''}${snapshot.data.docs.length}',
-                                        style: TextStyle(
-                                          color: Color(0xFF1B1B1B),
-                                          fontSize: 30,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                        'Trips',
-                                        style: TextStyle(
-                                          color: Color(0xFFB3B3B3),
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                }
-                              })
-                        ],
+                            ),
+                            SizedBox(height: 5.0),
+                            Text(
+                              '${user['name']}',
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF1B1B1B),
+                              ),
+                            ),
+                            Text(
+                              'Driver',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Color(0xFFB3B3B3),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                );
+                      SizedBox(height: 20),
+                      Container(
+                        height: 80,
+                        margin: const EdgeInsets.all(10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "0.0",
+                                          style: TextStyle(
+                                            color: Color(0xFF1B1B1B),
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(width: 5.0),
+                                        Icon(
+                                          Icons.star,
+                                          size: 25,
+                                          color: Color(0xFFCC1718),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                Text(
+                                  'Rate',
+                                  style: TextStyle(
+                                    color: Color(0xFFB3B3B3),
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            StreamBuilder(
+                                stream: feeds.getFeedsByUserId(userId),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: Text('An error occured.'),
+                                    );
+                                  } else {
+                                    return Column(
+                                      children: [
+                                        Text(
+                                          '${snapshot.data.docs.length < 10 ? '0' : ''}${snapshot.data.docs.length}',
+                                          style: TextStyle(
+                                            color: Color(0xFF1B1B1B),
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Trips',
+                                          style: TextStyle(
+                                            color: Color(0xFFB3B3B3),
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                })
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return Container(
+                      alignment: Alignment(-0.9, -0.9),
+                      child: Text(
+                        "Could No Get User Details!",
+                        style: TextStyle(
+                            color: Color(0xFF1B1B1B),
+                            fontFamily: 'Roboto',
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600),
+                      ));
+                }
               } else {
                 if (snapshot.hasError) {
                   return Container(

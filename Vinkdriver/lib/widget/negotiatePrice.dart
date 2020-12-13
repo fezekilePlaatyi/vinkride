@@ -12,7 +12,8 @@ import 'package:intl/intl.dart';
 class NegotiatePrice extends StatefulWidget {
   final String rideId;
   final Map feedData;
-  const NegotiatePrice({this.rideId, this.feedData});
+  final String userIdPoking;
+  const NegotiatePrice({this.rideId, this.feedData, this.userIdPoking});
   @override
   _NegotiatePriceState createState() => _NegotiatePriceState();
 }
@@ -23,6 +24,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
   var amountAdjust = false;
   var rideId;
   var feedData;
+  var userIdPoking;
 
   @override
   void initState() {
@@ -40,6 +42,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
     setState(() {
       rideId = widget.rideId;
       feedData = widget.feedData;
+      userIdPoking = widget.userIdPoking;
     });
 
     return Dialog(
@@ -141,7 +144,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
 
     Map<String, dynamic> notificationDataToDB = {
       'date_created': FieldValue.serverTimestamp(),
-      'to_user': feedData['sender_uid'],
+      'to_user': userIdPoking,
       'from_user': currentUserId,
       'is_seen': false,
       'amount': amountAdjustment,
@@ -165,13 +168,13 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
   _sendNotification(currentUserId, amountAdjustment) {
     var notificationData = {
       'title': "New Notification",
-      'body':
-          "A Passenger requested to join your Trip, click here for more details.",
+      'body': "A Driver Poked you to a Trip, click here for more details.",
       'notificationType': 'pokedToJoinTrip'
     };
 
     var messageData = {
       'passengerId': currentUserId,
+      'to_user': userIdPoking,
       'notificationType': 'pokedToJoinTrip',
       'amount': amountAdjustment,
       'trip_id': rideId,
@@ -185,7 +188,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
 
     VinkFirebaseMessagingService()
         .buildAndReturnFcmMessageBody(
-            notificationData, messageData, feedData['sender_uid'])
+            notificationData, messageData, userIdPoking)
         .then((data) => {VinkFirebaseMessagingService().sendFcmMessage(data)});
   }
 
