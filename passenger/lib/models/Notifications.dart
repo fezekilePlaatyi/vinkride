@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:passenger/constants.dart';
 
 class Notifications {
   FirebaseFirestore firestore;
@@ -10,7 +11,7 @@ class Notifications {
   Notifications() {
     firestore = FirebaseFirestore.instance;
     feedsRef = FirebaseFirestore.instance.collection("vink_feeds");
-    userRef = FirebaseFirestore.instance.collection("users");
+    userRef = FirebaseFirestore.instance.collection(UserType.PASSENGER);
     currentUserId = FirebaseAuth.instance.currentUser.uid;
   }
 

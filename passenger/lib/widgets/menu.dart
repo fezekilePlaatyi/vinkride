@@ -122,6 +122,9 @@ class _SideMenuState extends State<SideMenu> {
             'Notifications',
             style: TextStyle(color: Color(0xFF1B1B1B)),
           ),
+          onTap: () {
+            Routes.navigator.popAndPushNamed(Routes.notifications);
+          },
         ),
         ListTile(
           leading: Icon(
