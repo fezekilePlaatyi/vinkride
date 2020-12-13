@@ -30,8 +30,8 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _firebaseCloudHandler();
     currentUserId = auth.currentUser.uid;
+    _firebaseCloudHandler();
   }
 
   @override
@@ -215,10 +215,10 @@ class _HomeState extends State<Home> {
     DialogHelper.loadingDialogWithMessage(context, isLoading, "Loading");
     VinkUser.User user = new VinkUser.User();
 
-    user.getUserForCheck().then((user) {
+    user.isLoggedIn().then((snapshot) {
+      var user = snapshot.data();
       var transactionReference = DateTime.now().millisecondsSinceEpoch;
       var customer = "V - ${user['name']}";
-
       Map<String, String> paymentCheckoutData = {
         "TransactionReference": transactionReference.toString(),
         "Customer": customer,
@@ -246,7 +246,9 @@ class _HomeState extends State<Home> {
           _displayResponse(paymentCheckoutResponse['error'].toString());
         }
       });
-    }).catchError((onError) {
+    }).catchError((error) {
+      print('Error');
+      print(error);
       _displayResponse("Error getting your details.");
     });
   }
