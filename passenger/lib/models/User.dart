@@ -116,7 +116,7 @@ class User {
   Future<DocumentSnapshot> isLoggedIn() async {
     try {
       if (Utils.AUTH.currentUser != null) {
-        return Utils.DRIVER_COLLECTION.doc(Utils.AUTH_USER.uid).get();
+        return Utils.PASSENGER_COLLECTION.doc(Utils.AUTH_USER.uid).get();
       }
       return null;
     } catch (e) {

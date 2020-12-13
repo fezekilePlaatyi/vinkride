@@ -97,7 +97,7 @@ class _ChatHistoryState extends State<ChatHistory> {
 
   _chatSetup(userId) {
     return StreamBuilder(
-        stream: _user.getPassenger(userId),
+        stream: _user.getDriver(userId),
         builder: (BuildContext context,
             AsyncSnapshot<DocumentSnapshot> userSnapshot) {
           if (userSnapshot.hasData) {
@@ -108,6 +108,7 @@ class _ChatHistoryState extends State<ChatHistory> {
                   AsyncSnapshot<DocumentSnapshot> messagesSnapshot) {
                 if (messagesSnapshot.hasData) {
                   var messageDoc = messagesSnapshot.data.data();
+                  print(userSnapshot.data.exists);
                   List messages = messageDoc['text_messages'];
                   var lastMessage = messages[messages.length - 1];
                   return Container(
@@ -163,11 +164,11 @@ class _ChatHistoryState extends State<ChatHistory> {
                                             MediaQuery.of(context).size.width *
                                                 .45,
                                         child: Text(
-                                          lastMessage['message']
+                                          lastMessage['content']
                                                   .toString()
                                                   .isEmpty
                                               ? 'Shared a file...'
-                                              : lastMessage['message']
+                                              : lastMessage['content']
                                                   .toString(),
                                           style: TextStyle(
                                             fontSize: 16.0,
