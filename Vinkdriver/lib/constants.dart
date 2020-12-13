@@ -18,7 +18,7 @@ class Constants {
   static const VINK_USER_LOCATION_SUBJECT = "Hey, here's my location";
 
   static const VINK_SHARE_TEXT =
-      "Hey, I am using Vink Intercity, a Ride sharing app that helps driver make cash with their private cars on trips and passenger to save money and travel in comfort! You can also download it at ";
+      "Hello,Please check out this new exciting app for ridesharing when travelling between cities or towns. It eliminates the need for hiking spots and is great for passengers. You can use it to earn extra money on your next travel. I'm also using it too. Use the links below to download it on the app stores: : \n ANDROID: https://play.google.com/store/apps/details?id=com.vinkride.driver \n IOS: https://play.google.com/store/apps/details?id=com.vinkride.driver";
 }
 
 class TripConst {
@@ -28,4 +28,9 @@ class TripConst {
   static const ONCOMING_TRIP = 'oncoming';
   static const COMPLETED_TRIP = 'completed';
   static const TRIP_JOIN_REQUEST = 'requestToJoingTrip';
+}
+
+class UserType {
+  static const DRIVER = 'driver';
+  static const PASSENGER = 'passenger';
 }

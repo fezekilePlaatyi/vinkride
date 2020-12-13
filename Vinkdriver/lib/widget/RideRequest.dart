@@ -1,3 +1,5 @@
+import 'package:Vinkdriver/constants.dart';
+import 'package:Vinkdriver/routes/routes.gr.dart';
 import 'package:Vinkdriver/views/PokeUserOnTrip.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -44,19 +46,30 @@ class _RideRequestState extends State<RideRequest> {
                       if (snapshot.data.exists) {
                         var userDetails = snapshot.data.data();
                         return ListTile(
-                          leading: CircleAvatar(
-                            radius: 25.0,
-                            child: ClipOval(
-                              child: SizedBox(
-                                height: 80.0,
-                                width: 80.0,
-                                child: Image.network(
-                                  userDetails.containsKey('profile_pic')
-                                      ? userDetails['profile_pic']
-                                      : defaultPic,
-                                  height: 80,
-                                  width: 80,
-                                  fit: BoxFit.cover,
+                          leading: GestureDetector(
+                            onTap: () {
+                              Routes.navigator.pushNamed(
+                                Routes.profile,
+                                arguments: ProfileArguments(
+                                  userId: feedData['sender_uid'],
+                                  userType: UserType.PASSENGER,
+                                ),
+                              );
+                            },
+                            child: CircleAvatar(
+                              radius: 25.0,
+                              child: ClipOval(
+                                child: SizedBox(
+                                  height: 80.0,
+                                  width: 80.0,
+                                  child: Image.network(
+                                    userDetails.containsKey('profile_pic')
+                                        ? userDetails['profile_pic']
+                                        : defaultPic,
+                                    height: 80,
+                                    width: 80,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                             ),

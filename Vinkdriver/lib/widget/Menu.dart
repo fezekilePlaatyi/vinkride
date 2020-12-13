@@ -1,3 +1,6 @@
+import 'package:Vinkdriver/constants.dart';
+import 'package:Vinkdriver/model/ShareToOtherPlatforms.dart';
+import 'package:Vinkdriver/utils/Utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -115,6 +118,9 @@ class _SideMenuState extends State<SideMenu> {
             'Notifications',
             style: TextStyle(color: Color(0xFF1B1B1B)),
           ),
+          onTap: () {
+            Routes.navigator.popAndPushNamed(Routes.notifications);
+          },
         ),
         ListTile(
           leading: Icon(
@@ -151,6 +157,15 @@ class _SideMenuState extends State<SideMenu> {
             FontAwesomeIcons.userAlt,
             color: Color(0xFFCC1719),
           ),
+          onTap: () {
+            Routes.navigator.popAndPushNamed(
+              Routes.profile,
+              arguments: ProfileArguments(
+                userId: Utils.AUTH_USER.uid,
+                userType: UserType.DRIVER,
+              ),
+            );
+          },
         ),
         ListTile(
           leading: Icon(
@@ -163,10 +178,8 @@ class _SideMenuState extends State<SideMenu> {
           ),
           onTap: () {
             Navigator.of(context).pop();
-            // Share share = new Share(context);
-            // share.shareText(
-            //     '${Constants.VINK_SHARE_TEXT} https://play.google.com/store?gl=ZA',
-            //     '');
+            Share share = new Share(context);
+            share.shareText(Constants.VINK_SHARE_TEXT, '');
           },
         ),
         ListTile(

@@ -10,7 +10,7 @@ class Notifications {
   Notifications() {
     firestore = FirebaseFirestore.instance;
     feedsRef = FirebaseFirestore.instance.collection("vink_feeds");
-    userRef = FirebaseFirestore.instance.collection("users");
+    userRef = FirebaseFirestore.instance.collection("drivers");
     currentUserId = FirebaseAuth.instance.currentUser.uid;
   }
 

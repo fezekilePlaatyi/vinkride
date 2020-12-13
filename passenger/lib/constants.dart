@@ -20,7 +20,7 @@ class Constants {
   static const VINK_USER_LOCATION_SUBJECT = "Hey, here's my location";
 
   static const VINK_SHARE_TEXT =
-      "Hey, I am using Vink Intercity, a Ride sharing app that helps driver make cash with their private cars on trips and passenger to save money and travel in comfort! You can also download it at: \n ANDROID: https://play.google.com/store/apps/details?id=com.vinkride.passenger \n IOS: https://play.google.com/store/apps/details?id=com.vinkride.passenger";
+      "Hello, Please check out this new exciting app for ridesharing when travelling between cities or towns(Vink). It eliminates the need for hiking spots and is great for passengers. It lets you schedule or quickly join rides going to your destination. I'm using the app also! Use the links below to download it on the app stores: \n ANDROID: https://play.google.com/store/apps/details?id=com.vinkride.passenger \n IOS: https://play.google.com/store/apps/details?id=com.vinkride.passenger";
 }
 
 class TripConst {

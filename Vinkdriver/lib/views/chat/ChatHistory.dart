@@ -162,11 +162,11 @@ class _ChatHistoryState extends State<ChatHistory> {
                                             MediaQuery.of(context).size.width *
                                                 .45,
                                         child: Text(
-                                          lastMessage['message']
+                                          lastMessage['content']
                                                   .toString()
                                                   .isEmpty
                                               ? 'Shared a file...'
-                                              : lastMessage['message']
+                                              : lastMessage['content']
                                                   .toString(),
                                           style: TextStyle(
                                             fontSize: 16.0,

@@ -10,7 +10,6 @@ import 'package:simple_moment/simple_moment.dart';
 
 final defaultPic =
     'https://aed.cals.arizona.edu/sites/aed.cals.arizona.edu/files/images/people/default-profile_1.png';
-final userRef = FirebaseFirestore.instance.collection("users");
 final chatRef = FirebaseFirestore.instance.collection("chats");
 final requestRef = FirebaseFirestore.instance.collection("requests");
 final vinkCategoryRef =

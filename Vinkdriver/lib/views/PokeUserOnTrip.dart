@@ -96,7 +96,8 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
 
                       return Container(
                         margin: const EdgeInsets.only(bottom: 10.0),
-                        child: _myScheduledTrips(feedId, feedData),
+                        child:
+                            _myScheduledTrips(feedId, feedData, userIdPoking),
                       );
                     },
                   ),
@@ -107,7 +108,7 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
         ]));
   }
 
-  Widget _myScheduledTrips(feedId, feedData) {
+  Widget _myScheduledTrips(feedId, feedData, userIdPoking) {
     var departure = feedData['departure_point'];
     var destination = feedData['destination_point'];
     var departureDate = DateFormat('dd-MM-yy kk:mm')
@@ -139,7 +140,7 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
         trailing: RaisedButton(
           color: vinkBlack,
           onPressed: () {
-            DialogHelper.insertPrice(context, feedId, feedData);
+            DialogHelper.insertPrice(context, feedId, feedData, userIdPoking);
           },
           child: Text(
             'Poke',
