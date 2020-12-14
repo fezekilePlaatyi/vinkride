@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route_annotations.dart';
+import 'package:passenger/models/Notifications.dart';
 import 'package:passenger/views/CreateTrip.dart';
 import 'package:passenger/views/Home.dart';
 import 'package:passenger/views/Payment.dart';
@@ -41,4 +42,5 @@ class $Routes {
   ForgotPassword forgotPassword;
   Profile profile;
   Payment payment;
+  Notifications notifications;
 }

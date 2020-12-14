@@ -1,3 +1,4 @@
+import 'package:Vinkdriver/views/ViewingTrip.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Vinkdriver/model/Trip.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -54,12 +55,12 @@ class _DriverFeedState extends State<DriverFeed> {
                 var userDetails = snapshot.data.data();
                 return GestureDetector(
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => ViewingTrip(tripId: feedId),
-                    //   ),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ViewingTrip(tripId: feedId),
+                      ),
+                    );
                   },
                   child: Column(
                     children: [

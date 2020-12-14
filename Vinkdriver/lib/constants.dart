@@ -28,6 +28,8 @@ class TripConst {
   static const ONCOMING_TRIP = 'oncoming';
   static const COMPLETED_TRIP = 'completed';
   static const TRIP_JOIN_REQUEST = 'requestToJoingTrip';
+  static const TRIP_JOIN_ACCEPTED = 'acceptedToJoinTrip';
+  static const TRIP_JOIN_REJECTED = 'rejectedToJoinTrip';
 }
 
 class UserType {

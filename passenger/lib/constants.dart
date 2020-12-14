@@ -34,10 +34,13 @@ class TripConst {
   static const USER_EXISTING_ON_TRIP_CODE = "V_511";
   static const TRIP_NOT_EXISTING_CODE = "V_512";
   static const TRIP_JOIN_REQUEST = 'requestToJoingTrip';
+  static const TRIP_JOIN_ACCEPTED = 'acceptedToJoinTrip';
+  static const TRIP_JOIN_REJECTED = 'rejectedToJoinTrip';
 }
 
 class NotificationsConst {
   static const PASSENGER_JOINED_TRIP = 'passengerJoinedTrip';
+  static const PASSENGER_POKED_TRIP = 'pokedToJoinTrip';
 }
 
 class PaymentConst {
@@ -45,6 +48,6 @@ class PaymentConst {
 }
 
 class UserType {
-  static const DRIVER = 'driver';
-  static const PASSENGER = 'passenger';
+  static const DRIVER = 'drivers';
+  static const PASSENGER = 'passengers';
 }
