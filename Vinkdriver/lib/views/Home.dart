@@ -102,7 +102,7 @@ class _HomeState extends State<Home> {
             style: TextStyle(
               color: Color(0xFF1B1B1B),
               fontFamily: 'Roboto',
-              fontSize: 28,
+              fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -183,18 +183,17 @@ class _HomeState extends State<Home> {
                     var feedData = snapshot.data.docs[index].data();
                     var feedId = snapshot.data.docs[index].id;
                     // return Text("Feed data $feedata");
-                    return RideRequest(
-                        feedData: feedData, feedId: feedId);
+                    return RideRequest(feedData: feedData, feedId: feedId);
                   },
                 );
               } else {
                 return Container(
-                    alignment: Alignment(-0.9, -0.9),
-                    child: Text(
-                      "No request!",
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-                    ),);
+                  alignment: Alignment(-0.9, -0.9),
+                  child: Text(
+                    "No request!",
+                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+                  ),
+                );
               }
             }
           }),
