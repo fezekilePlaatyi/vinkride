@@ -61,17 +61,6 @@ class _SearchRideState extends State<SearchRide> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            SizedBox(height: 30.0),
-            Text(
-              'Find a ride \ngoing in your direction.',
-              style: TextStyle(
-                color: vinkDarkGrey,
-                fontFamily: 'Roboto',
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            SizedBox(height: 50.0),
             Container(
               decoration: BoxDecoration(
                 boxShadow: [

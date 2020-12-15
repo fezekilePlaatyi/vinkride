@@ -1,10 +1,12 @@
 class Constants {
-  static const GMAPS_API_KEY_ANDROID =
-      'AIzaSyDllEaUio-wy0QxBhf2gzoAOD6LnyvmOR0';
-  static const GMAPS_API_KEY_IOS = 'AIzaSyCl-2Fl9lNWrKy1TPY7KVL-I3Tg9iu2558';
+  static const GMAPS_API_KEY = 'AIzaSyAYI_WMsyJw3RqMcqv939GBFHy8HHPPNl4';
 
   static const FCM_SERVER_TOKEN =
       'AAAAfYh_87E:APA91bExovcGf1hqDDszhtZbIsiHDouiKeciBFfeYnFU4721uuzy_nwXFlyX5IZoxDuIHP7OG9tpy7bpQJOa4Rdg6_bRNd4iWuGY9LDlZMfYVziTKARL0tZ900dzP2cbr3gU3buk4K6_';
+
+  static const GMAPS_API_KEY_ANDROID =
+      'AIzaSyAYI_WMsyJw3RqMcqv939GBFHy8HHPPNl4';
+  static const GMAPS_API_KEY_IOS = 'AIzaSyCl-2Fl9lNWrKy1TPY7KVL-I3Tg9iu2558';
 
   static const PAYMENT_SERVER_ADDRESS =
       'https://us-central1-vink8-za.cloudfunctions.net';

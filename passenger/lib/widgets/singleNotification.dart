@@ -224,18 +224,6 @@ class SingleNotificationState extends State<SingleNotification> {
     });
   }
 
-  _sendAcceptedMessageToPassenger(messageData) {
-    var notificationData = {
-      'title': "New Notification",
-      'body': "Your request to joing join Trip accepted, continue to pay.",
-      'notificationType': TripConst.TRIP_JOIN_ACCEPTED
-    };
-    var passengerId = messageData['from_user'];
-    messageData['date_created'] = messageData['date_created'].toString();
-    messageData['notificationType'] = TripConst.TRIP_JOIN_ACCEPTED;
-    _deliverNotification(notificationData, messageData, passengerId);
-  }
-
   _sendRejectedMessageToPassenger(messageData) {
     var notificationData = {
       'title': "New Notification",

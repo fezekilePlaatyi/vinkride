@@ -41,14 +41,14 @@ class PlaceApiProvider {
 
   final sessionToken;
 
-  var apiKey;
+  var apiKey = Constants.INTERCITY_PROJECT_KEY;
 
   Future<List<Suggestion>> fetchSuggestions(String input, String lang) async {
-    if (Platform.isAndroid) {
-      apiKey = Constants.GMAPS_API_KEY_ANDROID;
-    } else if (Platform.isIOS) {
-      apiKey = Constants.GMAPS_API_KEY_IOS;
-    }
+    // if (Platform.isAndroid) {
+    //   apiKey = Constants.INTERCITY_PROJECT_KEY;
+    // } else if (Platform.isIOS) {
+    //   apiKey = Constants.INTERCITY_PROJECT_KEY;
+    // }
 
     final request =
         'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=$apiKey&sessiontoken=$sessionToken';

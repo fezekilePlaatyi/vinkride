@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:Vinkdriver/model/Helper.dart';
@@ -7,13 +6,14 @@ import 'package:Vinkdriver/model/Notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Vinkdriver/services/VinkFirebaseMessagingService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:intl/intl.dart';
 
 class NegotiatePrice extends StatefulWidget {
   final String rideId;
   final Map feedData;
   final String userIdPoking;
-  const NegotiatePrice({this.rideId, this.feedData, this.userIdPoking});
+  final String actionType;
+  const NegotiatePrice(
+      {this.rideId, this.feedData, this.userIdPoking, this.actionType});
   @override
   _NegotiatePriceState createState() => _NegotiatePriceState();
 }
@@ -25,6 +25,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
   var rideId;
   var feedData;
   var userIdPoking;
+  var actionType;
 
   @override
   void initState() {
@@ -43,6 +44,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
       rideId = widget.rideId;
       feedData = widget.feedData;
       userIdPoking = widget.userIdPoking;
+      actionType = widget.actionType;
     });
 
     return Dialog(

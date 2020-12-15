@@ -61,17 +61,7 @@ class _SearchRideState extends State<SearchRide> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            SizedBox(height: 30.0),
-            Text(
-              'Find a ride \ngoing in your direction.',
-              style: TextStyle(
-                color: vinkDarkGrey,
-                fontFamily: 'Roboto',
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            SizedBox(height: 50.0),
+            SizedBox(height: 10.0),
             Container(
               decoration: BoxDecoration(
                 boxShadow: [
@@ -112,7 +102,7 @@ class _SearchRideState extends State<SearchRide> {
                   }
                 },
                 decoration:
-                    inAppFormsDecor("Enter place of departure", Icons.search),
+                    inAppFormsDecor("Enter departure point.", Icons.search),
                 style: textStyle(16, vinkDarkGrey),
               ),
             ),
@@ -156,7 +146,8 @@ class _SearchRideState extends State<SearchRide> {
                     }
                   }
                 },
-                decoration: inAppFormsDecor("Enter destination", Icons.search),
+                decoration:
+                    inAppFormsDecor("Enter destination point", Icons.search),
                 style: textStyle(16, vinkDarkGrey),
               ),
             ),
