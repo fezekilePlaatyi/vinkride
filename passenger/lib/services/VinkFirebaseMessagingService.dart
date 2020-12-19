@@ -54,7 +54,6 @@ class VinkFirebaseMessagingService {
     var messageBody = <String, dynamic>{
       'notification': notificationBody,
       'priority': 'high',
-      'click_action': 'FLUTTER_NOTIFICATION_CLICK',
       'data': notificationDataBody,
       'to': '/topics/${reciever.toString()}',
     };

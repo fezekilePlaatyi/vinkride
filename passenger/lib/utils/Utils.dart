@@ -119,4 +119,19 @@ class Utils {
               ],
             ));
   }
+
+  static extractMessageData(messageData) async {
+    messageData.remove('google.message_id');
+    messageData.remove('google.ttl');
+    messageData.remove('google.sent_time');
+    messageData.remove('from');
+    messageData.remove('google.original_priority');
+    messageData.remove('collapse_key');
+    messageData.remove('click_action');
+    messageData.remove('google.delivered_priority');
+    messageData.remove('to');
+    messageData.remove('priority');
+    messageData.remove('notification');
+    return messageData;
+  }
 }

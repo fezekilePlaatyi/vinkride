@@ -28,10 +28,14 @@ class TripConst {
   static const ONCOMING_TRIP = 'oncoming';
   static const COMPLETED_TRIP = 'completed';
   static const TRIP_JOIN_REQUEST = 'requestToJoinTrip';
+  static const PASSENGER_JOINED_TRIP = 'passengerJoinedTrip';
+  static const PASSENGER_POKED_TRIP = 'pokedToJoinTrip';
   static const TRIP_JOIN_ACCEPTED = 'acceptedToJoinTrip';
   static const TRIP_JOIN_REJECTED = 'rejectedToJoinTrip';
   static const TRIP_REQUEST_ACCEPTED_STRING =
       "Your request to join Trip accepted, continue to pay.";
+  static const TRIP_POKED_STRING =
+      "A Driver Poked you to a Trip, click here for more details.";
 
   static const TRIP_REQUEST_REJECTED_STRING =
       "Your request to join Trip rejected.";

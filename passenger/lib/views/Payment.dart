@@ -83,8 +83,6 @@ class _PaymentState extends State<Payment> {
                         _addPassengerToTrip(tripId, driverId, passengerId,
                             transactionReference, amount);
 
-                        // _addPassengerToTrip(tripId, driverId)
-
                         return NavigationDecision.prevent;
                       } else if (request.url
                           .startsWith('$baseURL/payment/paymentError')) {
@@ -175,9 +173,16 @@ class _PaymentState extends State<Payment> {
     };
 
     feed
-        .addPassengerToFeedTrip(tripId, passengerId, newPassangerData)
+        .addPassengerToFeedTrip(tripId, currentUserId, newPassangerData)
         .then((value) {
-      _addNotificationToDb(tripId, driverId);
+      print("Results from model $value");
+      if (value == TripConst.TRIP_IS_FULL_CODE) {
+        _displayResponse(TripConst.TRIP_IS_FULL_STRING);
+      } else if (value == TripConst.USER_EXISTING_ON_TRIP_CODE) {
+        _displayResponse(TripConst.USER_EXISTING_ON_TRIP_STRING);
+      } else {
+        _addNotificationToDb(tripId, driverId);
+      }
     });
   }
 
@@ -187,7 +192,7 @@ class _PaymentState extends State<Payment> {
       'date_created': FieldValue.serverTimestamp(),
       'to_user': currentUserId,
       'is_seen': false,
-      'notification_type': NotificationsConst.PASSENGER_JOINED_TRIP,
+      'notification_type': TripConst.PASSENGER_JOINED_TRIP,
       'from_user': currentUserId,
       'trip_id': tripId,
     };
@@ -203,13 +208,12 @@ class _PaymentState extends State<Payment> {
     var notificationData = {
       'title': "New Notification",
       'body': "A Passenger has Joined your Trip, click here for more details.",
-      'notificationType': NotificationsConst.PASSENGER_JOINED_TRIP
     };
 
     var messageData = {
       'passengerId': currentUserId,
       'tripId': tripId,
-      'notificationType': NotificationsConst.PASSENGER_JOINED_TRIP
+      'notificationType': TripConst.PASSENGER_JOINED_TRIP
     };
 
     VinkFirebaseMessagingService()
@@ -222,6 +226,13 @@ class _PaymentState extends State<Payment> {
         DialogHelper.loadingDialogWithMessage(context, isLoading,
             'Successfuly joined trip and made done trip fare charges!');
       });
+    });
+  }
+
+  _displayResponse(message) {
+    setState(() {
+      var isLoading = false;
+      DialogHelper.loadingDialogWithMessage(context, isLoading, message);
     });
   }
 }

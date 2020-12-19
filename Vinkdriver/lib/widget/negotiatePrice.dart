@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:Vinkdriver/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:Vinkdriver/model/Helper.dart';
@@ -150,7 +151,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
       'from_user': currentUserId,
       'is_seen': false,
       'amount': amountAdjustment,
-      'notification_type': 'pokedToJoinTrip',
+      'notification_type': TripConst.PASSENGER_POKED_TRIP,
       'trip_id': rideId,
       'departurePoint': feedData['departure_point'],
       'destinationPoint': feedData['destination_point'],
@@ -170,14 +171,13 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
   _sendNotification(currentUserId, amountAdjustment) {
     var notificationData = {
       'title': "New Notification",
-      'body': "A Driver Poked you to a Trip, click here for more details.",
-      'notificationType': 'pokedToJoinTrip'
+      'body': TripConst.TRIP_POKED_STRING,
     };
 
     var messageData = {
       'passengerId': currentUserId,
       'to_user': userIdPoking,
-      'notificationType': 'pokedToJoinTrip',
+      'notificationType': TripConst.PASSENGER_POKED_TRIP,
       'amount': amountAdjustment,
       'trip_id': rideId,
       'departurePoint': feedData['departure_point'],
