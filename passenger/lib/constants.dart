@@ -35,9 +35,11 @@ class TripConst {
   static const TRIP_IS_FULL_CODE = "V_510";
   static const USER_EXISTING_ON_TRIP_CODE = "V_511";
   static const TRIP_NOT_EXISTING_CODE = "V_512";
-  static const TRIP_JOIN_REQUEST = 'requestToJoingTrip';
+  static const TRIP_JOIN_REQUEST = 'requestToJoinTrip';
   static const TRIP_JOIN_ACCEPTED = 'acceptedToJoinTrip';
   static const TRIP_JOIN_REJECTED = 'rejectedToJoinTrip';
+  static const TRIP_SUCCESSFULY_REQUESTED_STRING =
+      'A passenger has requested to join your trip, click here for more details.';
 }
 
 class NotificationsConst {

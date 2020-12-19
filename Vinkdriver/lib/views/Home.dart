@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:Vinkdriver/constants.dart';
 import 'package:Vinkdriver/model/Feeds.dart';
 import 'package:Vinkdriver/services/VinkFirebaseMessagingService.dart';
@@ -44,9 +46,9 @@ class _HomeState extends State<Home> {
           builder: (context) => AlertDialog(
             content: ListTile(
                 title: Text(
-                    "Trip Join Request ${messageData['departurePoint']} To ${messageData['destinationPoint']}"),
+                    "Trip Join Request ${messageData['departure_point']} To ${messageData['destination_point']}"),
                 subtitle: Text(
-                    "Time: ${messageData['departureDatetime']}. Amount To Pay - ${messageData['amount']}")),
+                    "Time: ${messageData['departure_datetime']}. Amount To Pay - ${messageData['amount']}")),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
@@ -57,7 +59,13 @@ class _HomeState extends State<Home> {
               ),
               FlatButton(
                 onPressed: () {
-                  _sendAcceptedMessageToPassenger(messageData);
+                  new Timer(
+                      const Duration(seconds: 1),
+                      () => {
+                            _sendAcceptedMessageToPassenger(messageData),
+                            print("1 second later.")
+                          });
+
                   Navigator.pop(context);
                 },
                 child: Text("Accept"),
@@ -67,6 +75,7 @@ class _HomeState extends State<Home> {
         );
       }
     }, onLaunch: (Map<String, dynamic> message) async {
+      print("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE onLaucn");
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -76,6 +85,7 @@ class _HomeState extends State<Home> {
         ),
       );
     }, onResume: (Map<String, dynamic> message) async {
+      print("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE onResume");
       showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -136,23 +146,22 @@ class _HomeState extends State<Home> {
   _sendRejectMessageToPassenger(messageData) {
     var notificationData = {
       'title': "New Notification",
-      'body':
-          "Your request to joing join Trip rejected, click here for more details.",
-      'notificationType': 'rejectedToJoinTrip'
+      'body': TripConst.TRIP_REQUEST_REJECTED_STRING
     };
-    var passengerId = messageData['passengerId'];
-    messageData['notificationType'] = 'rejectedToJoinTrip';
+    var passengerId = messageData['driverId'];
+    messageData['notificationType'] = TripConst.TRIP_JOIN_ACCEPTED;
     _deliverNotification(notificationData, messageData, passengerId);
   }
 
   _sendAcceptedMessageToPassenger(messageData) {
     var notificationData = {
       'title': "New Notification",
-      'body': "Your request to joing join Trip accepted, continue to pay.",
-      'notificationType': 'acceptedToJoinTrip'
+      'body': TripConst.TRIP_REQUEST_ACCEPTED_STRING
     };
-    var passengerId = messageData['passengerId'];
-    messageData['notificationType'] = 'acceptedToJoinTrip';
+    print(messageData);
+    var passengerId = messageData['driverId'];
+
+    messageData['notificationType'] = TripConst.TRIP_JOIN_ACCEPTED;
     _deliverNotification(notificationData, messageData, passengerId);
   }
 

@@ -249,7 +249,7 @@ class _RideRequestState extends State<RideRequest> {
                           context,
                           MaterialPageRoute(
                               builder: (_) => PokeUserOnTrip(
-                                    userIdPoking: feedData['sender_uid'],
+                                    feedData: feedData,
                                   )));
                     },
                     color: Color(0xFF1B1B1B),

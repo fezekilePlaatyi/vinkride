@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:passenger/constants.dart';
 import 'package:passenger/models/Helper.dart';
 import 'package:passenger/models/Notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -57,7 +58,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "About To Poke User.",
+              "About To Join Trip.",
               style: TextStyle(
                 fontSize: 20.0,
                 fontFamily: 'roboto',
@@ -65,6 +66,8 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
               ),
             ),
             SizedBox(height: 20.0),
+            Text("Trip Fare -  R${feedData['trip_fare']}"),
+            SizedBox(height: 10.0),
             amountAdjust
                 ? TextFormField(
                     decoration: formDecor("Enter units in ZARs"),
@@ -103,13 +106,16 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
                 SizedBox(width: 10.0),
                 RaisedButton(
                   onPressed: () {
-                    // ;
-                    // isLoading = true;
                     _loader(true);
 
                     String currentUserId = Utils.AUTH_USER.uid;
-                    var amountAdjustment = amountAdjustEditingController.text;
-                    _savePokeToDatabase(
+
+                    var amountAdjustment =
+                        amountAdjustEditingController.text != ""
+                            ? amountAdjustEditingController.text
+                            : feedData['trip_fare'];
+
+                    _saveRequestToDatabase(
                         currentUserId, rideId, amountAdjustment);
                   },
                   child: Text('Submit'),
@@ -127,7 +133,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
         ),
       );
 
-  _savePokeToDatabase(
+  _saveRequestToDatabase(
       String currentUserId, String rideId, String amountAdjustment) {
     Notifications notifications = new Notifications();
 
@@ -156,16 +162,17 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
       String currentUserId, String rideId, String amountAdjustment) {
     var notificationData = {
       'title': "New Notification",
-      'body':
-          "A Driver has poked you to avaliable Trip, click here for more details.",
-      'notificationType': 'pokedToJoinTrip'
+      'body': TripConst.TRIP_SUCCESSFULY_REQUESTED_STRING,
     };
 
     var messageData = {
       'driverId': currentUserId,
-      'notificationType': 'pokedToJoinTrip',
+      'notificationType': TripConst.TRIP_JOIN_REQUEST,
       'amount': amountAdjustment,
-      'trip_id': rideId
+      'trip_id': rideId,
+      'departure_point': feedData['departure_point'],
+      'destination_point': feedData['destination_point'],
+      'departure_datetime': feedData['departure_datetime'].toString(),
     };
 
     VinkFirebaseMessagingService()
@@ -187,7 +194,7 @@ class _NegotiatePriceState extends State<NegotiatePrice> {
                     child: CircularProgressIndicator(),
                   ),
                 )
-              : Text("Poked successfuly!"),
+              : Text("Request sent successfuly, wait for Drivers' response!"),
         ),
         actions: <Widget>[
           isLoading

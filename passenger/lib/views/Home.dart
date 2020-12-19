@@ -190,7 +190,7 @@ class _HomeState extends State<Home> {
       builder: (context) => AlertDialog(
         content: ListTile(
           title: Text(
-              "Accepted to joing Trip - ${messageData['departurePoint']} To ${messageData['destinationPoint']}"),
+              "Accepted to join Trip - ${messageData['departure_point']} To ${messageData['destination_point']}"),
         ),
         actions: <Widget>[
           FlatButton(
@@ -272,9 +272,15 @@ class _HomeState extends State<Home> {
           FlatButton(
             onPressed: () {
               Navigator.pop(context);
-              // _addPassengerToTrip(tripId, driverId)
+              var tripId = messageData['trip_id'];
+              var driverId = messageData['passengerId'];
+
+              messageData['passengerId'] = messageData['to_user'];
+              messageData['driverId'] = messageData['passengerId'];
+              // _addPassengerToTrip(tripId, driverId);
+              _prepareToGoToPayment(messageData);
             },
-            child: Text("Accept"),
+            child: Text("Accept & Pay"),
           ),
         ],
       ),

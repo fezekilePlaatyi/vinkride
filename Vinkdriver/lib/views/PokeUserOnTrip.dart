@@ -8,18 +8,22 @@ import 'package:intl/intl.dart';
 import 'package:Vinkdriver/helper/dialogHelper.dart';
 
 class PokeUserOnTrip extends StatefulWidget {
-  final String userIdPoking;
-  const PokeUserOnTrip({this.userIdPoking});
+  final Map feedData;
+  const PokeUserOnTrip({this.feedData});
   @override
   PokeUserOnTripState createState() => PokeUserOnTripState();
 }
 
 class PokeUserOnTripState extends State<PokeUserOnTrip> {
   Feeds feeds = new Feeds();
+  var priceWillingToPay;
 
   @override
   Widget build(BuildContext context) {
-    var userIdPoking = widget.userIdPoking;
+    var feedData = widget.feedData;
+    var userIdPoking = feedData['sender_uid'];
+    priceWillingToPay = feedData['trip_fare'];
+
     String currentUserId = Utils.AUTH_USER.uid;
 
     return Scaffold(
@@ -140,6 +144,7 @@ class PokeUserOnTripState extends State<PokeUserOnTrip> {
         trailing: RaisedButton(
           color: vinkBlack,
           onPressed: () {
+            feedData['trip_fare'] = priceWillingToPay;
             DialogHelper.insertPrice(context, feedId, feedData, userIdPoking);
           },
           child: Text(
