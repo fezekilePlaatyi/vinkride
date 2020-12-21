@@ -44,6 +44,9 @@ class _HomeState extends State<Home> {
       if (notificationType == TripConst.TRIP_JOIN_REQUEST) {
         _joinTripRequestNotificationHandler(messageData);
       }
+      if (notificationType == TripConst.PASSENGER_JOINED_TRIP) {
+        print("joined");
+      }
     }, onLaunch: (Map<String, dynamic> message) async {
       var messageData = message['data'];
       var notificationType = messageData['notificationType'];
@@ -52,6 +55,9 @@ class _HomeState extends State<Home> {
       if (notificationType == TripConst.TRIP_JOIN_REQUEST) {
         _joinTripRequestNotificationHandler(messageData);
       }
+      if (notificationType == TripConst.PASSENGER_JOINED_TRIP) {
+        print("joined");
+      }
     }, onResume: (Map<String, dynamic> message) async {
       var messageData = message['data'];
       var notificationType = messageData['notificationType'];
@@ -59,6 +65,9 @@ class _HomeState extends State<Home> {
 
       if (notificationType == TripConst.TRIP_JOIN_REQUEST) {
         _joinTripRequestNotificationHandler(messageData);
+      }
+      if (notificationType == TripConst.PASSENGER_JOINED_TRIP) {
+        print("joined");
       }
     });
   }

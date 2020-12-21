@@ -51,7 +51,7 @@ class _ProfileState extends State<Profile> {
           ),
         ),
         body: StreamBuilder(
-            stream: userType == UserType.DRIVER
+            stream: userType == 'driver'
                 ? _user.getDriver(userId)
                 : _user.getPassenger(userId),
             builder: (BuildContext context, AsyncSnapshot snapshot) {

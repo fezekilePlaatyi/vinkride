@@ -1,3 +1,4 @@
+import 'package:Vinkdriver/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -5,12 +6,15 @@ class Notifications {
   FirebaseFirestore firestore;
   CollectionReference feedsRef;
   CollectionReference userRef;
+  CollectionReference passengerRef;
   String currentUserId;
 
   Notifications() {
     firestore = FirebaseFirestore.instance;
     feedsRef = FirebaseFirestore.instance.collection("vink_feeds");
-    userRef = FirebaseFirestore.instance.collection("drivers");
+    userRef = FirebaseFirestore.instance.collection(CollectionsConts.DRIVERS);
+    passengerRef =
+        FirebaseFirestore.instance.collection(CollectionsConts.PASSENGERS);
     currentUserId = FirebaseAuth.instance.currentUser.uid;
   }
 

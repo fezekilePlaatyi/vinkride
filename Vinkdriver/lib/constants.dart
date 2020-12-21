@@ -45,3 +45,8 @@ class UserType {
   static const DRIVER = 'driver';
   static const PASSENGER = 'passenger';
 }
+
+class CollectionsConts {
+  static const DRIVERS = 'drivers';
+  static const PASSENGERS = 'passengers';
+}

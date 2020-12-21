@@ -6,17 +6,19 @@ class Notifications {
   FirebaseFirestore firestore;
   CollectionReference feedsRef;
   CollectionReference userRef;
+  CollectionReference driverRef;
   String currentUserId;
 
   Notifications() {
     firestore = FirebaseFirestore.instance;
     feedsRef = FirebaseFirestore.instance.collection("vink_feeds");
     userRef = FirebaseFirestore.instance.collection(UserType.PASSENGER);
+    driverRef = FirebaseFirestore.instance.collection(UserType.DRIVER);
     currentUserId = FirebaseAuth.instance.currentUser.uid;
   }
 
   addNewNotification(Map notificationData, String personToNotifyUserId) {
-    return userRef
+    return driverRef
         .doc(personToNotifyUserId.trim())
         .collection("notifications")
         .add(notificationData)
