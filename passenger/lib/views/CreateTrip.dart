@@ -263,7 +263,7 @@ class MyCustomFormState extends State {
       'departure_point': departureEditingController.text,
       'destination_point': destinationEditingController.text,
       'feed_status': 'open',
-      'feed_type': TripConst.RIDE_OFFER,
+      'feed_type': TripConst.RIDE_REQUEST,
       'sender_uid': currentUserId,
       'trip_fare': tripFareEditingController.text,
     };

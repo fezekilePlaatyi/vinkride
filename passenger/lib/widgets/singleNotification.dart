@@ -19,9 +19,9 @@ import 'package:passenger/models/User.dart' as VinkUser;
 import '../constants.dart';
 
 class SingleNotification extends StatefulWidget {
-  var notificationData;
-  var notificationId;
-  SingleNotification({this.notificationData, this.notificationId});
+  final Map notificationData;
+  final String notificationId;
+  const SingleNotification({this.notificationData, this.notificationId});
   @override
   SingleNotificationState createState() => SingleNotificationState();
 }

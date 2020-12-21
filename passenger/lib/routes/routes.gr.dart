@@ -9,7 +9,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:auto_route/router_utils.dart';
-import 'package:passenger/views/Notifications.dart';
 import 'package:passenger/views/onboarding.dart';
 import 'package:passenger/views/auth/login.dart';
 import 'package:passenger/views/auth/passengerForm.dart';
@@ -29,6 +28,7 @@ import 'package:passenger/widgets/JoinTrip.dart';
 import 'package:passenger/views/auth/forgot_password.dart';
 import 'package:passenger/views/user/Profile.dart';
 import 'package:passenger/views/Payment.dart';
+import 'package:passenger/views/Notifications.dart';
 
 class Routes {
   static const onboardingSlider = '/';
@@ -51,7 +51,6 @@ class Routes {
   static const profile = '/profile';
   static const payment = '/payment';
   static const notifications = '/notifications';
-
   static GlobalKey<NavigatorState> get navigatorKey =>
       getNavigatorKey<Routes>();
   static NavigatorState get navigator => navigatorKey.currentState;
@@ -92,11 +91,6 @@ class Routes {
       case Routes.chatHistory:
         return MaterialPageRoute(
           builder: (_) => ChatHistory(),
-          settings: settings,
-        );
-      case Routes.notifications:
-        return MaterialPageRoute(
-          builder: (_) => Notifications(),
           settings: settings,
         );
       case Routes.chatMessage:
@@ -199,6 +193,11 @@ class Routes {
         final typedArgs = args as String;
         return MaterialPageRoute(
           builder: (_) => Payment(paymentUrl: typedArgs),
+          settings: settings,
+        );
+      case Routes.notifications:
+        return MaterialPageRoute(
+          builder: (_) => Notifications(),
           settings: settings,
         );
       default:
