@@ -125,9 +125,9 @@ class Routes {
         if (hasInvalidArgs<String>(args)) {
           return misTypedArgsRoute<String>(args);
         }
-        final typedArgs = args as String;
+        final typedArgs = args as Map;
         return MaterialPageRoute(
-          builder: (_) => PokeUserOnTrip(userIdPoking: typedArgs),
+          builder: (_) => PokeUserOnTrip(feedData: typedArgs),
           settings: settings,
         );
       case Routes.driverFeed:

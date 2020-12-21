@@ -46,46 +46,14 @@ class VinkFirebaseMessagingService {
     _fcm.subscribeToTopic(topic);
   }
 
-  constructFirebaseMessage(
-      String title,
-      String notificationType,
-      String requestId,
-      Map notificationData,
-      Map messageData,
-      String senderId,
-      String reciever) async {
-    print("SENDER AND RECEIVER: ${senderId.toString()} ${reciever.toString()}");
-    var messageBody = <String, dynamic>{
-      'notification': <String, dynamic>{
-        'id': 'ID',
-        'title': title,
-        'body': notificationData.toString(),
-        'click_action': 'FLUTTER_NOTIFICATION_CLICK'
-      },
-      'priority': 'high',
-      'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-      'data': <String, dynamic>{
-        'id': 'ID',
-        'request_id': requestId,
-        'sender_id': senderId,
-        'title': notificationType,
-        'data': messageData.toString(),
-        'notification_type': notificationType,
-        'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-      },
-      'to': '/topics/${reciever.toString()}',
-    };
-
-    return messageBody;
-  }
-
   buildAndReturnFcmMessageBody(
       Map notificationBody, Map notificationDataBody, String reciever) async {
     print("onBuildAndReturnFcmMessageBody. Receiver of message: $reciever");
+
+    notificationDataBody['click_action'] = 'FLUTTER_NOTIFICATION_CLICK';
     var messageBody = <String, dynamic>{
       'notification': notificationBody,
       'priority': 'high',
-      'click_action': 'FLUTTER_NOTIFICATION_CLICK',
       'data': notificationDataBody,
       'to': '/topics/${reciever.toString()}',
     };

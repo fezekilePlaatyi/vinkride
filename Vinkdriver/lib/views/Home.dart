@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:Vinkdriver/constants.dart';
 import 'package:Vinkdriver/model/Feeds.dart';
 import 'package:Vinkdriver/services/VinkFirebaseMessagingService.dart';
+import 'package:Vinkdriver/utils/Utils.dart';
 import 'package:Vinkdriver/views/CreateTrip.dart';
 import 'package:Vinkdriver/views/SearchRide.dart';
 import 'package:Vinkdriver/widget/Menu.dart';
@@ -36,52 +39,36 @@ class _HomeState extends State<Home> {
     _fcm.configure(onMessage: (Map<String, dynamic> message) async {
       var messageData = message['data'];
       var notificationType = messageData['notificationType'];
-      print("onMessage Received. Data $messageData");
+      print("onMessage Message Received. Data $messageData");
 
       if (notificationType == TripConst.TRIP_JOIN_REQUEST) {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            content: ListTile(
-                title: Text(
-                    "Trip Join Request ${messageData['departurePoint']} To ${messageData['destinationPoint']}"),
-                subtitle: Text(
-                    "Time: ${messageData['departureDatetime']}. Amount To Pay - ${messageData['amount']}")),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: () {
-                  _sendRejectMessageToPassenger(messageData);
-                  Navigator.pop(context);
-                },
-                child: Text("Reject"),
-              ),
-              FlatButton(
-                onPressed: () {
-                  _sendAcceptedMessageToPassenger(messageData);
-                  Navigator.pop(context);
-                },
-                child: Text("Accept"),
-              ),
-            ],
-          ),
-        );
+        _joinTripRequestNotificationHandler(messageData);
+      }
+      if (notificationType == TripConst.PASSENGER_JOINED_TRIP) {
+        print("joined");
       }
     }, onLaunch: (Map<String, dynamic> message) async {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: ListTile(
-            title: Text("Notification"),
-          ),
-        ),
-      );
+      var messageData = message['data'];
+      var notificationType = messageData['notificationType'];
+      print("onLaunch Mesage Received. Data $messageData");
+
+      if (notificationType == TripConst.TRIP_JOIN_REQUEST) {
+        _joinTripRequestNotificationHandler(messageData);
+      }
+      if (notificationType == TripConst.PASSENGER_JOINED_TRIP) {
+        print("joined");
+      }
     }, onResume: (Map<String, dynamic> message) async {
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                  content: ListTile(
-                title: Text("Notification"),
-              )));
+      var messageData = message['data'];
+      var notificationType = messageData['notificationType'];
+      print("onLaunch Mesage Received. Data $messageData");
+
+      if (notificationType == TripConst.TRIP_JOIN_REQUEST) {
+        _joinTripRequestNotificationHandler(messageData);
+      }
+      if (notificationType == TripConst.PASSENGER_JOINED_TRIP) {
+        print("joined");
+      }
     });
   }
 
@@ -136,24 +123,28 @@ class _HomeState extends State<Home> {
   _sendRejectMessageToPassenger(messageData) {
     var notificationData = {
       'title': "New Notification",
-      'body':
-          "Your request to joing join Trip rejected, click here for more details.",
-      'notificationType': 'rejectedToJoinTrip'
+      'body': TripConst.TRIP_REQUEST_REJECTED_STRING
     };
-    var passengerId = messageData['passengerId'];
-    messageData['notificationType'] = 'rejectedToJoinTrip';
+    var passengerId = messageData['driverId'];
+    messageData['notificationType'] = TripConst.TRIP_JOIN_ACCEPTED;
     _deliverNotification(notificationData, messageData, passengerId);
   }
 
   _sendAcceptedMessageToPassenger(messageData) {
     var notificationData = {
       'title': "New Notification",
-      'body': "Your request to joing join Trip accepted, continue to pay.",
-      'notificationType': 'acceptedToJoinTrip'
+      'body': TripConst.TRIP_REQUEST_ACCEPTED_STRING
     };
-    var passengerId = messageData['passengerId'];
-    messageData['notificationType'] = 'acceptedToJoinTrip';
-    _deliverNotification(notificationData, messageData, passengerId);
+    // messageData = messageData.data;
+    var passengerId = messageData['driverId'];
+    messageData['departure_datetime'] =
+        messageData['departure_datetime'].toString();
+    messageData['notificationType'] = TripConst.TRIP_JOIN_ACCEPTED;
+
+    Utils.extractMessageData(messageData).then((messageData) => {
+          print(messageData),
+          _deliverNotification(notificationData, messageData, passengerId)
+        });
   }
 
   _deliverNotification(notificationData, messageData, passengerId) {
@@ -222,5 +213,40 @@ class _HomeState extends State<Home> {
         ),
       ),
     ]);
+  }
+
+  _joinTripRequestNotificationHandler(messageData) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: ListTile(
+            title: Text(
+                "Trip Join Request ${messageData['departure_point']} To ${messageData['destination_point']}"),
+            subtitle: Text(
+                "Time: ${messageData['departure_datetime']}. Amount To Pay - ${messageData['amount']}")),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () {
+              _sendRejectMessageToPassenger(messageData);
+              Navigator.pop(context);
+            },
+            child: Text("Reject"),
+          ),
+          FlatButton(
+            onPressed: () {
+              new Timer(
+                  const Duration(seconds: 1),
+                  () => {
+                        _sendAcceptedMessageToPassenger(messageData),
+                        print("1 second later.")
+                      });
+
+              Navigator.pop(context);
+            },
+            child: Text("Accept"),
+          ),
+        ],
+      ),
+    );
   }
 }

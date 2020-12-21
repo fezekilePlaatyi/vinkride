@@ -66,7 +66,7 @@ class SingleNotificationState extends State<SingleNotification> {
                       padding: const EdgeInsets.all(10.0),
                       child: Container(
                         child: notificationType ==
-                                NotificationsConst.PASSENGER_POKED_TRIP
+                                TripConst.PASSENGER_POKED_TRIP
                             ? displayPokedToTripNotification(
                                 userDetails, notificationType, notificationData)
                             : displayJoinedTripNotification(userDetails,

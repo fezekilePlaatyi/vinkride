@@ -11,6 +11,7 @@ import 'package:passenger/models/Feeds.dart';
 import 'package:passenger/models/Helper.dart';
 import 'package:passenger/models/Notifications.dart';
 import 'package:passenger/services/VinkFirebaseMessagingService.dart';
+import 'package:passenger/utils/Utils.dart';
 import 'package:passenger/widgets/driverFeed.dart';
 import 'package:passenger/widgets/menu.dart';
 import 'package:passenger/routes/routes.gr.dart';
@@ -157,29 +158,45 @@ class _HomeState extends State<Home> {
       var notificationType = messageData['notificationType'];
       print("onMessage Received. Data ${notificationType.toString()}");
 
-      if (notificationType == 'pokedToJoinTrip') {
+      if (notificationType == TripConst.PASSENGER_POKED_TRIP) {
         _pokeHandler(messageData);
-      } else if (notificationType == 'rejectedToJoinTrip') {
+      } else if (notificationType == TripConst.TRIP_JOIN_REJECTED) {
         _joingTripRequestDeclineHandler(messageData);
-      } else if (notificationType == 'acceptedToJoinTrip') {
+      } else if (notificationType == TripConst.TRIP_JOIN_ACCEPTED) {
         _requestAcceptedHandler(messageData);
       } else {}
     }, onLaunch: (Map<String, dynamic> message) async {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: ListTile(
-            title: Text("Notification"),
-          ),
-        ),
-      );
+      var messageData = message['data'];
+      var notificationType = messageData['notificationType'];
+      print("onLaunch Mesage Received. Data $messageData");
+
+      Utils.extractMessageData(messageData).then((messageData) => {
+            print(messageData),
+            if (notificationType == TripConst.PASSENGER_POKED_TRIP)
+              {_pokeHandler(messageData)}
+            else if (notificationType == TripConst.TRIP_JOIN_REJECTED)
+              {_joingTripRequestDeclineHandler(messageData)}
+            else if (notificationType == TripConst.TRIP_JOIN_ACCEPTED)
+              {_requestAcceptedHandler(messageData)}
+            else
+              {}
+          });
     }, onResume: (Map<String, dynamic> message) async {
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                  content: ListTile(
-                title: Text("Notification"),
-              )));
+      var messageData = message['data'];
+      var notificationType = messageData['notificationType'];
+      print("onLaunch Mesage Received. Data $messageData");
+
+      Utils.extractMessageData(messageData).then((messageData) => {
+            print(messageData),
+            if (notificationType == TripConst.PASSENGER_POKED_TRIP)
+              {_pokeHandler(messageData)}
+            else if (notificationType == TripConst.TRIP_JOIN_REJECTED)
+              {_joingTripRequestDeclineHandler(messageData)}
+            else if (notificationType == TripConst.TRIP_JOIN_ACCEPTED)
+              {_requestAcceptedHandler(messageData)}
+            else
+              {}
+          });
     });
   }
 
@@ -190,7 +207,7 @@ class _HomeState extends State<Home> {
       builder: (context) => AlertDialog(
         content: ListTile(
           title: Text(
-              "Accepted to joing Trip - ${messageData['departurePoint']} To ${messageData['destinationPoint']}"),
+              "Accepted to join Trip - ${messageData['departure_point']} To ${messageData['destination_point']}"),
         ),
         actions: <Widget>[
           FlatButton(
@@ -272,9 +289,15 @@ class _HomeState extends State<Home> {
           FlatButton(
             onPressed: () {
               Navigator.pop(context);
-              // _addPassengerToTrip(tripId, driverId)
+              var tripId = messageData['trip_id'];
+              var driverId = messageData['passengerId'];
+
+              messageData['passengerId'] = messageData['to_user'];
+              messageData['driverId'] = messageData['passengerId'];
+              // _addPassengerToTrip(tripId, driverId);
+              _prepareToGoToPayment(messageData);
             },
-            child: Text("Accept"),
+            child: Text("Accept & Pay"),
           ),
         ],
       ),
@@ -332,7 +355,7 @@ class _HomeState extends State<Home> {
       'date_created': FieldValue.serverTimestamp(),
       'to_user': currentUserId,
       'is_seen': false,
-      'notification_type': NotificationsConst.PASSENGER_JOINED_TRIP,
+      'notification_type': TripConst.PASSENGER_JOINED_TRIP,
       'from_user': currentUserId,
       'trip_id': tripId,
     };
@@ -354,7 +377,7 @@ class _HomeState extends State<Home> {
     var messageData = {
       'passengerId': currentUserId,
       'tripId': tripId,
-      'notificationType': NotificationsConst.PASSENGER_JOINED_TRIP
+      'notificationType': TripConst.PASSENGER_JOINED_TRIP
     };
 
     VinkFirebaseMessagingService()
