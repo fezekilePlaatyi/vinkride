@@ -1,4 +1,5 @@
 import 'package:Vinkdriver/constants.dart';
+import 'package:Vinkdriver/model/Helper.dart';
 import 'package:flutter/material.dart';
 import 'package:Vinkdriver/routes/routes.gr.dart';
 import 'package:Vinkdriver/widget/userTrips.dart';
@@ -9,8 +10,9 @@ class MyFeeds extends StatefulWidget {
 }
 
 class MyFeedsState extends State<MyFeeds> {
-  String _tabItemName = "active";
+  String _tabItemName = TripConst.ACTIVE_TRIP;
   var title = 'My Feed';
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -47,20 +49,33 @@ class MyFeedsState extends State<MyFeeds> {
               initialIndex: 0,
               length: 3,
               child: TabBar(
+                  indicatorColor: vinkBlack,
+                  labelColor: vinkBlack,
+                  unselectedLabelColor: vinkLightGrey,
                   onTap: (value) {
+                    String tabItem = TripConst.ACTIVE_TRIP;
                     switch (value) {
                       case 0:
-                        setState(() => _tabItemName = TripConst.ACTIVE_TRIP);
+                        tabItem = TripConst.ACTIVE_TRIP;
                         break;
                       case 1:
-                        setState(() => _tabItemName = TripConst.ONCOMING_TRIP);
+                        tabItem = TripConst.ONCOMING_TRIP;
                         break;
                       case 2:
-                        setState(() => _tabItemName = TripConst.COMPLETED_TRIP);
+                        tabItem = TripConst.COMPLETED_TRIP;
                         break;
-
                       default:
                     }
+                    setState(() {
+                      _tabItemName = tabItem;
+                      _isLoading = true;
+                    });
+
+                    Future.delayed(Duration(seconds: 2), () {
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    });
                   },
                   tabs: [
                     Tab(
@@ -83,7 +98,7 @@ class MyFeedsState extends State<MyFeeds> {
                     ),
                   ]),
             ),
-            _widgetChanger(_tabItemName),
+            _isLoading ? _loader() : _widgetChanger(_tabItemName),
           ],
         ),
       ]),
@@ -92,6 +107,14 @@ class MyFeedsState extends State<MyFeeds> {
 
   _widgetChanger(String tabItemName) {
     return UserTrips(feedStatus: tabItemName, parentContext: context);
+  }
+
+  Widget _loader() {
+    return Container(
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
   }
 
   TextStyle _tabTextStyle() {
