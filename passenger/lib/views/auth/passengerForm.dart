@@ -123,7 +123,7 @@ class _PassengerFormState extends State<PassengerForm> {
                               onSaved: (input) => _phone_number = input,
                               validator: (input) {
                                 if (input.isEmpty) {
-                                  return 'You will be called at some point';
+                                  return 'You will be Contacted at some point';
                                 }
                                 return null;
                               },
@@ -142,8 +142,6 @@ class _PassengerFormState extends State<PassengerForm> {
                               validator: (input) {
                                 if (input.isEmpty) {
                                   return 'Your address is important to us';
-                                } else if (!isValidAddress(input)) {
-                                  return 'Invalid address';
                                 }
                                 return null;
                               },
